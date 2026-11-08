@@ -2,6 +2,9 @@
 
 ## 2026-11-08
 
+- `OpeningHero.astro` / `index.astro` / `global.css` / `site.ts`: HiXFiらしい大胆さと動きの追加依頼に合わせ、ヒーローの大きな赤い面、画面のスクロール追従、赤い大文字帯と問い合わせ面を追加。自走ループは使わず、縮小モーション時は新しいスクロール演出を解除する。
+- 問い合わせを相談文1項目＋折りたたみの任意URLへ簡略化。メール新設前のため個人情報欄と擬似送信を外し、実際に相談文をコピーする操作へ変更。SEOからURLを引き継いだ場合は任意欄を開いて確認できるようにした。
+- `index.astro` / `global.css` / `services.ts` / `public/images/services/`: サービス説明を画像・短い説明・詳細リンク付き横4カラムに変更。画像は自社の架空体験サンプルを撮影し、実績と区別。タブレット2列・スマホ1列とすることで、それぞれの完成イメージを比較しやすくした。
 - `src/pages/seo-check.astro` / `src/scripts/seo-check.ts`: 追加指示により自社SEO確認ページを追加し、URL→解析・目的別ガイド→相談に変更。45秒の取得期限、利用上限時の案内、実測のみのスコア表示を実装。目的別案内は一般ガイドと明記し、顧客サイトを検出した結果と混同させない。
 - `src/data/services.ts` / `src/pages/services/[slug].astro` / `src/components/ServiceDemo.astro` / `src/scripts/service-demos.ts` / `src/styles/services.css`: ウェブ・EC・AIアプリ・保守セキュリティの4ページを追加。事業説明、実績と区別した体験サンプル、各3本の豆知識、料金の適用境界を掲載し、何を依頼できるか分かる構成へ拡張。
 - `OpeningHero.astro` / `site.ts` / `index.astro`: SEO解析を開いた後に相談ボタンを表示し、対象URLと相談文を引き継ぐ。受付用メールは新設予定のため送信は接続せず、現状を相談導線上にも明示。

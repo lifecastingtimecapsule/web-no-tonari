@@ -10,6 +10,7 @@
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 // 変更履歴: 2026-11-08 SEO確認後の相談表示と、URL・サービス名の相談欄への引き継ぎを追加。
+// 変更履歴: 2026-11-08 赤い大見出しとヒーローのスクロール演出、最小入力の相談コピー操作を追加。
 
 type Concern = {
   id: string;
@@ -215,7 +216,7 @@ function setupMotion(): void {
   }
 }
 
-/** 必須項目を近接表示で検証し、外部送信せずデモ完了状態を明確に示す。 */
+/** 必須の相談文と任意URLを検証し、外部へ送らずクリップボードへコピーする。 */
 function setupDemoForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   const status = document.querySelector<HTMLElement>('[data-form-status]');
@@ -233,6 +234,8 @@ function setupDemoForm(): void {
     const error = form.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
     const message = getError(input);
     input.setAttribute('aria-invalid', String(Boolean(message)));
+    const optionalSection = input.closest('details');
+    if (message && optionalSection) optionalSection.open = true;
     if (error) error.textContent = message;
     return Boolean(message);
   };
@@ -244,7 +247,7 @@ function setupDemoForm(): void {
     });
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const requiredInputs = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required], [type="url"]')];
     const invalidInputs = requiredInputs.filter(showFieldError);
@@ -259,17 +262,25 @@ function setupDemoForm(): void {
 
     submitButton.disabled = true;
     submitButton.dataset.loading = 'true';
-    submitLabel.textContent = '確認しています…';
+    submitLabel.textContent = 'コピーしています…';
     status.textContent = '';
 
-    window.setTimeout(() => {
+    try {
+      const message = form.querySelector<HTMLTextAreaElement>('#message')!.value.trim();
+      const siteUrl = form.querySelector<HTMLInputElement>('#site-url')!.value.trim();
+      const consultationText = `相談したいこと\n${message}${siteUrl ? `\n\nサイトのURL\n${siteUrl}` : ''}`;
+      await navigator.clipboard.writeText(consultationText);
+      status.dataset.state = 'success';
+      status.textContent = '相談内容をコピーしました。メモなどに貼り付けて保存できます。まだ送信はされていません。';
+    } catch {
+      status.dataset.state = 'error';
+      status.textContent = '自動でコピーできませんでした。入力欄の文章を選択してコピーしてください。内容はそのまま残っています。';
+    } finally {
       submitButton.disabled = false;
       submitButton.dataset.loading = 'false';
-      submitLabel.textContent = '入力内容を確認する';
-      status.dataset.state = 'success';
-      status.innerHTML = '<strong>相談内容の入力を確認しました。</strong><span>メール受付の準備中のため送信されていません。入力した内容は、この画面からコピーして保存できます。</span>';
+      submitLabel.textContent = '相談内容をコピーする';
       status.focus();
-    }, 650);
+    }
   });
 }
 
@@ -328,6 +339,21 @@ setupMotion();
 setupDemoForm();
 setupSeoCheck();
 
+/** 大きな文字と画面の重なりをスクロールに連動させ、縮小モーション変更時は自動解除する。 */
+function setupExpressiveMotion(): void {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const statement = document.querySelector<HTMLElement>('[data-motion-statement]');
+    if (statement) gsap.fromTo(statement, { x: () => window.innerWidth * .04 }, {
+      x: () => -Math.max(0, statement.scrollWidth - window.innerWidth + window.innerWidth * .08),
+      ease: 'none', scrollTrigger: { trigger: '.motion-statement', start: 'top bottom', end: 'bottom top', scrub: .65, invalidateOnRefresh: true },
+    });
+    const visual = document.querySelector<HTMLElement>('.opening__visual');
+    if (visual) gsap.to(visual, { y: -50, rotation: -3, ease: 'none', scrollTrigger: { trigger: '.opening', start: 'top top', end: 'bottom top', scrub: .8 } });
+  });
+}
+setupExpressiveMotion();
+
 /** サービス別ページから選んだ相談内容を、既存入力を上書きせず引き継ぐ。 */
 const requestedService = new URLSearchParams(window.location.search).get('service');
 const consultationMessage = document.querySelector<HTMLTextAreaElement>('#message');
@@ -340,5 +366,7 @@ if (requestedSiteUrl && consultationSiteUrl && !consultationSiteUrl.value.trim()
   try {
     const validSiteUrl = new URL(requestedSiteUrl);
     if (['https:', 'http:'].includes(validSiteUrl.protocol)) consultationSiteUrl.value = validSiteUrl.toString();
+    const optionalSection = consultationSiteUrl.closest('details');
+    if (optionalSection) optionalSection.open = true;
   } catch { /* 形式不正のクエリはフォームへ引き継がない。 */ }
 }
