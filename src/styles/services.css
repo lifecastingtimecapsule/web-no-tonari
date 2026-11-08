@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 旧花屋サンプル専用の未使用スタイルを外し、新しい教材CSSへ移管。 */
 /* 変更履歴: 2026-11-08 ヘッダー・フッターを共通化。モバイルのサービス切り替えを1行の横スクロールへ整理。 */
 /* 変更履歴: 2026-11-08 白黒赤の既存世界観を継承し、説明・体験・コラムを読み分ける4ページを追加。 */
 .service-tabs { display:flex; gap:28px; flex-wrap:nowrap; overflow-x:auto; white-space:nowrap; border-block:1px solid var(--mist); padding:10px 0; }
@@ -19,14 +20,6 @@
 .demo-topline { display:flex; justify-content:space-between; align-items:center; gap:16px; border-bottom:1px solid var(--mist); padding-bottom:18px; margin-bottom:24px; }
 .demo-topline span { font-size:12px; color:var(--ink-muted); }
 .demo-feedback { margin:28px 0 0; padding:20px; background:white; min-height:80px; line-height:1.8; font-size:14px; }
-.demo-hotspot { display:block; text-align:left; font:inherit; background:transparent; border:1px dashed #7c7c83; padding:10px; cursor:pointer; color:inherit; }
-.flower-demo__body { display:grid; grid-template-columns:1.3fr 1fr; gap:32px; align-items:center; }
-.flower-demo__body > div > button:first-child { font-size:clamp(1.8rem,3.6vw,3.7rem); line-height:1.4; letter-spacing:-.03em; font-weight:700; }
-.flower-demo__body p { padding:12px 10px; font-size:14px; line-height:1.8; }
-.flower-demo__type { color:#485b47; font-family:serif; font-size:clamp(5rem,10vw,9rem); line-height:1.1; text-align:center; background:#e5eade; border-radius:50% 50% 5px 5px; padding:24px; }
-.demo-hotspot--action { background:#485b47; color:white; padding:12px 24px; }
-.demo-hotspot--detail { margin-top:26px; font-size:13px; }
-.demo-hotspot:hover,.mail-demo__point:hover { border-color:var(--signal); }
 .shop-demo__body,.ai-demo__body { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
 .cup-stage { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:330px; background:#e9e4dc; gap:38px; overflow:hidden; }
 .cup-stage > span { color:#5e554c; font-size:12px; }
@@ -49,6 +42,7 @@
 .mail-demo > p { font-size:15px; line-height:1.8; }
 .mail-demo__point { display:block; padding:16px; width:100%; text-align:left; border:1px dashed #7c7c83; background:white; color:var(--ink); font:inherit; font-size:14px; margin:16px 0; cursor:pointer; overflow-wrap:anywhere; }
 .mail-demo__point[data-checked] { background:#fcecef; border-style:solid; border-color:var(--signal); }
+.mail-demo__point:hover { border-color:var(--signal); }
 .service-notes__articles { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
 .service-notes article { border-top:2px solid var(--ink); padding-top:20px; }
 .service-notes article h3 { font-size:19px; line-height:1.6; margin:0 0 14px; }
@@ -60,4 +54,4 @@
 .service-close__price { font-weight:700; }
 .service-close .button { margin:15px 0; }
 .service-close__notice { color:var(--ink-muted); font-size:12px!important; }
-@media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.shop-demo__body,.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.flower-demo__body { grid-template-columns:1fr; }.flower-demo__type { display:none; }.cup-stage { min-height:270px; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }
+@media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.shop-demo__body,.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.cup-stage { min-height:270px; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }

@@ -16,6 +16,7 @@ import OpeningHero from '../components/OpeningHero.astro';
 // 変更履歴: 2026-11-08 独立した企業理念ページへのリンクをフッターへ追加。
 // 変更履歴: 2026-11-08 確認済み運営会社と会社概要への導線をフッターに追加。
 // 変更履歴: 2026-11-08 サービスの横スクロールを撤去し、対象者・できること・料金をトップで説明する一覧へ変更。安全チェックへの導線とFAQの「準備中」表現を整理。
+// 変更履歴: 2026-11-09 縦の一覧を、3/2/1件表示で左右に送る承認済みのサービス紹介へ復元。
 import { servicePages } from '../data/services';
 const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -116,26 +117,24 @@ const faqs = [
             <p>必要なものだけを、必要な順序で。大きな仕組みを売ることから始めません。</p>
           </div>
 
-          <div class="service-guide">
-            {servicePages.map((service, index) => (
-              <article class="service-guide__item" aria-labelledby={`service-${service.slug}`}>
-                <a class="service-guide__image" href={`${serviceBase}/services/${service.slug}/#sample`} aria-label={`${service.name}の体験サンプルを触る`}>
-                  <img src={`${serviceBase}/images/services/${service.slug}.png`} alt={`${service.name}の体験サンプル画面`} width="900" height="680" loading="lazy" decoding="async" />
+          <div class="service-carousel-controls" data-service-controls hidden>
+            <p aria-live="polite" aria-atomic="true" data-service-position>1〜3 / 4</p>
+            <div>
+              <button type="button" aria-label="前のサービスを表示" aria-controls="service-carousel" data-service-prev disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg></button>
+              <button type="button" aria-label="次のサービスを表示" aria-controls="service-carousel" data-service-next><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg></button>
+            </div>
+          </div>
+          <div class="service-list" id="service-carousel" data-service-list tabindex="0" role="region" aria-label="サービス一覧。横にスクロールして閲覧できます">
+            {servicePages.map(service => (
+              <article class="service-row" aria-labelledby={`service-${service.slug}`}>
+                <a class="service-row__preview" href={`${serviceBase}/services/${service.slug}/#sample`} aria-label={`${service.name}の体験サンプルを触る`}>
+                  <img src={`${serviceBase}/images/services/${service.slug}.${service.slug === 'websites' ? 'webp' : 'png'}`} alt={`${service.name}の体験サンプル画面`} width={service.slug === 'websites' ? 1000 : 900} height={service.slug === 'websites' ? 644 : 680} loading="lazy" decoding="async" />
                   <span>体験サンプル</span>
                 </a>
-                <div class="service-guide__body">
-                  <p class="service-guide__num">{String(index + 1).padStart(2, '0')}</p>
-                  <h3 id={`service-${service.slug}`}><a href={`${serviceBase}/services/${service.slug}/`}>{service.name}</a></h3>
-                  <p class="service-guide__lead">{service.preview}</p>
-                  <p class="service-guide__for"><span>こんな方に</span>{service.forWhom}</p>
-                  <ul class="service-guide__tasks" aria-label={`${service.name}でできること`}>
-                    {service.tasks.map(([title, body]) => <li><strong>{title}</strong><span>{body}</span></li>)}
-                  </ul>
-                  <div class="service-guide__foot">
-                    <p class="service-guide__price">{service.priceShort}</p>
-                    <a class="text-link" href={`${serviceBase}/services/${service.slug}/`}>サンプルと詳しい内容を見る</a>
-                  </div>
-                </div>
+                <h3 id={`service-${service.slug}`}><a href={`${serviceBase}/services/${service.slug}/`}>{service.name}</a></h3>
+                <p class="service-row__summary">{service.preview}</p>
+                <p class="service-row__price">{service.priceShort}</p>
+                <a class="text-link service-row__detail" href={`${serviceBase}/services/${service.slug}/`}>サンプルと詳しい内容を見る</a>
               </article>
             ))}
           </div>

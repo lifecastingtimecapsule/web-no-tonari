@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 サービス紹介をPC3件・タブレット2件・スマホ1件の手動横送りへ復元。 */
 /* 変更履歴: 2026-11-04 対話線を核にした全体レイアウト、状態、レスポンシブ、縮小モーションを実装。 */
 /* 変更履歴: 2026-11-05 3Dヒーローのキャンバス、DOMラベル、SVGフォールバックの表示状態を追加。 */
 /* 変更履歴: 2026-11-05 黒鉛色の外殻と温かな核を主役にしたシネマティック・テック案へヒーローを再設計。 */
@@ -511,36 +512,67 @@ p {
 .services { padding-block: 96px; }
 .services .section-heading h2 { font-size: clamp(1.65rem, 3.5vw, 3.3rem); }
 
-/* 変更履歴: 2026-11-08 横スクロールをやめ、4サービスを「こんな方に・できること・料金」でページ内に説明する一覧へ変更。 */
-.service-guide { display: grid; gap: 20px; margin-top: 8px; }
-.service-guide__item { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; padding: 32px; border-radius: 16px; background: var(--white); }
-.service-guide__image { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--mist); border-radius: 12px; background: var(--mist-light); }
-.service-guide__image img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform 240ms var(--ease-out); }
-.service-guide__image:hover img { transform: scale(1.025); }
-.service-guide__image span { position: absolute; right: 10px; bottom: 10px; padding: 5px 9px; border-radius: 4px; background: var(--white); color: var(--ink-muted); font-size: 12px; }
-.service-guide__num { margin: 0 0 6px; color: var(--signal-deep); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .06em; }
-.service-guide__body h3 { margin: 0 0 10px; font-size: clamp(1.4rem, 2.2vw, 1.9rem); line-height: 1.4; }
-.service-guide__body h3 a { text-decoration: none; }
-.service-guide__body h3 a:hover { text-decoration: underline; text-underline-offset: .2em; }
-.service-guide__lead { margin: 0 0 18px; font-size: 15px; line-height: 1.9; }
-.service-guide__for { display: flex; gap: 12px; margin: 0 0 20px; padding: 14px 16px; border-radius: 10px; background: var(--mist-light); font-size: 14px; line-height: 1.8; }
-.service-guide__for span { flex: none; font-weight: 700; }
-.service-guide__tasks { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--mist); }
-.service-guide__tasks li { display: grid; grid-template-columns: 9.5em 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--mist); font-size: 14px; line-height: 1.8; }
-.service-guide__tasks strong { font-weight: 700; }
-.service-guide__tasks span { color: var(--ink-muted); }
-.service-guide__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; margin-top: 18px; }
-.service-guide__price { margin: 0; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.service-guide__foot .text-link { display: inline-flex; min-height: 44px; align-items: center; font-size: 14px; }
-@media (max-width: 900px) {
-  .service-guide__item { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
-  .service-guide__image { max-width: 520px; }
+.service-list {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 56px) / 3);
+  gap: 28px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-block: 8px;
 }
-@media (max-width: 560px) {
-  .service-guide__item { padding: 20px 18px; }
-  .service-guide__for { flex-direction: column; gap: 2px; }
-  .service-guide__tasks li { grid-template-columns: 1fr; gap: 2px; }
+/* 変更履歴: 2026-11-08 自動再生しない手動カルーセルへ変更。操作ボタンと表示範囲で残りの項目を示す。 */
+.service-carousel-controls { display:flex; align-items:center; justify-content:flex-end; gap:20px; margin:-12px 0 20px; }
+.service-carousel-controls[hidden] { display:none; }
+.service-carousel-controls p { font-size:13px; color:var(--ink-muted); margin:0; font-variant-numeric:tabular-nums; }
+.service-carousel-controls > div { display:flex; gap:10px; }
+.service-carousel-controls button { display:grid; place-items:center; width:46px; height:46px; padding:0; border:1px solid #b9b9c1; border-radius:50%; background:var(--white); color:var(--ink); cursor:pointer; transition:background-color 160ms ease,border-color 160ms ease; }
+.service-carousel-controls button:hover:not(:disabled) { background:var(--ink); border-color:var(--ink); color:var(--white); }
+.service-carousel-controls button:disabled { opacity:.35; cursor:default; }
+.service-carousel-controls svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.7; }
+.services { padding-block: 96px; }
+.services .section-heading h2 { font-size: clamp(1.65rem, 3.5vw, 3.3rem); }
+
+/* 変更履歴: 2026-11-08 サービスを実サンプルの画像付き横4カラムへ変更。タブレット2列・スマホ1列で比較しやすくする。 */
+.service-row {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 16px;
+  scroll-snap-align: start;
 }
+
+.service-row__preview {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--white);
+}
+
+.service-row__preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 240ms var(--ease-out);
+}
+.service-row__preview:hover img { transform: scale(1.025); }
+.service-row__preview span { position: absolute; right: 10px; bottom: 10px; padding: 5px 9px; background: var(--white); color: var(--ink-muted); font-size: 11px; border-radius: 4px; }
+.service-row h3 a { text-decoration: none; }
+.service-row h3 a:hover { text-decoration: underline; text-underline-offset: .25em; }
+
+.service-row h3, .service-row p { margin: 0; }
+.service-row h3 { font-size: 22px; line-height: 1.5; }
+.service-row__summary { font-size: 16px; line-height: 1.8; color: var(--ink-muted); }
+.service-row__price { font-size: 14px; font-weight: 700; line-height: 1.8; }
+.service-row__detail { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; margin-top: auto; }
+@media (max-width: 900px) { .service-list { grid-auto-columns: calc((100% - 24px) / 2); gap: 24px; } }
+@media (max-width: 560px) { .service-list { grid-auto-columns: 100%; gap: 20px; } }
 
 /* 変更履歴: 2026-11-08 固定料金と任意オプションを、一目で比較できる白い料金面として追加。 */
 .pricing {
@@ -890,7 +922,7 @@ p {
 .contact-form__optional .field { padding-top: 12px; }
 
 @media (max-width:560px) { .contact .contact__layout { gap:36px; }.contact.section { padding-block:56px; }.services { padding-block:64px; } }
-@media (prefers-reduced-motion:reduce) { .service-guide__image:hover img { transform:none; } }
+@media (prefers-reduced-motion:reduce) { .service-row__preview:hover img { transform:none; } }
 
 .field + .field {
   margin-top: 26px;

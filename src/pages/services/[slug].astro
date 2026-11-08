@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-08 サービスごとの事業説明、操作サンプル、豆知識を独立ページとして追加。
 // 役割: 共通のブランドとナビを保ち、4領域の提供内容を具体的に説明する。
 // 変更履歴: 2026-11-08 トップと同じ共通レイアウト・ナビ・ロゴを適用。
+// 変更履歴: 2026-11-09 ウェブ制作の教材更新日を反映し、他のサンプルの更新日は維持。
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import '../../styles/services.css';
 import { servicePages } from '../../data/services';
@@ -14,7 +15,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></nav><nav class="service-tabs" aria-label="サービス別ページ">{servicePages.map(item => <a href={`${home}services/${item.slug}/`} aria-current={service.slug === item.slug ? 'page' : undefined}>{item.name}</a>)}</nav>
 <section class="service-intro"><div><h1>{service.title.split('\n').map(line => <span>{line}</span>)}</h1><p>{service.lead}</p><a class="button button--human" href="#sample">サンプルを触ってみる</a></div><aside><h2>{service.name}でできること</h2>{service.tasks.map(([title, body]) => <div class="service-task"><h3>{title}</h3><p>{body}</p></div>)}</aside></section>
 <section class="service-sample" id="sample" aria-labelledby="sample-title"><div class="service-section-heading"><h2 id="sample-title">{service.sampleTitle}</h2><p>{service.sampleIntro}</p></div><ServiceDemo slug={service.slug} /></section>
-<section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime="2026-11-08">2026年11月8日 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div>{service.source && <p class="service-source">参考資料：<a href={service.source} target="_blank" rel="noopener noreferrer">{service.sourceLabel}（別タブ）</a></p>}</section>
+<section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div>{service.source && <p class="service-source">参考資料：<a href={service.source} target="_blank" rel="noopener noreferrer">{service.sourceLabel}（別タブ）</a></p>}</section>
 <section class="service-close"><h2>この先は、あなたの仕事に合わせて。</h2><p class="service-close__price">{service.price}</p><p>{service.priceNote}</p><a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>相談内容をまとめる</a><p class="service-close__notice">相談受付用のメールアドレスは準備中です。現在は入力内容の整理まで利用できます。</p></section>
 </div><script>import '../../scripts/service-demos';</script>
 </SiteLayout>
