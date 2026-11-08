@@ -95,13 +95,20 @@ async function readLimited(response: Response): Promise<string> {
   return new TextDecoder().decode(merged);
 }
 
-async function snapshotPage(host: string): Promise<PageSnapshot> {
+async function snapshotPage(host: string): Promise<PageSnapshot & { diagnostics: Record<string, string | number | null> }> {
   const [httpsResult, httpResult] = await Promise.allSettled([
     fetchFollowing(`https://${host}/`, true),
     fetchWithTimeout(`http://${host}/`, { redirect: 'manual', headers: { 'User-Agent': USER_AGENT } }),
   ]);
   const page = httpsResult.status === 'fulfilled' ? httpsResult.value : null;
   let httpRedirectsToHttps: boolean | null = null;
+  // 判定の根拠を結果に残し、誤判定の調査をできるようにする（画面には表示しない）。
+  const diagnostics: Record<string, string | number | null> = {
+    httpsStatus: page?.response.status ?? null,
+    httpStatus: httpResult.status === 'fulfilled' ? httpResult.value.status : null,
+    httpLocation: httpResult.status === 'fulfilled' ? httpResult.value.headers.get('Location') : null,
+    httpUrl: httpResult.status === 'fulfilled' ? httpResult.value.url : null,
+  };
   if (httpResult.status === 'fulfilled') {
     const location = httpResult.value.headers.get('Location');
     httpRedirectsToHttps = Boolean(location && location.startsWith('https://'));
@@ -115,6 +122,7 @@ async function snapshotPage(host: string): Promise<PageSnapshot> {
     httpRedirectsToHttps,
     headers,
     html: page?.body ?? '',
+    diagnostics,
   };
 }
 
@@ -136,7 +144,7 @@ async function runCheck(target: URL) {
   const domain = organizationalDomain(host);
   const [page, spf, dmarc] = await Promise.all([snapshotPage(host), lookupTxt(domain), lookupTxt(`_dmarc.${domain}`)]);
   const items = [...analyzePage(page), ...analyzeMail({ domain, spf, dmarc })];
-  return { target: target.toString(), domain, checkedAt: new Date().toISOString(), reachable: page.httpsReachable, items, counts: countStatuses(items) };
+  return { target: target.toString(), domain, checkedAt: new Date().toISOString(), reachable: page.httpsReachable, items, counts: countStatuses(items), diagnostics: page.diagnostics };
 }
 
 export default {
@@ -152,7 +160,7 @@ export default {
     if ('error' in normalized) return json({ error: normalized.error, message: ERROR_MESSAGES[normalized.error] }, 400, cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-    const cacheKey = new Request(`https://safety-check.cache/${normalized.url.hostname}`);
+    const cacheKey = new Request(`https://safety-check.cache/v2/${normalized.url.hostname}`);
     const cached = await cache?.match(cacheKey);
     if (cached) return json(await cached.json(), 200, { ...cors, 'X-Check-Cache': 'hit' });
 
