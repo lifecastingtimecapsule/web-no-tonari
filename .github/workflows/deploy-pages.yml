@@ -1,5 +1,5 @@
 # 変更履歴: 2026-11-08 mainへの更新をGitHub Pagesへ静的公開するワークフローを追加。
-# 変更履歴: 2026-11-08 リファラー制限を付けた公開APIキーを、リポジトリ変数からビルドへ渡せるよう追加。
+# 変更履歴: 2026-11-08 SEO確認を廃止し、安全チェックWorkerのURLをリポジトリ変数からビルドへ渡すよう変更。
 name: Deploy static site to GitHub Pages
 
 on:
@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          PUBLIC_PAGESPEED_API_KEY: ${{ vars.PUBLIC_PAGESPEED_API_KEY }}
+          PUBLIC_SAFETY_CHECK_API: ${{ vars.PUBLIC_SAFETY_CHECK_API }}
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

@@ -1,5 +1,6 @@
 ---
 // 変更履歴: 2026-11-08 ユーザー依頼に基づき、誇張のない企業理念を独立した読み物ページとして追加。
+// 変更履歴: 2026-11-08 会社概要と同じく、フッターと重複する本文末尾のリンク列を撤去。
 // 役割: 事業の目的と基本姿勢を説明する。法人情報・資格・実績は推測して掲載しない。
 // 変更履歴: 2026-11-08 運営会社の確認に伴い会社概要への相互導線を追加。
 import SiteLayout from '../layouts/SiteLayout.astro';
@@ -25,11 +26,10 @@ const principles = [
         <h2 id="principles-title">大切にしていること</h2>
         {principles.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}
       </section>
-      <div class="philosophy__links"><a href={`${home}company/`}>会社概要を見る</a><a href={`${home}#services`}>サービスを見る</a><a href={`${home}#contact`}>お問い合わせ</a></div>
     </div>
 </SiteLayout>
 <style>
-  .philosophy { max-width: 800px; padding-top: 0; padding-bottom: 80px; }
+  .philosophy { max-width: 800px; padding-top: 0; padding-bottom: 0; }
   .philosophy__breadcrumb { display: flex; gap: 14px; align-items: center; margin-bottom: 36px; font-size: 13px; color: var(--ink-muted); }
   h1 { font-size: clamp(1.8rem, 3vw, 2.3rem); line-height: 1.5; padding-bottom: 24px; margin-bottom: 48px; border-bottom: 1px solid var(--mist); }
   .philosophy__mission h2 { font-size: clamp(1.65rem, 3.5vw, 2.7rem); line-height: 1.6; letter-spacing: -.025em; margin-bottom: 28px; }
@@ -39,7 +39,5 @@ const principles = [
   article { padding: 26px 0; border-top: 1px solid var(--mist); }
   article h3 { font-size: 18px; margin: 0 0 12px; }
   article p { margin: 0; }
-  .philosophy__links { display: flex; flex-wrap: wrap; gap: 16px 36px; padding-top: 0; margin-top: 20px; border-top: 1px solid var(--mist); font-size: 14px; }
-  .philosophy__links a { display: inline-flex; align-items: center; min-height: 44px; }
-  @media(max-width:560px) { .philosophy { padding-top: 0; padding-bottom: 56px; } h1 { margin-bottom: 32px; }.philosophy__mission h2 { font-size: 1.6rem; }.philosophy__principles { margin-top: 40px; } }
+  @media(max-width:560px) { .philosophy { padding-top: 0; padding-bottom: 0; } h1 { margin-bottom: 32px; }.philosophy__mission h2 { font-size: 1.6rem; }.philosophy__principles { margin-top: 40px; } }
 </style>

@@ -1,0 +1,8 @@
+# 変更履歴: 2026-11-08 「かんたん安全チェック」APIのCloudflare Workers設定を追加。
+name = "web-no-tonari-safety-check"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+ALLOWED_ORIGINS = "https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"

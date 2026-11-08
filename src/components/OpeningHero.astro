@@ -4,7 +4,8 @@
 // 変更履歴: 2026-11-08 コピーと相談導線、画面の重なりが順に組み上がる導入演出の受け口を追加。
 // 変更履歴: 2026-11-08 URLをGoogle PageSpeed InsightsのモバイルSEO確認へ渡す、鍵不要の簡易チェックフォームを追加。
 // 変更履歴: 2026-11-08 入力URLと右側の確認画面を同期する構成へ更新。後から追加した3Dシグナルは方針見直しで撤去。
-// 役割: まだ要件がまとまっていない利用者を、相談フォームと対応領域へ迷わず導く。
+// 変更履歴: 2026-11-08 SEO確認を「かんたん安全チェック」へ置き換え、相談への補助リンクを追加。「できること」帯を撤去。
+// 役割: まだ要件がまとまっていない利用者を、安全チェックと相談フォームへ迷わず導く。
 // 変更履歴: 2026-11-08 SEO解析を開いた後に相談への次の一歩を表示し、入力URLを引き継ぐ受け口を追加。
 // 変更履歴: 2026-11-08 赤い背景面を大きく置き、画面の重なりを際立たせる。
 // 変更履歴: 2026-11-08 URL入力枠・補助テキストのコントラストを共通トークンで改善。
@@ -14,25 +15,25 @@
   <div class="opening__copy" data-hero-copy>
     <h1 id="hero-title" data-hero-title><span>ウェブの心配を、</span><span><em>仕事から</em>なくす。</span></h1>
     <p class="opening__lead" data-hero-lead>更新、リニューアル、AIアプリ、安全性の確認まで。<br />小さなチームで、いま必要なことから整理します。</p>
-    <form class="opening__consult" data-seo-check-form novalidate data-hero-consult>
-      <label class="opening__check-label" for="seo-check-url">確認したいサイトのURL</label>
-      <input class="opening__consult-prompt" id="seo-check-url" name="seoCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="yourbusiness.com…" aria-describedby="seo-check-note seo-check-status" required />
-      <button class="opening__consult-action" type="submit">SEOを確認する <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
+    <form class="opening__consult" data-safety-check-form novalidate data-hero-consult>
+      <label class="opening__check-label" for="safety-check-url">安全性を確認したいサイトのURL</label>
+      <input class="opening__consult-prompt" id="safety-check-url" name="safetyCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="yourbusiness.com" aria-describedby="safety-check-note safety-check-status" required />
+      <button class="opening__consult-action" type="submit">安全チェック <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
     </form>
-    <p class="opening__note" id="seo-check-note" data-hero-note>SEO確認と改善ガイドのページへ進みます。入力URLをGoogleの解析サービスへ送ります。</p>
-    <p class="opening__check-status" id="seo-check-status" role="status" aria-live="polite" data-seo-check-status></p>
+    <p class="opening__note" id="safety-check-note" data-hero-note>無料・登録不要。公開されている情報だけで、通信の暗号化やなりすましメール対策を確認します。<a href="#contact">先に相談する</a></p>
+    <p class="opening__check-status" id="safety-check-status" role="status" aria-live="polite" data-safety-check-status></p>
   </div>
 
   <div class="opening__visual" aria-label="対応領域を表す画面の重なり">
     <div class="opening__browser-card" aria-hidden="true" data-hero-browser>
       <div class="opening__browser-bar"><span></span><span></span><span></span><p>サイト確認のイメージ</p></div>
       <div class="opening__browser-content">
-        <p class="opening__browser-kicker">SEO CHECK / MOBILE</p>
+        <p class="opening__browser-kicker">SAFETY CHECK</p>
         <h2>いまのウェブを、<br />先に確かめる。</h2>
-        <div class="opening__preview-url"><span data-seo-preview-url>yourbusiness.com</span><i data-seo-preview-state>入力待ち</i></div>
-        <div class="opening__browser-choice"><span>表示と読み込みの状態</span><i></i></div>
-        <div class="opening__browser-choice"><span>検索の基本設定</span><i></i></div>
-        <div class="opening__browser-choice"><span>次に整える優先順位</span><i></i></div>
+        <div class="opening__preview-url"><span data-check-preview-url>yourbusiness.com</span><i data-check-preview-state>入力待ち</i></div>
+        <div class="opening__browser-choice"><span>通信の暗号化</span><i></i></div>
+        <div class="opening__browser-choice"><span>ブラウザ向けの保護設定</span><i></i></div>
+        <div class="opening__browser-choice"><span>なりすましメール対策</span><i></i></div>
       </div>
     </div>
     <div class="opening__mobile-card" aria-hidden="true" data-hero-mobile>
@@ -44,14 +45,10 @@
     <div class="opening__health-card" aria-hidden="true" data-hero-health><span class="opening__health-dot"></span><span>URLから、最初の確認を。</span></div>
   </div>
 
-  <div class="opening__scope" aria-label="対応する領域">
-    <p>できること</p>
-    <ul><li>ウェブサイト</li><li>ECショップ</li><li>AIアプリ開発</li><li>保守・セキュリティ</li></ul>
-  </div>
 </section>
 
 <style>
-  .opening { display: grid; grid-template-columns: 1.02fr .98fr; column-gap: 42px; align-items: center; padding-top: 182px; padding-bottom: 0; overflow: clip; overflow-clip-margin: 8px; }
+  .opening { display: grid; grid-template-columns: 1.02fr .98fr; column-gap: 42px; align-items: center; padding-top: 182px; padding-bottom: 16px; overflow: clip; overflow-clip-margin: 8px; }
   .opening__copy { position: relative; z-index: 2; padding-bottom: 14px; }
   h1 { margin: 0 0 27px; font-size: clamp(2.75rem, 5.15vw, 5rem); font-weight: 900; line-height: 1.16; letter-spacing: -.04em; }
   h1 span { display: block; white-space: nowrap; }
@@ -65,7 +62,8 @@
   .opening__consult-action { display: inline-flex; min-height: 46px; align-items: center; gap: 13px; border: 0; padding: 0 20px; border-radius: 999px; background: var(--signal); color: white; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background-color 180ms ease, transform 180ms ease; }
   .opening__consult:hover .opening__consult-action { background: var(--signal-deep); transform: translateX(2px); }
   .opening__consult svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-  .opening__note { margin: 15px 0 0 7px; color: var(--ink-muted); font-size: 12px; }
+  .opening__note { max-width: 535px; margin: 15px 0 0 7px; color: var(--ink-muted); font-size: 13px; line-height: 1.8; }
+  .opening__note a { display: inline-block; padding-block: 12px; margin-block: -12px; margin-left: 8px; color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
   .opening__check-status { min-height: 1.5em; margin: 5px 0 0 7px; color: var(--signal-deep); font-size: 12px; font-weight: 500; }
   .opening__visual { position: relative; min-width: 0; height: 488px; }
   .opening__visual::before { content: ''; position: absolute; inset: 38px -6px 36px 40px; background: var(--signal); border-radius: 48% 48% 28% 48%; transform: rotate(-8deg); }
@@ -90,11 +88,8 @@
   .opening__mobile-card li::before { content: '•'; margin-right: 7px; color: var(--signal); }
   .opening__health-card { position: absolute; z-index: 3; top: 0; right: -3%; display: inline-flex; min-height: 43px; align-items: center; gap: 8px; padding: 0 16px; border: 1px solid #dddde2; border-radius: 12px; background: white; box-shadow: 0 10px 28px rgb(20 20 22 / 10%); font-size: 11px; font-weight: 700; transform: rotate(2deg); }
   .opening__health-dot { width: 9px; height: 9px; border-radius: 50%; background: #19b969; }
-  .opening__scope { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 84px; padding-block: 29px; border-top: 1px solid var(--mist); border-bottom: 1px solid var(--mist); }
-  .opening__scope p { margin: 0; color: var(--ink-muted); font-size: 13px; }
-  .opening__scope ul { display: flex; flex-wrap: wrap; gap: 34px; margin: 0; padding: 0; list-style: none; font-size: 14px; font-weight: 700; }
   @media (max-width: 1100px) and (min-width: 801px) { .opening { column-gap: 22px; } h1 { font-size: 4.9vw; } .opening__visual { height: 418px; } .opening__browser-content { padding: 26px; } .opening__lead { font-size: 15px; } }
-  @media (max-width: 800px) { .opening { grid-template-columns: 1fr; padding-top: 135px; } h1 { font-size: clamp(2.4rem, 7.1vw, 4rem); } .opening__lead { font-size: 16px; } .opening__visual { width: min(540px, 100%); height: 458px; justify-self: center; margin-top: 70px; } .opening__scope { margin-top: 40px; align-items: flex-start; flex-direction: column; gap: 15px; } .opening__scope ul { gap: 12px 24px; font-size: 13px; } }
-  @media (max-width: 480px) { .opening { padding-top: 154px; } h1 { margin-bottom: 21px; font-size: clamp(2.2rem, 9.1vw, 2.85rem); line-height: 1.18; } .opening__lead { margin-bottom: 24px; font-size: 14px; line-height: 1.85; } .opening__consult { min-height: 57px; padding-left: 16px; } .opening__consult-prompt { font-size: 11px; } .opening__consult-action { min-height: 42px; gap: 8px; padding: 0 14px; font-size: 11px; } .opening__consult-action svg { width: 15px; } .opening__note, .opening__check-status { margin-left: 2px; font-size: 10px; } .opening__visual { height: 345px; margin-top: 54px; } .opening__browser-card { top: 14px; width: 83%; } .opening__browser-content { padding: 23px 22px 24px; } .opening__browser-content h2 { margin-bottom: 15px; font-size: 1.37rem; } .opening__preview-url { min-height: 31px; margin-bottom: 10px; font-size: 8px; } .opening__preview-url i { font-size: 7px; } .opening__browser-choice { min-height: 33px; font-size: 9px; } .opening__mobile-card { right: 1%; width: 37%; min-width: 132px; padding: 15px 12px; border-width: 4px; border-radius: 20px; } .opening__mobile-card > p { margin-bottom: 11px; font-size: 6px; } .opening__mobile-rule { height: 5px; margin-bottom: 12px; } .opening__mobile-card strong { font-size: 1rem; } .opening__mobile-card ul { margin-top: 10px; font-size: 7px; } .opening__health-card { top: 0; right: 0; min-height: 36px; padding: 0 10px; font-size: 8px; } .opening__health-dot { width: 7px; height: 7px; } .opening__scope { margin-top: 31px; padding-block: 24px; } }
+  @media (max-width: 800px) { .opening { grid-template-columns: 1fr; padding-top: 135px; } h1 { font-size: clamp(2.4rem, 7.1vw, 4rem); } .opening__lead { font-size: 16px; } .opening__visual { width: min(540px, 100%); height: 458px; justify-self: center; margin-top: 70px; }  }
+  @media (max-width: 480px) { .opening { padding-top: 154px; } h1 { margin-bottom: 21px; font-size: clamp(2.2rem, 9.1vw, 2.85rem); line-height: 1.18; } .opening__lead { margin-bottom: 24px; font-size: 14px; line-height: 1.85; } .opening__consult { min-height: 57px; padding-left: 16px; } .opening__consult-prompt { font-size: 16px; } .opening__consult-action { min-height: 42px; gap: 8px; padding: 0 14px; font-size: 11px; } .opening__consult-action svg { width: 15px; } .opening__note, .opening__check-status { margin-left: 2px; font-size: 12px; } .opening__visual { height: 345px; margin-top: 54px; } .opening__browser-card { top: 14px; width: 83%; } .opening__browser-content { padding: 23px 22px 24px; } .opening__browser-content h2 { margin-bottom: 15px; font-size: 1.37rem; } .opening__preview-url { min-height: 31px; margin-bottom: 10px; font-size: 8px; } .opening__preview-url i { font-size: 7px; } .opening__browser-choice { min-height: 33px; font-size: 9px; } .opening__mobile-card { right: 1%; width: 37%; min-width: 132px; padding: 15px 12px; border-width: 4px; border-radius: 20px; } .opening__mobile-card > p { margin-bottom: 11px; font-size: 6px; } .opening__mobile-rule { height: 5px; margin-bottom: 12px; } .opening__mobile-card strong { font-size: 1rem; } .opening__mobile-card ul { margin-top: 10px; font-size: 7px; } .opening__health-card { top: 0; right: 0; min-height: 36px; padding: 0 10px; font-size: 8px; } .opening__health-dot { width: 7px; height: 7px; }  }
   @media (prefers-reduced-motion: reduce) { .opening__consult, .opening__consult-action { transition: none; } .opening__consult:hover .opening__consult-action { transform: none; } }
 </style>

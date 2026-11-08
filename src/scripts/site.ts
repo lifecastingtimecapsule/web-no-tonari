@@ -160,9 +160,9 @@ function setupMotion(): void {
     }
 
     /** サービスは一覧として順に、診断は確認の入口として線から現れる。 */
-    const serviceList = document.querySelector<HTMLElement>('[data-service-list]');
+    const serviceList = document.querySelector<HTMLElement>('.service-guide');
     if (serviceList) {
-      gsap.from(serviceList.querySelectorAll('.service-row'), {
+      gsap.from(serviceList.querySelectorAll('.service-guide__item'), {
         opacity: 0,
         y: 18,
         duration: 0.42,
@@ -294,13 +294,13 @@ function setupMessageAutosize(): void {
   resizeMessage();
 }
 
-/** 公開URLを検証し、自社のSEO確認・改善ガイドページへ引き渡す。 */
-function setupSeoCheck(): void {
-  const form = document.querySelector<HTMLFormElement>('[data-seo-check-form]');
-  const input = document.querySelector<HTMLInputElement>('#seo-check-url');
-  const status = document.querySelector<HTMLElement>('[data-seo-check-status]');
-  const previewUrl = document.querySelector<HTMLElement>('[data-seo-preview-url]');
-  const previewState = document.querySelector<HTMLElement>('[data-seo-preview-state]');
+/** 公開URLを軽く検証し、かんたん安全チェックのページへ引き渡す。 */
+function setupSafetyCheck(): void {
+  const form = document.querySelector<HTMLFormElement>('[data-safety-check-form]');
+  const input = document.querySelector<HTMLInputElement>('#safety-check-url');
+  const status = document.querySelector<HTMLElement>('[data-safety-check-status]');
+  const previewUrl = document.querySelector<HTMLElement>('[data-check-preview-url]');
+  const previewState = document.querySelector<HTMLElement>('[data-check-preview-state]');
   if (!form || !input || !status) return;
 
   /** URL欄の入力を右側の確認画面にも反映し、画面同士の役割を一つに保つ。 */
@@ -309,30 +309,26 @@ function setupSeoCheck(): void {
     if (previewUrl) previewUrl.textContent = enteredUrl || 'yourbusiness.com';
     if (previewState) previewState.textContent = enteredUrl ? '確認の準備' : '入力待ち';
   };
+  const showError = (): void => {
+    input.setAttribute('aria-invalid', 'true');
+    status.textContent = 'example.com のような、確認したいサイトのURLを入力してください。';
+    input.focus();
+  };
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const enteredUrl = input.value.trim();
-    if (!enteredUrl || /\s/.test(enteredUrl)) {
-      input.setAttribute('aria-invalid', 'true');
-      status.textContent = 'スペースを含まない、確認したい公開URLを入力してください。';
-      input.focus();
-      return;
-    }
-    const urlWithProtocol = /^https?:\/\//i.test(enteredUrl) ? enteredUrl : `https://${enteredUrl}`;
-
+    if (!enteredUrl || /\s/.test(enteredUrl)) { showError(); return; }
     try {
-      const targetUrl = new URL(urlWithProtocol);
-      if (!['http:', 'https:'].includes(targetUrl.protocol) || !targetUrl.hostname) throw new Error('invalid-url');
-      const checkUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/seo-check/`, location.origin);
-      checkUrl.searchParams.set('url', targetUrl.toString());
-      if (previewState) previewState.textContent = '解析を開く';
-      window.location.assign(checkUrl.toString());
+      const targetUrl = new URL(/^https?:\/\//i.test(enteredUrl) ? enteredUrl : `https://${enteredUrl}`);
+      if (!['http:', 'https:'].includes(targetUrl.protocol) || !targetUrl.hostname.includes('.')) throw new Error('invalid-url');
+      const checkUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/check/`, location.origin);
+      checkUrl.searchParams.set('url', targetUrl.hostname);
+      if (previewState) previewState.textContent = '確認へ進む';
       input.removeAttribute('aria-invalid');
+      window.location.assign(checkUrl.toString());
     } catch {
-      input.setAttribute('aria-invalid', 'true');
-      status.textContent = 'スペースを含まない、確認したい公開URLを入力してください。';
-      input.focus();
+      showError();
     }
   });
 
@@ -346,48 +342,8 @@ function setupSeoCheck(): void {
 setupConcernTool();
 setupMotion();
 setupDemoForm();
-setupSeoCheck();
+setupSafetyCheck();
 
-/** サービスを1件ずつ横送りし、スワイプ・キー操作・画面幅変更にも表示範囲を同期する。 */
-function setupServiceCarousel(): void {
-  const track = document.querySelector<HTMLElement>('[data-service-list]');
-  const controls = document.querySelector<HTMLElement>('[data-service-controls]');
-  const previousButton = document.querySelector<HTMLButtonElement>('[data-service-prev]');
-  const nextButton = document.querySelector<HTMLButtonElement>('[data-service-next]');
-  const position = document.querySelector<HTMLElement>('[data-service-position]');
-  if (!track || !controls || !previousButton || !nextButton || !position) return;
-  const cards = [...track.querySelectorAll<HTMLElement>('.service-row')];
-  controls.hidden = false;
-  let scrollTimer = 0;
-  const updatePosition = (): void => {
-    const bounds = track.getBoundingClientRect();
-    const visibleCards = cards.map((card, index) => ({ index, bounds: card.getBoundingClientRect() }))
-      .filter(card => card.bounds.left >= bounds.left - 4 && card.bounds.right <= bounds.right + 4);
-    // スナップ位置と描画端の数pxの差を許容し、実質終端でボタンを無効化する。
-    previousButton.disabled = track.scrollLeft <= 8;
-    nextButton.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 8;
-    if (visibleCards.length) {
-      const first = visibleCards[0].index + 1;
-      const last = visibleCards[visibleCards.length - 1].index + 1;
-      position.textContent = `${first === last ? first : `${first}〜${last}`} / ${cards.length}`;
-    }
-  };
-  const move = (direction: number): void => {
-    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-    const distance = (cards[0]?.getBoundingClientRect().width ?? track.clientWidth) + gap;
-    track.scrollBy({ left: distance * direction, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-  };
-  previousButton.addEventListener('click', () => move(-1));
-  nextButton.addEventListener('click', () => move(1));
-  track.addEventListener('scroll', () => { clearTimeout(scrollTimer); scrollTimer = window.setTimeout(updatePosition, 120); }, { passive: true });
-  track.addEventListener('keydown', event => {
-    if (event.target !== track || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
-    event.preventDefault(); move(event.key === 'ArrowRight' ? 1 : -1);
-  });
-  new ResizeObserver(updatePosition).observe(track);
-  updatePosition();
-}
-setupServiceCarousel();
 
 /** ヒーロー画面だけをスクロールに連動させ、問い合わせ欄は静止表示を維持する。 */
 function setupExpressiveMotion(): void {
@@ -403,7 +359,8 @@ setupExpressiveMotion();
 const requestedService = new URLSearchParams(window.location.search).get('service');
 const consultationMessage = document.querySelector<HTMLTextAreaElement>('#message');
 if (requestedService && consultationMessage && !consultationMessage.value.trim()) {
-  consultationMessage.value = `${requestedService.slice(0, 100)}について相談したいです。\n現在の状況：\n希望すること：`;
+  const requestedNote = new URLSearchParams(window.location.search).get('note')?.slice(0, 500);
+  consultationMessage.value = `${requestedService.slice(0, 100)}について相談したいです。\n${requestedNote ? `${requestedNote}\n` : ''}現在の状況：\n希望すること：`;
 }
 const requestedSiteUrl = new URLSearchParams(window.location.search).get('siteUrl');
 const consultationSiteUrl = document.querySelector<HTMLInputElement>('#site-url');

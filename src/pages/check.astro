@@ -1,0 +1,114 @@
+---
+// 変更履歴: 2026-11-08 SEO確認を廃止し、公開情報だけで確認する「かんたん安全チェック」ページを追加。
+// 役割: 確認範囲を先に示し、結果を3段階で表示して、有料の基本セキュリティ確認と相談へつなぐ。
+import SiteLayout from '../layouts/SiteLayout.astro';
+import '../styles/services.css';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+const apiAvailable = Boolean(import.meta.env.PUBLIC_SAFETY_CHECK_API);
+const checks = [
+  ['通信の暗号化', 'https:// で開けるか、http:// から自動で切り替わるか、暗号化を固定する設定（HSTS）があるか。'],
+  ['ブラウザ向けの保護設定', '他サイトへの埋め込みや、読み込み元の制限など、主な4つの設定が有効か。'],
+  ['ソフトの版の表示', 'CMSやサーバーのバージョンが、外から読み取れる状態になっていないか。'],
+  ['暗号化されない読み込み', 'https:// のページの中で、http:// の画像やプログラムを読み込んでいないか。'],
+  ['なりすましメール対策', '会社のドメインを名乗った偽メールを防ぐ設定（SPF・DMARC）があるか。'],
+];
+const notChecked = ['CMS・プラグインの更新状況', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
+---
+<SiteLayout title="かんたん安全チェック｜ウェブのとなり" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、なりすましメール対策など、外から見える安全性を無料で確認できます。">
+<div class="shell check-page">
+  <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
+  <h1>サイトの安全性を、<br />かんたんチェック。</h1>
+  <p class="check-lead">URLを入れるだけで、外から見える安全性を確認できます。<br />点数ではなく、「問題なし」「確認をおすすめ」「要対応」の3段階でお伝えします。</p>
+
+  <form class="check-form" data-check-form data-api={import.meta.env.PUBLIC_SAFETY_CHECK_API ?? ''} novalidate>
+    <label for="check-url">確認したいサイトのURL</label>
+    <div class="check-form__row">
+      <input id="check-url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" required aria-describedby="check-disclosure check-status" />
+      <button class="button button--human" type="submit" data-check-run disabled={!apiAvailable}>チェックする</button>
+    </div>
+    <p id="check-disclosure" class="check-form__note">確認するのはトップページ1件と、ドメインの公開DNS情報だけです。侵入や攻撃にあたる操作は行いません。</p>
+    <p id="check-status" class="check-form__status" role="status" aria-live="polite" data-check-status>{apiAvailable ? '' : 'チェック機能は公開準備中です。お急ぎの場合は、お問い合わせからご相談ください。'}</p>
+  </form>
+
+  <section class="check-result" data-check-result hidden aria-labelledby="check-result-title" tabindex="-1">
+    <h2 id="check-result-title">チェック結果</h2>
+    <p class="check-result__target" data-check-target></p>
+    <ul class="check-summary" data-check-summary aria-label="結果の内訳"></ul>
+    <ol class="check-items" data-check-items></ol>
+    <p class="check-result__time" data-check-time></p>
+  </section>
+
+  <section class="check-scope" aria-labelledby="check-scope-title">
+    <h2 id="check-scope-title">このチェックで確認すること</h2>
+    <dl>{checks.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
+  </section>
+
+  <section class="check-next" aria-labelledby="check-next-title">
+    <div>
+      <h2 id="check-next-title">外から見えるのは、<br />入口だけ。</h2>
+      <p>サイトの安全性の多くは、管理画面やサーバーの中で決まります。次の項目は、このチェックでは確認できません。</p>
+      <ul>{notChecked.map(item => <li>{item}</li>)}</ul>
+    </div>
+    <div class="check-next__offer">
+      <p class="check-next__label">基本セキュリティ確認</p>
+      <p class="check-next__price">¥55,000<small>（税込）</small></p>
+      <p>CMS・権限・更新・バックアップ・フォーム・HTTPSを確認し、すぐ対応することと今後整えることを分けて報告します。</p>
+      <a class="button button--human" data-check-consult href={`${home}?service=${encodeURIComponent('安全チェックの結果')}#contact`}>この結果をもとに相談する</a>
+    </div>
+  </section>
+</div>
+<script>import '../scripts/safety-check';</script>
+</SiteLayout>
+<style is:global>
+/* JSで描画する結果行にも効かせるため、.check-page配下に限定したグローバルスタイルにする。 */
+.check-page { max-width: 1000px; }
+.check-page h1 { margin: 0 0 24px; font-size: clamp(2.3rem, 5vw, 4.4rem); font-weight: 900; line-height: 1.25; letter-spacing: -.035em; }
+.check-lead { margin-bottom: 36px; color: var(--ink-muted); line-height: 2; }
+.check-form { padding: 28px; border-radius: 16px; background: var(--mist-light); }
+.check-form label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; }
+.check-form__row { display: flex; gap: 12px; }
+.check-form input { flex: 1; min-width: 0; min-height: 52px; padding: 12px 14px; border: 1px solid var(--input-border); border-radius: 8px; background: white; color: var(--ink); font: inherit; }
+.check-form .button { flex: none; width: auto; min-height: 52px; }
+.check-form .button:disabled { opacity: .45; cursor: not-allowed; }
+.check-form__note { margin: 14px 0 0; color: var(--ink-muted); font-size: 13px; line-height: 1.8; }
+.check-form__status { min-height: 1.6em; margin: 6px 0 0; color: var(--signal-deep); font-size: 14px; font-weight: 500; }
+.check-result { margin-top: 48px; scroll-margin-top: 120px; }
+.check-result[hidden] { display: none; }
+.check-result:focus { outline: none; }
+.check-result h2, .check-scope h2, .check-next h2 { margin: 0 0 12px; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.4; letter-spacing: -.02em; }
+.check-result__target { margin: 0 0 20px; font-weight: 700; overflow-wrap: anywhere; }
+.check-page .check-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; padding: 0; list-style: none; }
+.check-page .check-items { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--mist); }
+.check-page .check-item { display: grid; grid-template-columns: 148px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--mist); }
+.check-page .check-item h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.5; }
+.check-page .check-item p { margin: 0; font-size: 14px; line-height: 1.85; }
+.check-page .check-item p + p { margin-top: 6px; color: var(--ink-muted); }
+.check-page .status-badge { display: inline-flex; align-self: start; justify-self: start; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border: 1px solid currentColor; border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.check-page .status-badge--ok { color: #115940; background: #e7f5ef; border-color: #b9e0cf; }
+.check-page .status-badge--advice { color: #7a4b00; background: #fff6e5; border-color: #f0d5a0; }
+.check-page .status-badge--action { color: white; background: var(--signal-deep); border-color: var(--signal-deep); }
+.check-page .status-badge--unknown { color: var(--ink-muted); background: white; border-color: var(--mist); }
+.check-result__time { margin-top: 14px; color: var(--ink-muted); font-size: 12px; }
+.check-scope { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--mist); }
+.check-scope dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; margin: 24px 0 0; }
+.check-scope dl > div { padding: 18px 0; border-top: 1px solid var(--mist); }
+.check-scope dt { margin-bottom: 6px; font-weight: 700; }
+.check-scope dd { margin: 0; color: var(--ink-muted); font-size: 14px; line-height: 1.85; }
+.check-next { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; margin-top: 56px; padding: 40px; border-radius: 16px; background: var(--night); color: white; }
+.check-next p { color: #d1d1d6; font-size: 14px; line-height: 1.9; }
+.check-next ul { margin: 16px 0 0; padding-left: 1.2em; color: white; font-size: 14px; line-height: 2.1; }
+.check-next__offer { padding: 28px; border-radius: 12px; background: rgb(255 255 255 / 6%); }
+.check-next__label { margin: 0; color: white !important; font-weight: 700; }
+.check-next__price { margin: 6px 0 12px; color: white !important; font-size: 34px !important; font-weight: 700; line-height: 1.2 !important; font-variant-numeric: tabular-nums; }
+.check-next__price small { font-size: 13px; }
+.check-next .button { width: 100%; margin-top: 8px; }
+@media (max-width: 800px) {
+  .check-form .button { width: 100%; }
+  .check-form { padding: 20px; }
+  .check-form__row { flex-direction: column; }
+  .check-page .check-item { grid-template-columns: 1fr; gap: 10px; }
+  .check-scope dl { grid-template-columns: 1fr; }
+  .check-next { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
+  .check-next__offer { padding: 20px; }
+}
+</style>

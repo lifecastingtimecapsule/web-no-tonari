@@ -25,7 +25,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
     </div>
 </SiteLayout>
 <style>
-  .company { max-width: 900px; padding-top: 0; padding-bottom: 80px; }
+  .company { max-width: 900px; padding-top: 0; padding-bottom: 0; }
   nav { display: flex; gap: 14px; margin-bottom: 36px; font-size: 13px; color: var(--ink-muted); }
   h1 { font-size: clamp(1.8rem, 3vw, 2.3rem); line-height: 1.5; margin-bottom: 24px; }
   .company__intro { font-size: 16px; line-height: 2; color: var(--ink-muted); margin-bottom: 36px; }
@@ -33,5 +33,5 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   dl > div { display: grid; grid-template-columns: 190px 1fr; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--mist); font-size: 15px; line-height: 1.9; }
   dt { font-weight: 700; } dd { margin: 0; } ul { list-style: none; padding: 0; margin: 0; }
   .company__source { font-size: 12px; color: var(--ink-muted); margin-top: 24px; }
-  @media(max-width:600px) { .company { padding-top: 0; padding-bottom: 56px; } dl > div { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; } }
+  @media(max-width:600px) { .company { padding-top: 0; padding-bottom: 0; } dl > div { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; } }
 </style>

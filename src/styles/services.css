@@ -54,7 +54,7 @@
 .service-notes article h3 { font-size:19px; line-height:1.6; margin:0 0 14px; }
 .service-notes article p { font-size:14px; line-height:2; color:var(--ink-muted); margin:0; }
 .service-source { font-size:12px; margin-top:24px; overflow-wrap:anywhere; }
-.service-close { padding:40px; background:var(--mist-light); border-radius:16px; margin:24px 0 64px; }
+.service-close { padding:40px; background:var(--mist-light); border-radius:16px; margin:24px 0 0; }
 .service-close h2 { font-size:clamp(1.5rem,2.5vw,2.2rem); margin:0 0 24px; }
 .service-close p { max-width:65ch; font-size:14px; line-height:1.9; }
 .service-close__price { font-weight:700; }

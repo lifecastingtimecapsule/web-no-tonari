@@ -1,16 +1,36 @@
 ---
 // 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
+// 変更履歴: 2026-11-08 右寄せの1行構成を、ブランド・相談導線・3列のサイトマップ・運営表記の構成へ再設計。全ページで同じ余白から始まるよう統一。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
 import Brand from './Brand.astro';
+import { servicePages } from '../data/services';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
+const groups: [string, [string, string][]][] = [
+  ['サービス', [...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['かんたん安全チェック', `${home}check/`]]],
+  ['ご案内', [['料金', `${home}#pricing`], ['よくある質問', `${home}#faq`], ['お問い合わせ', `${home}#contact`]]],
+  ['運営について', [['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`]]],
+];
 ---
 <footer class="site-footer">
-  <div class="shell site-footer__inner">
-    <Brand footer />
-    <p>技術が大きくなる時代に、小さく近くいる。</p>
-    <nav class="site-footer__links" aria-label="フッターナビゲーション"><a href={`${home}#services`}>サービス</a><a href={`${home}company/`}>会社概要</a><a href={`${home}philosophy/`}>企業理念</a><a href={`${home}#faq`}>よくある質問</a><a href={`${home}#contact`}>お問い合わせ</a></nav>
-    {!isCompanyPage && <p class="site-footer__operator"><small>運営：株式会社ライフキャスティングジャパン</small></p>}
+  <div class="shell site-footer__top">
+    <div class="site-footer__brand">
+      <Brand footer />
+      <p>技術が大きくなる時代に、小さく近くいる。</p>
+      <a class="site-footer__cta" href={`${home}#contact`}>相談する <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+      {groups.map(([heading, links]) => (
+        <div>
+          <p class="site-footer__heading">{heading}</p>
+          <ul>{links.map(([label, href]) => <li><a href={href}>{label}</a></li>)}</ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+  <div class="shell site-footer__bottom">
+    {isCompanyPage ? <span /> : <small>運営：株式会社ライフキャスティングジャパン（愛知県大府市）</small>}
+    <small>© 2026 ウェブのとなり</small>
   </div>
 </footer>
