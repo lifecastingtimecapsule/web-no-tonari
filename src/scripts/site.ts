@@ -9,6 +9,7 @@
 // 変更履歴: 2026-11-08 URL入力をヒーロー右側の確認画面へ同期する処理を追加。後から追加した抽象3Dの初期化は方針見直しで削除。
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+// 変更履歴: 2026-11-08 SEO確認後の相談表示と、URL・サービス名の相談欄への引き継ぎを追加。
 
 type Concern = {
   id: string;
@@ -16,8 +17,6 @@ type Concern = {
   title: string;
   body: string;
 };
-
-const pageSpeedInsightsUrl = 'https://pagespeed.web.dev/analysis';
 
 const concerns: Concern[] = [
   {
@@ -268,13 +267,13 @@ function setupDemoForm(): void {
       submitButton.dataset.loading = 'false';
       submitLabel.textContent = '入力内容を確認する';
       status.dataset.state = 'success';
-      status.innerHTML = '<strong>デモ確認が完了しました。</strong><span>入力内容は送信されていません。公開時に送信先を設定します。</span>';
+      status.innerHTML = '<strong>相談内容の入力を確認しました。</strong><span>メール受付の準備中のため送信されていません。入力した内容は、この画面からコピーして保存できます。</span>';
       status.focus();
     }, 650);
   });
 }
 
-/** 入力された公開URLをGoogleのモバイルSEO簡易チェックへ安全に引き渡す。 */
+/** 公開URLを検証し、自社のSEO確認・改善ガイドページへ引き渡す。 */
 function setupSeoCheck(): void {
   const form = document.querySelector<HTMLFormElement>('[data-seo-check-form]');
   const input = document.querySelector<HTMLInputElement>('#seo-check-url');
@@ -304,11 +303,10 @@ function setupSeoCheck(): void {
     try {
       const targetUrl = new URL(urlWithProtocol);
       if (!['http:', 'https:'].includes(targetUrl.protocol) || !targetUrl.hostname) throw new Error('invalid-url');
-      const checkUrl = new URL(pageSpeedInsightsUrl);
+      const checkUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/seo-check/`, location.origin);
       checkUrl.searchParams.set('url', targetUrl.toString());
       if (previewState) previewState.textContent = '解析を開く';
-      window.open(checkUrl.toString(), '_blank', 'noopener,noreferrer');
-      status.textContent = 'Google PageSpeed InsightsでモバイルSEOの確認を開きました。';
+      window.location.assign(checkUrl.toString());
       input.removeAttribute('aria-invalid');
     } catch {
       input.setAttribute('aria-invalid', 'true');
@@ -329,3 +327,18 @@ setupConcernTool();
 setupMotion();
 setupDemoForm();
 setupSeoCheck();
+
+/** サービス別ページから選んだ相談内容を、既存入力を上書きせず引き継ぐ。 */
+const requestedService = new URLSearchParams(window.location.search).get('service');
+const consultationMessage = document.querySelector<HTMLTextAreaElement>('#message');
+if (requestedService && consultationMessage && !consultationMessage.value.trim()) {
+  consultationMessage.value = `${requestedService.slice(0, 100)}について相談したいです。\n現在の状況：\n希望すること：`;
+}
+const requestedSiteUrl = new URLSearchParams(window.location.search).get('siteUrl');
+const consultationSiteUrl = document.querySelector<HTMLInputElement>('#site-url');
+if (requestedSiteUrl && consultationSiteUrl && !consultationSiteUrl.value.trim()) {
+  try {
+    const validSiteUrl = new URL(requestedSiteUrl);
+    if (['https:', 'http:'].includes(validSiteUrl.protocol)) consultationSiteUrl.value = validSiteUrl.toString();
+  } catch { /* 形式不正のクエリはフォームへ引き継がない。 */ }
+}

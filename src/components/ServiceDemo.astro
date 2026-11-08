@@ -1,0 +1,26 @@
+---
+// 変更履歴: 2026-11-08 対応内容を操作で理解できる4種類の架空サンプルを追加。
+// 役割: 実績や実サービスと区別した、外部送信のない体験を表示する。
+const { slug } = Astro.props;
+---
+<div class:list={['service-demo', `service-demo--${slug}`]}>
+  {slug === 'websites' && <div class="flower-demo">
+    <div class="demo-topline"><strong>花と、暮らし。</strong><span>架空の花屋</span></div>
+    <div class="flower-demo__body"><div><button type="button" class="demo-hotspot" data-demo-note="最初に伝えるのは、何のお店か。短い見出しと商品名で、ページの目的をつかめるようにしています。">いつもの部屋に、<br />ひと束の季節を。</button><p>季節の花束を、あなたの暮らしへ。<br />一束 ¥3,300（税込・サンプル価格）</p><button type="button" class="demo-hotspot demo-hotspot--action" data-demo-note="見出しと価格を読んだ後に選べる場所へ。ボタンは予約の入口を示します。このサンプルでは予約は発生しません。">花束を選ぶ</button></div><div class="flower-demo__type" aria-hidden="true">花<br />束</div></div>
+    <button type="button" class="demo-hotspot demo-hotspot--detail" data-demo-note="注文前の不安を解消する情報です。受け取り場所や日程など、判断に必要な条件を行動の近くに置きます。">店頭受け取り・3日前までのご予約</button>
+    <p class="demo-feedback" role="status" data-demo-feedback>見出し、ボタン、受け取り条件を押してみてください。</p>
+  </div>}
+  {slug === 'ec' && <div class="shop-demo">
+    <div class="demo-topline"><strong>日々の道具店</strong><span>架空の商品</span></div>
+    <div class="shop-demo__body"><div class="cup-stage"><div class="cup-shape" data-cup aria-hidden="true"></div><span>商品形状のイメージ図</span></div><div><h3>朝のマグ</h3><p>手になじむ、まいにちの一杯。</p><strong class="demo-price">¥2,400 <small>税込</small></strong><p>容量 300mL ／ 送料 ¥600<br />発送目安 3営業日（すべてサンプル）</p><label for="sample-color">色</label><select id="sample-color" name="sampleColor" data-product-color><option value="sand">砂色</option><option value="red">赤土</option><option value="ink">墨色</option></select><label for="sample-quantity">数量</label><select id="sample-quantity" name="sampleQuantity" data-product-quantity>{[1,2,3].map(quantity => <option value={quantity}>{quantity}点</option>)}</select><button class="button button--human" type="button" data-cart-add>サンプルカートに入れる</button></div></div>
+    <div class="demo-feedback" role="status" data-cart-status>カートは空です。注文は行われません。</div><button class="demo-reset" type="button" data-cart-reset>カートを空にする</button>
+  </div>}
+  {slug === 'ai-apps' && <div class="ai-demo">
+    <div class="demo-topline"><strong>問い合わせ整理ノート</strong><span>生成せず、表示を体験</span></div>
+    <div class="ai-demo__body"><div><label for="sample-inquiry">問い合わせサンプルを選ぶ</label><select id="sample-inquiry" name="sampleInquiry" data-inquiry><option value="update">営業時間を変更したい</option><option value="renew">サイトを作り直したい</option><option value="shop">オンラインで商品を売りたい</option></select><blockquote data-inquiry-text>来月から営業時間が10時〜18時になります。ホームページの案内を変更できますか？</blockquote><button class="button button--human" type="button" data-inquiry-organize>整理したサンプルを見る</button></div><div class="ai-demo__output"><h3>人が確認するための下書き</h3><div role="status" aria-live="polite" data-inquiry-output><p>左の問い合わせを選んで、整理した内容を表示できます。</p></div><small>返信の送信・AIへの情報送信は行いません。</small></div></div>
+  </div>}
+  {slug === 'security' && <div class="mail-demo">
+    <div class="demo-topline"><strong>受信メールのサンプル</strong><span>0 / 3か所を確認</span></div>
+    <p>件名：本日中にアカウントの確認が必要です</p><button class="mail-demo__point" type="button" data-mail-point="差出人の名前だけで判断しない" data-demo-note="表示名が『管理サポート』でも本人とは限りません。差出人アドレスと普段の連絡方法を確認し、必要なら既知の窓口に問い合わせます。">差出人：管理サポート &lt;notice@account-example.test&gt;</button><p>いつもご利用ありがとうございます。</p><button class="mail-demo__point" type="button" data-mail-point="急がせる依頼は立ち止まる" data-demo-note="『今日中』『利用停止』など、急いで判断させる表現に注意します。業務上の依頼でも、そのメールだけで判断せず別の経路で確かめます。">本日中に手続きしない場合、すべてのサービスが停止します。</button><button class="mail-demo__point" type="button" data-mail-point="リンクから情報を入力する前に確認" data-demo-note="メールのリンクからパスワードを入力せず、普段使っているブックマークや公式アプリを開いて確認します。このサンプルに実際のリンクはありません。">アカウントを確認する（学習用・リンクなし）</button><p class="demo-feedback" role="status" data-demo-feedback>差出人、急がせる文章、手続きボタン。順番は自由です。</p>
+  </div>}
+</div>

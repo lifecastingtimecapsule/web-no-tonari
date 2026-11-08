@@ -5,6 +5,7 @@
 // 変更履歴: 2026-11-08 URLをGoogle PageSpeed InsightsのモバイルSEO確認へ渡す、鍵不要の簡易チェックフォームを追加。
 // 変更履歴: 2026-11-08 入力URLと右側の確認画面を同期する構成へ更新。後から追加した3Dシグナルは方針見直しで撤去。
 // 役割: まだ要件がまとまっていない利用者を、相談フォームと対応領域へ迷わず導く。
+// 変更履歴: 2026-11-08 SEO解析を開いた後に相談への次の一歩を表示し、入力URLを引き継ぐ受け口を追加。
 ---
 
 <section class="opening shell" id="top" aria-labelledby="hero-title" data-hero-motion>
@@ -16,13 +17,13 @@
       <input class="opening__consult-prompt" id="seo-check-url" name="seoCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="yourbusiness.com" aria-describedby="seo-check-note seo-check-status" required />
       <button class="opening__consult-action" type="submit">SEOを確認する <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
     </form>
-    <p class="opening__note" id="seo-check-note" data-hero-note>Google PageSpeed Insightsで、モバイルSEOの簡易チェックを別タブで開きます。</p>
+    <p class="opening__note" id="seo-check-note" data-hero-note>SEO確認と改善ガイドのページへ進みます。入力URLをGoogleの解析サービスへ送ります。</p>
     <p class="opening__check-status" id="seo-check-status" role="status" aria-live="polite" data-seo-check-status></p>
   </div>
 
   <div class="opening__visual" aria-label="対応領域を表す画面の重なり">
     <div class="opening__browser-card" aria-hidden="true" data-hero-browser>
-      <div class="opening__browser-bar"><span></span><span></span><span></span><p>web-no-tonari.jp</p></div>
+      <div class="opening__browser-bar"><span></span><span></span><span></span><p>サイト確認のイメージ</p></div>
       <div class="opening__browser-content">
         <p class="opening__browser-kicker">SEO CHECK / MOBILE</p>
         <h2>いまのウェブを、<br />先に確かめる。</h2>

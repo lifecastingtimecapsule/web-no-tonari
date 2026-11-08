@@ -2,6 +2,9 @@
 
 ## 2026-11-08
 
+- `src/pages/seo-check.astro` / `src/scripts/seo-check.ts`: 追加指示により自社SEO確認ページを追加し、URL→解析・目的別ガイド→相談に変更。45秒の取得期限、利用上限時の案内、実測のみのスコア表示を実装。目的別案内は一般ガイドと明記し、顧客サイトを検出した結果と混同させない。
+- `src/data/services.ts` / `src/pages/services/[slug].astro` / `src/components/ServiceDemo.astro` / `src/scripts/service-demos.ts` / `src/styles/services.css`: ウェブ・EC・AIアプリ・保守セキュリティの4ページを追加。事業説明、実績と区別した体験サンプル、各3本の豆知識、料金の適用境界を掲載し、何を依頼できるか分かる構成へ拡張。
+- `OpeningHero.astro` / `site.ts` / `index.astro`: SEO解析を開いた後に相談ボタンを表示し、対象URLと相談文を引き継ぐ。受付用メールは新設予定のため送信は接続せず、現状を相談導線上にも明示。
 - `.github/workflows/deploy-pages.yml` / `astro.config.mjs` / `.gitignore` / `README.md`: GitHub Pagesで安全に静的公開できるよう、`main`更新時のビルド・デプロイ、プロジェクトページ用の配信パス、ローカル検証ログと途中成果物の公開除外、公開手順を追加。サイト本体と必要な制作記録だけを公開対象にするため。
 - `src/pages/index.astro` / `src/styles/global.css`: 固定の基本料金3件と任意オプションを、追加請求の境界・保守契約の任意性・外部費用の実費を含めて掲載。料金の上振れを連想させる「〜」を使わず、クリーンな価格方針を伝えるため。
 - `PRODUCT.md` / `DESIGN.md`: ユーザーが承認した税込固定価格、任意オプション、保守契約の非必須方針を記録。
