@@ -693,9 +693,23 @@ p {
 
 .service-list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 56px) / 3);
   gap: 28px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-block: 8px;
 }
+/* 変更履歴: 2026-11-08 自動再生しない手動カルーセルへ変更。操作ボタンと表示範囲で残りの項目を示す。 */
+.service-carousel-controls { display:flex; align-items:center; justify-content:flex-end; gap:20px; margin:-12px 0 20px; }
+.service-carousel-controls[hidden] { display:none; }
+.service-carousel-controls p { font-size:13px; color:var(--ink-muted); margin:0; font-variant-numeric:tabular-nums; }
+.service-carousel-controls > div { display:flex; gap:10px; }
+.service-carousel-controls button { display:grid; place-items:center; width:46px; height:46px; padding:0; border:1px solid #b9b9c1; border-radius:50%; background:var(--white); color:var(--ink); cursor:pointer; transition:background-color 160ms ease,border-color 160ms ease; }
+.service-carousel-controls button:hover:not(:disabled) { background:var(--ink); border-color:var(--ink); color:var(--white); }
+.service-carousel-controls button:disabled { opacity:.35; cursor:default; }
+.service-carousel-controls svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.7; }
 .services { padding-block: 96px; }
 .services .section-heading h2 { font-size: clamp(1.65rem, 3.5vw, 3.3rem); }
 
@@ -705,6 +719,7 @@ p {
   flex-direction: column;
   min-width: 0;
   gap: 16px;
+  scroll-snap-align: start;
 }
 
 .service-row__preview {
@@ -1366,7 +1381,7 @@ p {
     height: 48px;
   }
 
-  .service-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 24px; }
+  .service-list { grid-auto-columns: calc((100% - 24px) / 2); gap:24px; }
 
   .security__line {
     top: 54%;
@@ -1547,7 +1562,7 @@ p {
     min-height: 66px;
   }
 
-  .service-list { grid-template-columns: 1fr; gap: 38px; }
+  .service-list { grid-auto-columns: 100%; gap:20px; }
 
   .faq-list summary {
     min-height: 82px;

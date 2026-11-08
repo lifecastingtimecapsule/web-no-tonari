@@ -10,6 +10,7 @@ import OpeningHero from '../components/OpeningHero.astro';
 // 変更履歴: 2026-11-08 サービスをサンプル画面・短い説明付きの横並びカラムへ変更し、完成像を比較しやすくする。
 // 変更履歴: 2026-11-08 スクロール連動の赤い大見出しを追加し、相談欄を本文＋任意URLとコピー操作へ簡略化。
 // 変更履歴: 2026-11-08 再指示により問い合わせ前の動く文字帯を撤去し、一般的な問い合わせ見出しへ変更。
+// 変更履歴: 2026-11-08 サービスを3件ずつ見せる手動横送りへ変更。全4件を左右ボタン・スワイプで閲覧できる。
 import { servicePages } from '../data/services';
 const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -149,7 +150,14 @@ const faqs = [
             <p>必要なものだけを、必要な順序で。大きな仕組みを売ることから始めません。</p>
           </div>
 
-          <div class="service-list" data-service-list>
+          <div class="service-carousel-controls" data-service-controls hidden>
+            <p role="status" aria-live="polite" aria-atomic="true" data-service-position>全4サービス</p>
+            <div>
+              <button type="button" aria-label="前のサービスを表示" aria-controls="service-carousel" data-service-prev disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg></button>
+              <button type="button" aria-label="次のサービスを表示" aria-controls="service-carousel" data-service-next><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg></button>
+            </div>
+          </div>
+          <div class="service-list" id="service-carousel" data-service-list tabindex="0" role="region" aria-label="サービス一覧。横にスクロールして閲覧できます">
             {servicePages.map((service) => (
               <article class="service-row">
                 <a class="service-row__preview" href={`${serviceBase}/services/${service.slug}/`} aria-label={`${service.name}のサンプルを見る`}>
