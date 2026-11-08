@@ -1,6 +1,7 @@
 ---
 // 変更履歴: 2026-11-08 ユーザー依頼に基づき、誇張のない企業理念を独立した読み物ページとして追加。
 // 役割: 事業の目的と基本姿勢を説明する。法人情報・資格・実績は推測して掲載しない。
+// 変更履歴: 2026-11-08 運営会社の確認に伴い会社概要への相互導線を追加。
 import '../styles/global.css';
 import '../styles/services.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
@@ -46,7 +47,7 @@ const principles = [
         <h2 id="principles-title">大切にしていること</h2>
         {principles.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}
       </section>
-      <div class="philosophy__links"><a href={`${home}#services`}>サービスを見る</a><a href={`${home}#contact`}>お問い合わせ</a></div>
+      <div class="philosophy__links"><a href={`${home}company/`}>会社概要を見る</a><a href={`${home}#services`}>サービスを見る</a><a href={`${home}#contact`}>お問い合わせ</a></div>
     </main>
     <footer class="service-footer shell"><a href={home}>ウェブのとなり ホームへ</a><span>© 2026 ウェブのとなり</span></footer>
   </body>

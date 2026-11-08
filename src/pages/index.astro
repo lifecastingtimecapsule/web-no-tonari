@@ -12,6 +12,7 @@ import OpeningHero from '../components/OpeningHero.astro';
 // 変更履歴: 2026-11-08 再指示により問い合わせ前の動く文字帯を撤去し、一般的な問い合わせ見出しへ変更。
 // 変更履歴: 2026-11-08 サービスを3件ずつ見せる手動横送りへ変更。全4件を左右ボタン・スワイプで閲覧できる。
 // 変更履歴: 2026-11-08 独立した企業理念ページへのリンクをフッターへ追加。
+// 変更履歴: 2026-11-08 確認済み運営会社と会社概要への導線をフッターに追加。
 import { servicePages } from '../data/services';
 const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -298,8 +299,8 @@ const faqs = [
           <span>ウェブのとなり</span>
         </a>
         <p>技術が大きくなる時代に、小さく近くいる。</p>
-        <p class="site-footer__provisional"><a href={`${serviceBase}/philosophy/`}>企業理念</a></p>
-        <p><small>© 2026 ウェブのとなり</small></p>
+        <p class="site-footer__provisional"><a href={`${serviceBase}/company/`}>会社概要</a>　<a href={`${serviceBase}/philosophy/`}>企業理念</a></p>
+        <p><small>運営：株式会社ライフキャスティングジャパン</small></p>
       </div>
     </footer>
 
