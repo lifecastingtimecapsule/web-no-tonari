@@ -70,7 +70,7 @@ export function organizationalDomain(hostname: string): string {
     const second = labels[labels.length - 2];
     if (JP_SECOND_LEVELS.has(second) || JP_PREFECTURES.has(second)) keep = 3;
     // 市町村（city.obu.aichi.jp など）は4つ目までが組織の単位。県（pref.aichi.jp）は3つ目まで。
-    if (JP_PREFECTURES.has(second) && JP_LOCAL_GOVERNMENT.has(labels[labels.length - 3]) && labels.length >= 4) keep = 4;
+    if (JP_PREFECTURES.has(second) && labels.length >= 4 && JP_LOCAL_GOVERNMENT.has(labels[labels.length - 4])) keep = 4;
   }
   return labels.slice(-Math.min(keep, labels.length)).join('.');
 }
