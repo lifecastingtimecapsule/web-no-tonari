@@ -1049,51 +1049,47 @@ p {
 }
 
 .contact {
-  background: var(--signal);
-  color: var(--white);
+  background: var(--white);
+  color: var(--ink);
+  border-top: 1px solid var(--mist);
 }
 
-.contact__layout {
-  display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
-  gap: clamp(64px, 10vw, 150px);
-  align-items: start;
+/* 変更履歴: 2026-11-08 問い合わせは白地・一列・静止表示へ変更。強い赤や装飾的な影を外す。 */
+.contact .contact__layout {
+  display: block;
+  max-width: 680px;
 }
 
 .contact__intro {
-  position: sticky;
-  top: calc(var(--header-height) + 40px);
+  position: static;
+  margin-bottom: 28px;
 }
 
 .contact__intro p {
-  color: var(--white);
+  color: var(--ink-muted);
 }
-.contact__intro h2 { font-size: clamp(3.2rem, 6vw, 6rem); line-height: 1.15; letter-spacing: -.035em; }
+.contact__intro h2 { font-size: clamp(1.65rem, 3vw, 2rem); line-height: 1.5; letter-spacing: 0; margin-bottom: 12px; }
 
 .contact__demo-note {
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid rgb(255 255 255 / 22%);
-  font-size: 0.9rem;
+  margin-top: 14px;
+  font-size: 0.82rem;
 }
 
-.contact-form {
-  padding: clamp(28px, 5vw, 60px);
-  border-radius: var(--radius-md);
-  background: var(--paper);
+.contact .contact-form {
+  padding: 0;
+  border-radius: 0;
+  background: var(--white);
   color: var(--ink);
-  box-shadow: 0 24px 62px rgb(99 8 19 / 18%);
+  box-shadow: none;
 }
+.contact-form .button { width: auto; min-width: 220px; background: var(--ink); box-shadow: none; border-radius: 6px; transform: none; }
+.contact-form .button:hover { background: #343438; transform: none; }
 .contact-form__optional { margin: 4px 0 24px; }
 .contact-form__optional summary { min-height: 44px; display: list-item; padding-block: 10px; font-size: 13px; color: var(--ink-muted); cursor: pointer; }
 .contact-form__optional .field { padding-top: 12px; }
 
-/* 変更履歴: 2026-11-08 赤い横断面と大きな文字を追加。スクロールに連動し、常時自走しない。 */
-.motion-statement { overflow: hidden; padding: clamp(28px, 5vw, 64px) 0; background: var(--signal); color: var(--white); }
-.motion-statement p { display: flex; width: max-content; gap: .2em; margin: 0; padding-inline: 4vw; font-family: var(--font-display); font-size: clamp(3.25rem, 10vw, 9rem); font-weight: 900; line-height: 1.15; letter-spacing: -.035em; }
-.motion-statement span { white-space: nowrap; }
 @media (max-width:560px) { .contact .contact__layout { gap:36px; }.contact.section { padding-block:56px; }.services { padding-block:64px; } }
-@media (prefers-reduced-motion:reduce) { .motion-statement p { width:auto; flex-wrap:wrap; font-size:clamp(2rem,8vw,4rem); }.service-row__preview:hover img { transform:none; } }
+@media (prefers-reduced-motion:reduce) { .service-row__preview:hover img { transform:none; } }
 
 .field + .field {
   margin-top: 26px;

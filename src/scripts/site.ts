@@ -11,6 +11,7 @@ import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 // 変更履歴: 2026-11-08 SEO確認後の相談表示と、URL・サービス名の相談欄への引き継ぎを追加。
 // 変更履歴: 2026-11-08 赤い大見出しとヒーローのスクロール演出、最小入力の相談コピー操作を追加。
+// 変更履歴: 2026-11-08 問い合わせの静止・簡素化依頼に合わせ、赤い文字帯のスクロール処理を撤去。
 
 type Concern = {
   id: string;
@@ -339,15 +340,10 @@ setupMotion();
 setupDemoForm();
 setupSeoCheck();
 
-/** 大きな文字と画面の重なりをスクロールに連動させ、縮小モーション変更時は自動解除する。 */
+/** ヒーロー画面だけをスクロールに連動させ、問い合わせ欄は静止表示を維持する。 */
 function setupExpressiveMotion(): void {
   gsap.registerPlugin(ScrollTrigger);
   gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
-    const statement = document.querySelector<HTMLElement>('[data-motion-statement]');
-    if (statement) gsap.fromTo(statement, { x: () => window.innerWidth * .04 }, {
-      x: () => -Math.max(0, statement.scrollWidth - window.innerWidth + window.innerWidth * .08),
-      ease: 'none', scrollTrigger: { trigger: '.motion-statement', start: 'top bottom', end: 'bottom top', scrub: .65, invalidateOnRefresh: true },
-    });
     const visual = document.querySelector<HTMLElement>('.opening__visual');
     if (visual) gsap.to(visual, { y: -50, rotation: -3, ease: 'none', scrollTrigger: { trigger: '.opening', start: 'top top', end: 'bottom top', scrub: .8 } });
   });
