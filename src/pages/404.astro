@@ -1,0 +1,18 @@
+---
+// 変更履歴: 2026-11-08 Cloudflare配信で存在しないURLに返すページを追加。
+import SiteLayout from '../layouts/SiteLayout.astro';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<SiteLayout title="ページが見つかりません｜ウェブのとなり" description="お探しのページは見つかりませんでした。">
+<div class="shell not-found">
+  <h1>ページが見つかりません。</h1>
+  <p>URLが変わったか、ページが移動した可能性があります。</p>
+  <p><a class="button button--human" href={home}>トップへ戻る</a></p>
+</div>
+</SiteLayout>
+<style>
+.not-found { max-width: 800px; }
+h1 { margin: 0 0 16px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.3; }
+p { color: var(--ink-muted); line-height: 2; }
+.button { width: auto; margin-top: 16px; }
+</style>

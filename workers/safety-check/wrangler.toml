@@ -5,4 +5,4 @@ compatibility_date = "2026-11-01"
 workers_dev = true
 
 [vars]
-ALLOWED_ORIGINS = "https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"
+ALLOWED_ORIGINS = "https://web-no-tonari.amaretto.workers.dev,https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"

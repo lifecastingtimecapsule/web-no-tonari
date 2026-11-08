@@ -1,0 +1,12 @@
+# 変更履歴: 2026-11-08 Cloudflare配信時のセキュリティヘッダー。自社の安全チェックで確認する項目をすべて満たす。
+# GitHub Pagesではこのファイルは使われない（ヘッダーを設定できないため）。
+/*
+  Strict-Transport-Security: max-age=31536000
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://web-no-tonari-safety-check.amaretto.workers.dev; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

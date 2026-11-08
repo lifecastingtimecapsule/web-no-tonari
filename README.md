@@ -23,3 +23,13 @@ GitHub Pages は `main` ブランチへの更新を自動公開します。
 3. 独自ドメインへ移ったら、`workers/safety-check/wrangler.toml` の `ALLOWED_ORIGINS` に新しいオリジンを追加する。
 
 目的別ガイドは一般的な案内で、顧客サイトの内容を読み取ったAI診断ではありません。問い合わせの送信先は、メール新設後に接続します。
+
+## Cloudflareでの配信（2026-11-08〜）
+
+サイト本体は `https://web-no-tonari.amaretto.workers.dev/` でも配信する（Cloudflare Workersの静的アセット）。mainへ反映すると `.github/workflows/deploy-cloudflare-site.yml` が `SITE_URL`・`BASE_PATH=/` でビルドし、`deploy/site/wrangler.toml` の設定で公開する。セキュリティヘッダーは `public/_headers` で付与する（GitHub Pagesでは使われない）。
+
+- CSPで `'unsafe-inline'` を使わないため、`astro.config.mjs` でスクリプト・CSSのインライン化を止めている。インラインの `<script>`・`<style>`・`style` 属性を追加しないこと。
+- 外部へ接続先を増やす場合（APIやフォント等）は、`public/_headers` のCSPにも追加する。
+- 独自ドメインへ移るときは、ワークフローの `SITE_URL`、安全チェックの `ALLOWED_ORIGINS`、CSPを更新する。
+- GitHub Pages版（`/web-no-tonari/`）は移行確認が済むまで併存させる。
+
