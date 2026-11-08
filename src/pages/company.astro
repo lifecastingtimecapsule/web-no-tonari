@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-08 ユーザー提供の会社名・市区町村と国税庁で確認した法人番号に基づき会社概要を追加。
 // 役割: サービスの運営主体を明示する。設立日・代表者は未確認のため掲載しない。
 // 変更履歴: 2026-11-08 ユーザーが確認した資本金100万円を追加。
+// 変更履歴: 2026-11-08 フッターと連続して重複する本文末尾のリンク列を撤去し、回遊導線を共通フッターへ集約。
 import SiteLayout from '../layouts/SiteLayout.astro';
 // 変更履歴: 2026-11-08 共通レイアウトを採用し、トップから移動した際のロゴ・ナビ・書体・フッターの断絶を解消。
 import '../styles/services.css';
@@ -21,7 +22,6 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
         <div><dt>本サイトの事業内容</dt><dd><ul><li>ウェブサイトの企画・デザイン・制作</li><li>ECショップのデザイン・制作</li><li>AIアプリ開発・業務活用の支援</li><li>ウェブサイトの保守・更新・セキュリティ確認</li></ul></dd></div>
       </dl>
       <p class="company__source"><a href="https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001172553" target="_blank" rel="noopener noreferrer">国税庁法人番号公表サイトで法人情報を確認する（別タブ）</a></p>
-      <div class="company__links"><a href={`${home}philosophy/`}>企業理念を見る</a><a href={`${home}#services`}>サービスを見る</a><a href={`${home}#contact`}>お問い合わせ</a></div>
     </div>
 </SiteLayout>
 <style>
@@ -33,7 +33,5 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   dl > div { display: grid; grid-template-columns: 190px 1fr; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--mist); font-size: 15px; line-height: 1.9; }
   dt { font-weight: 700; } dd { margin: 0; } ul { list-style: none; padding: 0; margin: 0; }
   .company__source { font-size: 12px; color: var(--ink-muted); margin-top: 24px; }
-  .company__links { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 36px; font-size: 14px; }
-  .company__links a { display: inline-flex; align-items: center; min-height: 44px; }
   @media(max-width:600px) { .company { padding-top: 0; padding-bottom: 56px; } dl > div { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; } }
 </style>
