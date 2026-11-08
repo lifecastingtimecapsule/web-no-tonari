@@ -1,0 +1,18 @@
+# 変更履歴: 2026-11-08 GitHub公開時に依存関係・ビルド生成物・OS固有ファイルを含めないため追加。
+node_modules/
+dist/
+.DS_Store
+.astro/
+.env
+.env.*
+!.env.example
+
+# 変更履歴: 2026-11-08 公開リポジトリにローカル検証ログ・途中成果物を含めないため追加。
+.playwright-mcp/
+.superpowers/
+work/
+outputs/
+docs/superpowers/
+public/images/yayoi-*.jpg
+public/images/yayoi-*.webp
+public/images/ASSETS.md
