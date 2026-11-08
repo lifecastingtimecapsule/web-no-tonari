@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-08 ナビを共通スクリプトへ移動し、空白相談の検証と動きの設定変更への追従を修正。
 // 変更履歴: 2026-11-04 ナビ、困りごと選択、対話線、デモフォームの動作を追加。
 // 変更履歴: 2026-11-05 3Dヒーローを初期化し、ページ離脱時に描画資源を破棄する処理を追加。
 // 変更履歴: 2026-11-08 抽象3Dの初期化を外し、実画面コラージュに軽いポインター追従を追加。
@@ -48,32 +49,6 @@ const concerns: Concern[] = [
   },
 ];
 
-/** モバイルナビゲーションを開閉し、選択後は本文へフォーカスを戻せる状態にする。 */
-function setupNavigation(): void {
-  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
-  const nav = document.querySelector<HTMLElement>('[data-nav]');
-  if (!button || !nav) return;
-
-  const closeMenu = (): void => {
-    button.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('menu-open');
-  };
-
-  button.addEventListener('click', () => {
-    const expanded = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!expanded));
-    document.body.classList.toggle('menu-open', !expanded);
-  });
-
-  nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
-      closeMenu();
-      button.focus();
-    }
-  });
-}
-
 /** 選ばれた困りごとを対応方針へ接続し、押下状態と読み上げ内容を同期する。 */
 function setupConcernTool(): void {
   const tool = document.querySelector<HTMLElement>('[data-concern-tool]');
@@ -83,7 +58,22 @@ function setupConcernTool(): void {
   const title = tool.querySelector<HTMLElement>('[data-concern-title]');
   const body = tool.querySelector<HTMLElement>('[data-concern-body]');
   if (!service || !title || !body) return;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const result = tool.querySelector<HTMLElement>('.concern-tool__result');
+  if (!result) return;
+
+  /** 選択中の案内を更新し、演出中の設定変更でも内容と選択状態を一致させる。 */
+  const updateResult = (selected: Concern): void => {
+    service.textContent = selected.service;
+    title.textContent = selected.title;
+    body.textContent = selected.body;
+  };
+  window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
+    if (!event.matches) return;
+    gsap.killTweensOf(result);
+    gsap.set(result, { opacity: 1, y: 0 });
+    const selected = concerns.find(item => item.id === tool.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.dataset.concern);
+    if (selected) updateResult(selected);
+  });
 
   tool.querySelectorAll<HTMLButtonElement>('[data-concern]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -94,17 +84,11 @@ function setupConcernTool(): void {
         choice.setAttribute('aria-pressed', String(choice === button));
       });
 
-      const result = tool.querySelector<HTMLElement>('.concern-tool__result');
-      if (!result) return;
-
-      const updateResult = (): void => {
-        service.textContent = selected.service;
-        title.textContent = selected.title;
-        body.textContent = selected.body;
-      };
-
+      gsap.killTweensOf(result);
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReducedMotion) {
-        updateResult();
+        gsap.set(result, { opacity: 1, y: 0 });
+        updateResult(selected);
         return;
       }
 
@@ -113,7 +97,7 @@ function setupConcernTool(): void {
         y: 8,
         duration: 0.16,
         onComplete: () => {
-          updateResult();
+          updateResult(selected);
           gsap.to(result, { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' });
         },
       });
@@ -123,99 +107,94 @@ function setupConcernTool(): void {
 
 /** 対話線とヒーローの一度だけの動きを、通常スクロールと縮小モーション設定に合わせる。 */
 function setupMotion(): void {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const heroPath = document.querySelector<SVGPathElement>('[data-hero-path]');
-  const railFill = document.querySelector<HTMLElement>('[data-rail-fill]');
-
-  if (prefersReducedMotion) {
-    if (heroPath) heroPath.style.strokeDashoffset = '0';
-    if (railFill) railFill.style.transform = 'scaleY(1)';
-    return;
-  }
-
   gsap.registerPlugin(ScrollTrigger);
+  // 設定変更時にGSAPの動き・非表示状態を巻き戻し、本文を静止表示へ戻す。
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    const heroPath = document.querySelector<SVGPathElement>('[data-hero-path]');
+    const railFill = document.querySelector<HTMLElement>('[data-rail-fill]');
 
-  /** ヒーローのコピーと対応画面を順に組み上げ、相談への視線を自然に集める。 */
-  const hero = document.querySelector<HTMLElement>('[data-hero-motion]');
-  if (hero) {
-    const heroTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    const heroTitle = hero.querySelector<HTMLElement>('[data-hero-title]');
-    const heroLead = hero.querySelector<HTMLElement>('[data-hero-lead]');
-    const heroConsult = hero.querySelector<HTMLElement>('[data-hero-consult]');
-    const heroNote = hero.querySelector<HTMLElement>('[data-hero-note]');
-    const heroBrowser = hero.querySelector<HTMLElement>('[data-hero-browser]');
-    const heroMobile = hero.querySelector<HTMLElement>('[data-hero-mobile]');
-    const heroHealth = hero.querySelector<HTMLElement>('[data-hero-health]');
+    /** ヒーローのコピーと対応画面を順に組み上げ、相談への視線を自然に集める。 */
+    const hero = document.querySelector<HTMLElement>('[data-hero-motion]');
+    if (hero) {
+      const heroTimeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      const heroTitle = hero.querySelector<HTMLElement>('[data-hero-title]');
+      const heroLead = hero.querySelector<HTMLElement>('[data-hero-lead]');
+      const heroConsult = hero.querySelector<HTMLElement>('[data-hero-consult]');
+      const heroNote = hero.querySelector<HTMLElement>('[data-hero-note]');
+      const heroBrowser = hero.querySelector<HTMLElement>('[data-hero-browser]');
+      const heroMobile = hero.querySelector<HTMLElement>('[data-hero-mobile]');
+      const heroHealth = hero.querySelector<HTMLElement>('[data-hero-health]');
 
-    if (heroTitle) heroTimeline.from(heroTitle, { opacity: 0, y: 18, duration: 0.48 }, 0.04);
-    if (heroLead) heroTimeline.from(heroLead, { opacity: 0, y: 12, duration: 0.36 }, 0.2);
-    if (heroConsult) heroTimeline.from(heroConsult, { opacity: 0, y: 10, duration: 0.32 }, 0.28);
-    if (heroNote) heroTimeline.from(heroNote, { opacity: 0, duration: 0.28 }, 0.4);
-    if (heroBrowser) heroTimeline.from(heroBrowser, { clipPath: 'inset(0 0 14% 0 round 14px)', filter: 'blur(8px)', opacity: 0, scale: 0.96, y: 24, duration: 0.64 }, 0.12);
-    if (heroMobile) heroTimeline.from(heroMobile, { opacity: 0, x: 20, y: 46, rotation: 10, duration: 0.52 }, 0.44);
-    if (heroHealth) heroTimeline.from(heroHealth, { opacity: 0, x: 16, duration: 0.34 }, 0.55);
-  }
+      if (heroTitle) heroTimeline.from(heroTitle, { opacity: 0, y: 18, duration: 0.48 }, 0.04);
+      if (heroLead) heroTimeline.from(heroLead, { opacity: 0, y: 12, duration: 0.36 }, 0.2);
+      if (heroConsult) heroTimeline.from(heroConsult, { opacity: 0, y: 10, duration: 0.32 }, 0.28);
+      if (heroNote) heroTimeline.from(heroNote, { opacity: 0, duration: 0.28 }, 0.4);
+      if (heroBrowser) heroTimeline.from(heroBrowser, { clipPath: 'inset(0 0 14% 0 round 14px)', filter: 'blur(8px)', opacity: 0, scale: 0.96, y: 24, duration: 0.64 }, 0.12);
+      if (heroMobile) heroTimeline.from(heroMobile, { opacity: 0, x: 20, y: 46, rotation: 10, duration: 0.52 }, 0.44);
+      if (heroHealth) heroTimeline.from(heroHealth, { opacity: 0, x: 16, duration: 0.34 }, 0.55);
+    }
 
-  if (heroPath) {
-    const length = heroPath.getTotalLength();
-    gsap.set(heroPath, { strokeDasharray: length, strokeDashoffset: length });
-    gsap.to(heroPath, { strokeDashoffset: 0, duration: 1.8, ease: 'expo.out', delay: 0.25 });
-  }
+    if (heroPath) {
+      const length = heroPath.getTotalLength();
+      gsap.set(heroPath, { strokeDasharray: length, strokeDashoffset: length });
+      gsap.to(heroPath, { strokeDashoffset: 0, duration: 1.8, ease: 'expo.out', delay: 0.25 });
+    }
 
-  if (railFill) {
-    gsap.fromTo(
-      railFill,
-      { scaleY: 0, transformOrigin: 'top' },
-      {
-        scaleY: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.concerns',
-          endTrigger: '.security',
-          start: 'top 72%',
-          end: 'bottom 58%',
-          scrub: 0.6,
+    if (railFill) {
+      gsap.fromTo(
+        railFill,
+        { scaleY: 0, transformOrigin: 'top' },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.concerns',
+            endTrigger: '.security',
+            start: 'top 72%',
+            end: 'bottom 58%',
+            scrub: 0.6,
+          },
         },
-      },
-    );
-  }
-
-  /** サービスは一覧として順に、診断は確認の入口として線から現れる。 */
-  const serviceList = document.querySelector<HTMLElement>('[data-service-list]');
-  if (serviceList) {
-    gsap.from(serviceList.querySelectorAll('.service-row'), {
-      opacity: 0,
-      y: 18,
-      duration: 0.42,
-      stagger: 0.07,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: serviceList, start: 'top 82%', toggleActions: 'play none none reverse' },
-    });
-  }
-
-  const security = document.querySelector<HTMLElement>('[data-security-motion]');
-  if (security) {
-    const securityLine = security.querySelector<HTMLElement>('.security__line');
-    const securityDiagnostic = security.querySelector<HTMLElement>('.security__diagnostic');
-    if (securityLine) {
-      gsap.from(securityLine, {
-        scaleX: 0,
-        transformOrigin: 'left center',
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: { trigger: security, start: 'top 76%', toggleActions: 'play none none reverse' },
-      });
+      );
     }
-    if (securityDiagnostic) {
-      gsap.from(securityDiagnostic, {
+
+    /** サービスは一覧として順に、診断は確認の入口として線から現れる。 */
+    const serviceList = document.querySelector<HTMLElement>('[data-service-list]');
+    if (serviceList) {
+      gsap.from(serviceList.querySelectorAll('.service-row'), {
         opacity: 0,
-        x: -16,
+        y: 18,
         duration: 0.42,
+        stagger: 0.07,
         ease: 'power2.out',
-        scrollTrigger: { trigger: securityDiagnostic, start: 'top 88%', toggleActions: 'play none none reverse' },
+        scrollTrigger: { trigger: serviceList, start: 'top 82%', toggleActions: 'play none none reverse' },
       });
     }
-  }
+
+    const security = document.querySelector<HTMLElement>('[data-security-motion]');
+    if (security) {
+      const securityLine = security.querySelector<HTMLElement>('.security__line');
+      const securityDiagnostic = security.querySelector<HTMLElement>('.security__diagnostic');
+      if (securityLine) {
+        gsap.from(securityLine, {
+          scaleX: 0,
+          transformOrigin: 'left center',
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: security, start: 'top 76%', toggleActions: 'play none none reverse' },
+        });
+      }
+      if (securityDiagnostic) {
+        gsap.from(securityDiagnostic, {
+          opacity: 0,
+          x: -16,
+          duration: 0.42,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: securityDiagnostic, start: 'top 88%', toggleActions: 'play none none reverse' },
+        });
+      }
+    }
+  });
 }
 
 /** 必須の相談文と任意URLを検証し、外部へ送らずクリップボードへコピーする。 */
@@ -227,7 +206,7 @@ function setupDemoForm(): void {
   if (!form || !status || !submitButton || !submitLabel) return;
 
   const getError = (input: HTMLInputElement | HTMLTextAreaElement): string => {
-    if (input.validity.valueMissing) return `${input.labels?.[0]?.childNodes[0]?.textContent?.trim() ?? 'この項目'}を入力してください。`;
+    if (input.validity.valueMissing || (input.required && !input.value.trim())) return `${input.labels?.[0]?.childNodes[0]?.textContent?.trim() ?? 'この項目'}を入力してください。`;
     if (input.validity.typeMismatch) return input.type === 'url' ? 'サイトのURL形式を確認してください。' : 'メールアドレスの形式を確認してください。';
     return '';
   };
@@ -335,7 +314,6 @@ function setupSeoCheck(): void {
   });
 }
 
-setupNavigation();
 setupConcernTool();
 setupMotion();
 setupDemoForm();

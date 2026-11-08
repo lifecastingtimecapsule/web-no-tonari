@@ -1,5 +1,19 @@
 // 変更履歴: 2026-11-08 視線誘導、商品選択、文章整理、メール確認の学習用操作を追加。
 // 役割: 架空サンプル内の表示だけを更新し、購入・生成・外部送信を行わない。
+// 変更履歴: 2026-11-08 横向きタブで現在のサービスが画面外へ隠れないよう、横方向だけ表示位置を補正。
+/** 現在のサービス名をタブ列の表示範囲に収め、サンプルへの縦スクロールは変えない。 */
+function revealCurrentServiceTab(): void {
+  const serviceTabs = document.querySelector<HTMLElement>('.service-tabs');
+  const selectedTab = serviceTabs?.querySelector<HTMLElement>('[aria-current]');
+  if (!serviceTabs || !selectedTab) return;
+  const tabBounds = selectedTab.getBoundingClientRect();
+  const listBounds = serviceTabs.getBoundingClientRect();
+  if (tabBounds.right > listBounds.right) serviceTabs.scrollLeft += tabBounds.right - listBounds.right;
+  else if (tabBounds.left < listBounds.left) serviceTabs.scrollLeft += tabBounds.left - listBounds.left;
+}
+revealCurrentServiceTab();
+window.addEventListener('resize', revealCurrentServiceTab);
+
 const demoFeedback = document.querySelector<HTMLElement>('[data-demo-feedback]');
 const checkedMailPoints = new Set<Element>();
 document.querySelectorAll<HTMLButtonElement>('[data-demo-note]').forEach(button => {

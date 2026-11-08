@@ -1,0 +1,14 @@
+---
+// 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
+// 役割: サイトの締めくくりと回遊先を一貫して提供する。
+import Brand from './Brand.astro';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<footer class="site-footer">
+  <div class="shell site-footer__inner">
+    <Brand footer />
+    <p>技術が大きくなる時代に、小さく近くいる。</p>
+    <nav class="site-footer__links" aria-label="フッターナビゲーション"><a href={`${home}#services`}>サービス</a><a href={`${home}company/`}>会社概要</a><a href={`${home}philosophy/`}>企業理念</a><a href={`${home}#faq`}>よくある質問</a><a href={`${home}#contact`}>お問い合わせ</a></nav>
+    <p class="site-footer__operator"><small>運営：株式会社ライフキャスティングジャパン</small></p>
+  </div>
+</footer>

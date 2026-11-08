@@ -1,14 +1,9 @@
+/* 変更履歴: 2026-11-08 ヘッダー・フッターを共通化。モバイルのサービス切り替えを1行の横スクロールへ整理。 */
 /* 変更履歴: 2026-11-08 白黒赤の既存世界観を継承し、説明・体験・コラムを読み分ける4ページを追加。 */
-.service-page { background: var(--white); }
-.service-header { display:flex; gap:24px; align-items:center; min-height:100px; flex-wrap:wrap; }
-.service-header .brand { margin-right:auto; }
-.service-header a { font-size:14px; }
-.service-header .brand { font-size:20px; }
-.service-header__contact { color:var(--signal-deep); font-weight:700; }
-.service-tabs { display:flex; gap:28px; flex-wrap:wrap; border-block:1px solid var(--mist); padding:10px 0; }
+.service-tabs { display:flex; gap:28px; flex-wrap:nowrap; overflow-x:auto; white-space:nowrap; border-block:1px solid var(--mist); padding:10px 0; }
 .service-tabs a { padding:12px 0; font-size:14px; text-decoration:none; }
 .service-tabs [aria-current] { color:var(--signal-deep); text-decoration:underline; text-underline-offset:9px; }
-.service-intro { display:grid; grid-template-columns:1.2fr 1fr; gap:80px; padding:76px 0 70px; }
+.service-intro { display:grid; grid-template-columns:1.2fr 1fr; gap:80px; padding:48px 0 64px; }
 .service-intro h1 { font-size:clamp(2.3rem,4.3vw,4.3rem); line-height:1.3; letter-spacing:-.035em; margin:0 0 28px; font-weight:900; }
 .service-intro h1 span { display:block; }
 .service-intro > div > p { max-width:36em; font-size:17px; line-height:1.95; margin-bottom:28px; }
@@ -42,7 +37,7 @@
 .demo-price { font-size:28px; font-variant-numeric:tabular-nums; }
 .demo-price small { font-size:12px; }
 .service-demo label { display:block; font-size:14px; margin:16px 0 6px; }
-.service-demo select { width:100%; padding:12px; min-height:48px; background:white; border:1px solid #b6b6bd; color:var(--ink); font:inherit; border-radius:6px; }
+.service-demo select { width:100%; padding:12px; min-height:48px; background:white; border:1px solid var(--input-border); color:var(--ink); font:inherit; border-radius:6px; }
 .shop-demo .button { margin-top:24px; width:100%; }
 .demo-reset { font:inherit; font-size:14px; min-height:44px; text-decoration:underline; text-underline-offset:4px; border:0; background:transparent; color:var(--ink-muted); cursor:pointer; }
 .ai-demo blockquote { margin:22px 0; background:white; padding:24px; line-height:1.9; }
@@ -65,5 +60,4 @@
 .service-close__price { font-weight:700; }
 .service-close .button { margin:15px 0; }
 .service-close__notice { color:var(--ink-muted); font-size:12px!important; }
-.service-footer { padding-bottom:36px; display:flex; justify-content:space-between; gap:20px; font-size:13px; }
-@media(max-width:800px) { .service-header { gap:14px; padding-block:20px; }.service-header .brand { width:100%; }.service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:45px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.shop-demo__body,.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.flower-demo__body { grid-template-columns:1fr; }.flower-demo__type { display:none; }.service-footer { flex-wrap:wrap; }.cup-stage { min-height:270px; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }
+@media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.shop-demo__body,.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.flower-demo__body { grid-template-columns:1fr; }.flower-demo__type { display:none; }.cup-stage { min-height:270px; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }

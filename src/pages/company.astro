@@ -2,31 +2,13 @@
 // 変更履歴: 2026-11-08 ユーザー提供の会社名・市区町村と国税庁で確認した法人番号に基づき会社概要を追加。
 // 役割: サービスの運営主体を明示する。設立日・代表者は未確認のため掲載しない。
 // 変更履歴: 2026-11-08 ユーザーが確認した資本金100万円を追加。
-import '../styles/global.css';
+import SiteLayout from '../layouts/SiteLayout.astro';
+// 変更履歴: 2026-11-08 共通レイアウトを採用し、トップから移動した際のロゴ・ナビ・書体・フッターの断絶を解消。
 import '../styles/services.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const canonical = `https://lifecastingtimecapsule.github.io${home}company/`;
 ---
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>会社概要｜ウェブのとなり</title>
-    <meta name="description" content="ウェブのとなりの運営会社、株式会社ライフキャスティングジャパンの会社概要。愛知県大府市を拠点とするウェブ・ITサービスのご案内。" />
-    <meta property="og:title" content="会社概要｜ウェブのとなり" />
-    <meta property="og:description" content="運営会社：株式会社ライフキャスティングジャパン。所在地：愛知県大府市。" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonical} />
-    <link rel="canonical" href={canonical} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">本文へ移動</a>
-    <header class="service-header shell"><a class="brand" href={home}>ウェブのとなり</a><a href={`${home}philosophy/`}>企業理念</a><a href={`${home}#contact`}>お問い合わせ</a></header>
-    <main id="main" class="company shell">
+<SiteLayout title="会社概要｜ウェブのとなり" description="ウェブのとなりの運営会社、株式会社ライフキャスティングジャパンの会社概要。愛知県大府市を拠点とするウェブ・ITサービスのご案内。">
+<div class="company shell">
       <nav aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">会社概要</span></nav>
       <h1>会社概要</h1>
       <p class="company__intro">「ウェブのとなり」は、株式会社ライフキャスティングジャパンが運営するウェブ・ITサービスです。</p>
@@ -40,12 +22,10 @@ const canonical = `https://lifecastingtimecapsule.github.io${home}company/`;
       </dl>
       <p class="company__source"><a href="https://www.houjin-bangou.nta.go.jp/henkorireki-johoto.html?selHouzinNo=3180001172553" target="_blank" rel="noopener noreferrer">国税庁法人番号公表サイトで法人情報を確認する（別タブ）</a></p>
       <div class="company__links"><a href={`${home}philosophy/`}>企業理念を見る</a><a href={`${home}#services`}>サービスを見る</a><a href={`${home}#contact`}>お問い合わせ</a></div>
-    </main>
-    <footer class="service-footer shell"><a href={home}>ウェブのとなり ホームへ</a><span>© 2026 株式会社ライフキャスティングジャパン</span></footer>
-  </body>
-</html>
+    </div>
+</SiteLayout>
 <style>
-  .company { max-width: 900px; padding-top: 32px; padding-bottom: 80px; }
+  .company { max-width: 900px; padding-top: 0; padding-bottom: 80px; }
   nav { display: flex; gap: 14px; margin-bottom: 36px; font-size: 13px; color: var(--ink-muted); }
   h1 { font-size: clamp(1.8rem, 3vw, 2.3rem); line-height: 1.5; margin-bottom: 24px; }
   .company__intro { font-size: 16px; line-height: 2; color: var(--ink-muted); margin-bottom: 36px; }
@@ -55,5 +35,5 @@ const canonical = `https://lifecastingtimecapsule.github.io${home}company/`;
   .company__source { font-size: 12px; color: var(--ink-muted); margin-top: 24px; }
   .company__links { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 36px; font-size: 14px; }
   .company__links a { display: inline-flex; align-items: center; min-height: 44px; }
-  @media(max-width:600px) { .company { padding-top: 18px; padding-bottom: 56px; } dl > div { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; }.service-footer span { max-width: 100%; overflow-wrap: anywhere; } }
+  @media(max-width:600px) { .company { padding-top: 0; padding-bottom: 56px; } dl > div { grid-template-columns: 1fr; gap: 8px; padding: 20px 0; } }
 </style>

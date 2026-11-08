@@ -1,25 +1,26 @@
 ---
 // 変更履歴: 2026-11-08 SEO確認を自社ページに集約し、目的別の案内から相談へつなぐため追加。
 // 役割: 実測結果と目的別の一般ガイドを区別して表示するSEO確認の入口。
-import '../styles/global.css';
+import SiteLayout from '../layouts/SiteLayout.astro';
+// 変更履歴: 2026-11-08 共通レイアウトを採用し、トップから移動した際のロゴ・ナビ・書体・フッターの断絶を解消。
 import '../styles/services.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
-<!doctype html><html lang="ja"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>サイトのSEO確認と改善ガイド｜ウェブのとなり</title><meta name="description" content="サイトのURLと目的から、SEOの基本と次に整える項目を確認。点数だけで終わらせず、改善の相談へつなげます。" /><meta name="robots" content="noindex" /><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet" /></head>
-<body class="service-page"><a class="skip-link" href="#main">本文へ移動</a><header class="service-header shell"><a class="brand" href={home}>ウェブのとなり</a><a href={`${home}#services`}>サービス一覧</a></header>
-<main id="main" class="shell seo-page"><h1>確認して、<br />改善の一歩へ。</h1><p class="seo-lead">サイトの目的によって、見直す場所は変わります。<br />検索の基本と、あなたのサイトで確認したいことを整理しましょう。</p>
+<SiteLayout title="サイトのSEO確認と改善ガイド｜ウェブのとなり" description="サイトのURLと目的から、SEOの基本と次に整える項目を確認。点数だけで終わらせず、改善の相談へつなげます。" noindex>
+<div class="shell seo-page"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">SEO確認</span></nav><h1>確認して、<br />改善の一歩へ。</h1><p class="seo-lead">サイトの目的によって、見直す場所は変わります。<br />検索の基本と、あなたのサイトで確認したいことを整理しましょう。</p>
 <form class="seo-form" data-seo-page-form novalidate><div><label for="check-url">確認する公開サイトのURL</label><input id="check-url" name="url" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com…" required aria-describedby="seo-error seo-disclosure" /></div><div><label for="check-goal">このサイトで増やしたいこと</label><select id="check-goal" name="goal"><option value="contact">会社への問い合わせ</option><option value="store">お店への来店・予約</option><option value="ec">商品の購入</option></select></div><p id="seo-disclosure">確認を始めると入力URLをGoogle PageSpeed Insightsへ送ります。公開サイトのURLを入力してください。</p><button class="button button--human" type="submit" data-seo-run>SEO確認を始める</button><p id="seo-error" role="status" aria-live="polite" data-seo-run-status></p></form>
 <section class="seo-result" data-seo-result hidden aria-labelledby="seo-result-title"><h2 id="seo-result-title">確認するサイトと、改善の入口。</h2><p class="seo-target" data-seo-target></p><div class="seo-measurement"><h3>GoogleによるモバイルSEOの基本確認</h3><p role="status" data-seo-score>まだ解析していません。</p><ul data-seo-findings></ul><a data-seo-external target="_blank" rel="noopener noreferrer">Googleで詳しい結果を開く（別タブ）</a><p class="seo-small">点数は検索順位・集客成果・安全性の保証ではありません。確認対象は入力した1ページです。</p></div>
 <div class="seo-guide"><h3 data-seo-guide-title>サイトの目的に合わせた確認ガイド</h3><p>以下は選んだ目的に基づく一般的な案内です。サイトを閲覧して問題を検出した結果ではありません。</p><div data-seo-guide></div></div>
-<div class="service-close"><h2>自分のサイトなら、何から直す？</h2><p>結果の読み方や、実際に直す場所をもっと知りたい方へ。URLと目的を引き継いで、相談内容をまとめられます。</p><a class="button button--human" data-seo-page-consult href={`${home}#contact`}>このサイトについて、もっと知りたい</a><p class="service-close__notice">受付用のメールは新設予定です。現在は相談内容の入力・整理まで利用できます。</p><a href={`${home}services/websites/`}>ウェブ制作のサンプルと豆知識を見る</a></div></section>
-<p class="service-source">参考：<a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=ja" target="_blank" rel="noopener noreferrer">Google SEOスターターガイド（別タブ）</a></p></main><footer class="service-footer shell"><a href={home}>ホームへ戻る</a><span>© 2026 ウェブのとなり</span></footer><script>import '../scripts/seo-check';</script></body></html>
+<div class="service-close"><h2>自分のサイトなら、何から直す？</h2><p>結果の読み方や、実際に直す場所をもっと知りたい方へ。URLと目的を引き継いで、相談内容をまとめられます。</p><a class="button button--human" data-seo-page-consult href={`${home}#contact`}>相談内容をまとめる</a><p class="service-close__notice">受付用のメールは新設予定です。現在は相談内容の入力・整理まで利用できます。</p><a href={`${home}services/websites/`}>ウェブ制作のサンプルと豆知識を見る</a></div></section>
+<p class="service-source">参考：<a href="https://developers.google.com/search/docs/fundamentals/seo-starter-guide?hl=ja" target="_blank" rel="noopener noreferrer">Google SEOスターターガイド（別タブ）</a></p></div><script>import '../scripts/seo-check';</script>
+</SiteLayout>
 <style>
-.seo-page { max-width:1000px; padding-top:40px; padding-bottom:60px; }
+.seo-page { max-width:1000px; padding-top: 0; padding-bottom:60px; }
 h1 { font-size:clamp(2.5rem,5vw,4.8rem); line-height:1.3; font-weight:900; letter-spacing:-.035em; margin:0 0 24px; }
 .seo-lead { line-height:2; color:var(--ink-muted); margin-bottom:32px; }
 .seo-form { padding:28px; background:var(--mist-light); border-radius:16px; display:grid; grid-template-columns:1.2fr 1fr; gap:20px; }
 .seo-form label { display:block; font-size:14px; font-weight:700; margin-bottom:10px; }
-.seo-form input,.seo-form select { width:100%; min-height:50px; padding:12px; border:1px solid #b6b6bd; border-radius:6px; font:inherit; background:white; color:var(--ink); }
+.seo-form input,.seo-form select { width:100%; min-height:50px; padding:12px; border:1px solid var(--input-border); border-radius:6px; font:inherit; background:white; color:var(--ink); }
 .seo-form > p,.seo-form > button { grid-column:1/-1; margin:0; }
 .seo-form p { font-size:13px; line-height:1.8; }
 .seo-result { margin-top:48px; scroll-margin-top:24px; }
@@ -32,5 +33,5 @@ h1 { font-size:clamp(2.5rem,5vw,4.8rem); line-height:1.3; font-weight:900; lette
 .seo-measurement ul { padding-left:20px; line-height:2; font-size:14px; }
 .seo-small { font-size:12px!important; color:var(--ink-muted); }
 .seo-guide article { padding-top:20px; }.seo-guide h4 { font-size:17px; margin:0; }.seo-guide article p { color:var(--ink-muted); margin-top:8px; }
-@media(max-width:600px){.seo-form { grid-template-columns:1fr; padding:20px; }.seo-page { padding-top:24px; }}
+@media(max-width:600px){.seo-form { grid-template-columns:1fr; padding:20px; }.seo-page { padding-top: 0; }}
 </style>
