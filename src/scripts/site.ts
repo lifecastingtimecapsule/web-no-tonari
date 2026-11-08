@@ -356,8 +356,9 @@ function setupServiceCarousel(): void {
     const bounds = track.getBoundingClientRect();
     const visibleCards = cards.map((card, index) => ({ index, bounds: card.getBoundingClientRect() }))
       .filter(card => card.bounds.left >= bounds.left - 4 && card.bounds.right <= bounds.right + 4);
-    previousButton.disabled = track.scrollLeft <= 2;
-    nextButton.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 2;
+    // スナップ位置と描画端の数pxの差を許容し、実質終端でボタンを無効化する。
+    previousButton.disabled = track.scrollLeft <= 8;
+    nextButton.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 8;
     if (visibleCards.length) {
       const first = visibleCards[0].index + 1;
       const last = visibleCards[visibleCards.length - 1].index + 1;
