@@ -44,6 +44,10 @@ describe('analyzePage', () => {
     expect(items).toHaveLength(1);
     expect(items[0].status).toBe('action');
   });
+  it.each([404, 429, 503])('応答コード%sでは、エラーページの内容で判定しない', (code) => {
+    const items = analyzePage({ ...securePage, status: code, headers: {}, html: '' });
+    expect(items.map((item) => `${item.id}:${item.status}`)).toEqual(['https:ok', 'page:unknown']);
+  });
   it('バージョン露出・混在スクリプト・転送なしを検出する', () => {
     const items = analyzePage({
       ...securePage,

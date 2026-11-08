@@ -15,6 +15,8 @@ export interface CheckItem {
 export interface PageSnapshot {
   /** https://で接続できたか */
   httpsReachable: boolean;
+  /** トップページの応答コード（取得できなければnull） */
+  status?: number | null;
   /** 最後に到達したURL（転送後） */
   finalUrl: string | null;
   /** http://で接続したとき、https://へ転送されたか（null = 確認できず） */
@@ -78,6 +80,16 @@ export function analyzePage(page: PageSnapshot): CheckItem[] {
       summary: 'https:// で正常に接続できませんでした。',
       detail: '証明書の期限切れや設定漏れの可能性があります。訪問者のブラウザに警告が出ていないか、すぐに確認してください。',
     });
+    return items;
+  }
+
+  // 変更履歴: 2026-11-08 自動アクセスの拒否（403・429等）や404の応答を、そのサイトの設定として誤判定しないよう分岐を追加。
+  if (page.status && page.status >= 400) {
+    items.push({ id: 'https', title: 'HTTPS（鍵マーク）での接続', status: 'ok', summary: 'https:// での接続はできます。', detail: '' });
+    const reason = page.status === 404
+      ? `トップページが見つかりませんでした（応答コード ${page.status}）。公開されているページのURLか確認してください。`
+      : `サイト側で自動アクセスが制限され、内容を確認できませんでした（応答コード ${page.status}）。`;
+    items.push({ id: 'page', title: '通信・表示まわりの設定', status: 'unknown', summary: reason, detail: '転送・HSTS・保護設定・バージョン表示・読み込みの確認は行っていません。メール対策の結果のみ参考にしてください。' });
     return items;
   }
 
