@@ -4,6 +4,8 @@
 /* 変更履歴: 2026-11-08 白黒赤パレットと浮いた白ナビへ更新し、実画面中心のトップに統一。 */
 
 /* 変更履歴: 2026-11-08 全ページ共通の余白・フッター・入力コントラストを統一し、未使用の旧3DヒーローCSSを撤去。 */
+/* 変更履歴: 2026-11-08 相談文の初期入力面を小さくし、長文時だけ自動的に高さを増やす構成へ変更。 */
+/* 変更履歴: 2026-11-08 項目追加後もフォームを間延びさせないよう、空のエラー行は表示しない。 */
 :root {
   --night: #18181c;
   --night-soft: #29292f;
@@ -914,6 +916,7 @@ p {
 }
 .contact-form .button { width: auto; min-width: 220px; background: var(--ink); box-shadow: none; border-radius: 6px; transform: none; }
 .contact-form .button:hover { background: #343438; transform: none; }
+.contact-form .field__error:empty { display: none; }
 .contact-form__optional { margin: 4px 0 24px; }
 .contact-form__optional summary { min-height: 44px; display: list-item; padding-block: 10px; font-size: 13px; color: var(--ink-muted); cursor: pointer; }
 .contact-form__optional .field { padding-top: 12px; }
@@ -956,7 +959,7 @@ p {
 }
 
 .field textarea {
-  min-height: 156px;
+  min-height: 88px;
   resize: vertical;
 }
 

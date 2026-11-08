@@ -5,6 +5,7 @@
 // 変更履歴: 2026-11-08 白黒赤ヒーローと社内制作事例へ置換し、実画面を主役にする。
 // 変更履歴: 2026-11-08 YAYOI SAIGA事例を外し、HiXFiを参考にしたサービス起点の導線へ再整理。
 // 変更履歴: 2026-11-08 全ページ共通のSiteLayoutへhead・ヘッダー・フッターを集約。
+// 変更履歴: 2026-11-08 依頼者の会社名・担当者名・メール欄を追加し、相談欄を入力に合わせて伸びる2行の初期表示へ変更。
 import SiteLayout from '../layouts/SiteLayout.astro';
 import OpeningHero from '../components/OpeningHero.astro';
 // 変更履歴: 2026-11-08 4サービスへの詳細・体験導線を追加し、ECを含む提供領域を統一。
@@ -222,14 +223,29 @@ const faqs = [
           <div class="contact__intro">
             <h2 id="contact-title">お問い合わせ</h2>
             <p>ご相談・ご質問をお書きください。</p>
-            <p class="contact__demo-note">メールの受付先を準備中です。いまは相談内容をコピーして保存できます。外部へは送信されません。</p>
+            <p class="contact__demo-note">メールの受付先を準備中です。いまは入力内容をコピーして保存できます。外部へは送信されません。</p>
           </div>
 
           <form class="contact-form" data-contact-form novalidate>
             <div class="field">
+              <label for="company-name">会社名・屋号 <span>必須</span></label>
+              <input id="company-name" name="companyName" type="text" autocomplete="organization" required aria-describedby="company-name-error" placeholder="例：株式会社〇〇…" />
+              <p class="field__error" id="company-name-error" data-error-for="companyName"></p>
+            </div>
+            <div class="field">
+              <label for="contact-name">担当者名 <span>必須</span></label>
+              <input id="contact-name" name="contactName" type="text" autocomplete="name" required aria-describedby="contact-name-error" placeholder="例：山田 太郎…" />
+              <p class="field__error" id="contact-name-error" data-error-for="contactName"></p>
+            </div>
+            <div class="field">
+              <label for="contact-email">メールアドレス <span>必須</span></label>
+              <input id="contact-email" name="contactEmail" type="email" inputmode="email" autocomplete="email" spellcheck="false" required aria-describedby="contact-email-error" placeholder="name@example.com…" />
+              <p class="field__error" id="contact-email-error" data-error-for="contactEmail"></p>
+            </div>
+            <div class="field">
               <label for="message">相談したいこと <span>必須</span></label>
-              <textarea id="message" name="message" rows="5" required aria-describedby="message-help message-error" placeholder="例：お店のホームページを作り直したいです…"></textarea>
-              <p class="field__help" id="message-help">短い文章で大丈夫です。</p>
+              <textarea id="message" name="message" rows="2" required aria-describedby="message-help message-error" placeholder="例：お店のホームページを作り直したいです…"></textarea>
+              <p class="field__help" id="message-help">短い文章で大丈夫です。入力に合わせて欄が広がります。</p>
               <p class="field__error" id="message-error" data-error-for="message"></p>
             </div>
             <details class="contact-form__optional">

@@ -1,4 +1,5 @@
 // 変更履歴: 2026-11-08 ナビを共通スクリプトへ移動し、空白相談の検証と動きの設定変更への追従を修正。
+// 変更履歴: 2026-11-08 必須の依頼者情報を検証・コピーへ含め、相談文の入力・引継ぎ・画面幅に合わせた自動伸縮を追加。
 // 変更履歴: 2026-11-04 ナビ、困りごと選択、対話線、デモフォームの動作を追加。
 // 変更履歴: 2026-11-05 3Dヒーローを初期化し、ページ離脱時に描画資源を破棄する処理を追加。
 // 変更履歴: 2026-11-08 抽象3Dの初期化を外し、実画面コラージュに軽いポインター追従を追加。
@@ -197,7 +198,7 @@ function setupMotion(): void {
   });
 }
 
-/** 必須の相談文と任意URLを検証し、外部へ送らずクリップボードへコピーする。 */
+/** 必須の依頼者情報・相談文と任意URLを検証し、外部へ送らず入力内容をコピーする。 */
 function setupDemoForm(): void {
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   const status = document.querySelector<HTMLElement>('[data-form-status]');
@@ -247,9 +248,12 @@ function setupDemoForm(): void {
     status.textContent = '';
 
     try {
+      const companyName = form.querySelector<HTMLInputElement>('#company-name')!.value.trim();
+      const contactName = form.querySelector<HTMLInputElement>('#contact-name')!.value.trim();
+      const contactEmail = form.querySelector<HTMLInputElement>('#contact-email')!.value.trim();
       const message = form.querySelector<HTMLTextAreaElement>('#message')!.value.trim();
       const siteUrl = form.querySelector<HTMLInputElement>('#site-url')!.value.trim();
-      const consultationText = `相談したいこと\n${message}${siteUrl ? `\n\nサイトのURL\n${siteUrl}` : ''}`;
+      const consultationText = `会社名・屋号\n${companyName}\n\n担当者名\n${contactName}\n\nメールアドレス\n${contactEmail}\n\n相談したいこと\n${message}${siteUrl ? `\n\nサイトのURL\n${siteUrl}` : ''}`;
       await navigator.clipboard.writeText(consultationText);
       status.dataset.state = 'success';
       status.textContent = '相談内容をコピーしました。メモなどに貼り付けて保存できます。まだ送信はされていません。';
@@ -263,6 +267,31 @@ function setupDemoForm(): void {
       status.focus();
     }
   });
+}
+
+/** 相談文を内容に合う高さへ伸縮し、URLからの引継ぎや画面幅の変化にも対応する。 */
+function setupMessageAutosize(): void {
+  const messageField = document.querySelector<HTMLTextAreaElement>('#message');
+  if (!messageField) return;
+
+  /** 高さを一度解放して内容量を測り、削除時にも小さな入力面へ戻せるようにする。 */
+  const resizeMessage = (): void => {
+    messageField.style.height = 'auto';
+    const fieldStyle = getComputedStyle(messageField);
+    const borderHeight = parseFloat(fieldStyle.borderTopWidth) + parseFloat(fieldStyle.borderBottomWidth);
+    messageField.style.height = `${messageField.scrollHeight + borderHeight}px`;
+  };
+  messageField.style.overflowY = 'hidden';
+  messageField.addEventListener('input', resizeMessage);
+  let messageWidth = 0;
+  new ResizeObserver(entries => {
+    const nextWidth = entries[0].contentRect.width;
+    if (nextWidth === messageWidth) return;
+    messageWidth = nextWidth;
+    resizeMessage();
+  }).observe(messageField);
+  document.fonts.ready.then(resizeMessage);
+  resizeMessage();
 }
 
 /** 公開URLを検証し、自社のSEO確認・改善ガイドページへ引き渡す。 */
@@ -386,3 +415,4 @@ if (requestedSiteUrl && consultationSiteUrl && !consultationSiteUrl.value.trim()
     if (optionalSection) optionalSection.open = true;
   } catch { /* 形式不正のクエリはフォームへ引き継がない。 */ }
 }
+setupMessageAutosize();
