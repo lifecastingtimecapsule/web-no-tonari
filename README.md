@@ -19,7 +19,7 @@ GitHub Pages は `main` ブランチへの更新を自動公開します。
 
 公開手順:
 1. Cloudflareで「Workersの編集」権限のAPIトークンを作り、GitHubリポジトリのSecretsに `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` を登録する。mainへ反映すると `.github/workflows/deploy-safety-check.yml` がWorkerを公開する（手元から公開する場合は `cd workers/safety-check && npx wrangler deploy`）。
-2. 公開されたWorkerのURL（例：`https://web-no-tonari-safety-check.<アカウント>.workers.dev`）を、GitHubリポジトリ変数 `PUBLIC_SAFETY_CHECK_API` に登録し、サイトを再公開する。未登録の間、チェックページは「公開準備中」と表示する。
+2. 公開中のWorkerは `https://web-no-tonari-safety-check.amaretto.workers.dev`。`src/pages/check.astro` の既定値になっており、別のURLへ切り替える場合だけGitHubリポジトリ変数 `PUBLIC_SAFETY_CHECK_API` で上書きする。
 3. 独自ドメインへ移ったら、`workers/safety-check/wrangler.toml` の `ALLOWED_ORIGINS` に新しいオリジンを追加する。
 
 目的別ガイドは一般的な案内で、顧客サイトの内容を読み取ったAI診断ではありません。問い合わせの送信先は、メール新設後に接続します。

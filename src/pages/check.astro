@@ -4,7 +4,9 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import '../styles/services.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const apiAvailable = Boolean(import.meta.env.PUBLIC_SAFETY_CHECK_API);
+// 変更履歴: 2026-11-08 公開済みWorkerのURLを既定値にし、リポジトリ変数がなくても動くよう変更（変数があれば優先）。
+const checkApi = import.meta.env.PUBLIC_SAFETY_CHECK_API || 'https://web-no-tonari-safety-check.amaretto.workers.dev';
+const apiAvailable = Boolean(checkApi);
 const checks = [
   ['通信の暗号化', 'https:// で開けるか、http:// から自動で切り替わるか、暗号化を固定する設定（HSTS）があるか。'],
   ['ブラウザ向けの保護設定', '他サイトへの埋め込みや、読み込み元の制限など、主な4つの設定が有効か。'],
@@ -20,7 +22,7 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
   <h1>サイトの安全性を、<br />かんたんチェック。</h1>
   <p class="check-lead">URLを入れるだけで、外から見える安全性を確認できます。<br />点数ではなく、「問題なし」「確認をおすすめ」「要対応」の3段階でお伝えします。</p>
 
-  <form class="check-form" data-check-form data-api={import.meta.env.PUBLIC_SAFETY_CHECK_API ?? ''} novalidate>
+  <form class="check-form" data-check-form data-api={checkApi} novalidate>
     <label for="check-url">確認したいサイトのURL</label>
     <div class="check-form__row">
       <input id="check-url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" required aria-describedby="check-disclosure check-status" />
