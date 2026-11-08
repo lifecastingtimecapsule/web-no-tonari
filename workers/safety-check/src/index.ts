@@ -161,7 +161,7 @@ export default {
     if ('error' in normalized) return json({ error: normalized.error, message: ERROR_MESSAGES[normalized.error] }, 400, cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-    const cacheKey = new Request(`https://safety-check.cache/v3/${normalized.url.hostname}`);
+    const cacheKey = new Request(`https://safety-check.cache/v4/${normalized.url.hostname}`);
     const cached = await cache?.match(cacheKey);
     if (cached) return json(await cached.json(), 200, { ...cors, 'X-Check-Cache': 'hit' });
 
