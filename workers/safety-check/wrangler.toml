@@ -2,6 +2,8 @@
 name = "web-no-tonari-safety-check"
 main = "src/index.ts"
 compatibility_date = "2026-11-01"
+# 変更履歴: 2026-11-08 同一アカウントのWorker（自社サイト）も公開インターネット経由で確認するため追加。
+compatibility_flags = ["global_fetch_strictly_public"]
 workers_dev = true
 
 [vars]
