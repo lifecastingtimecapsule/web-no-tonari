@@ -11,6 +11,7 @@ import OpeningHero from '../components/OpeningHero.astro';
 // 変更履歴: 2026-11-08 スクロール連動の赤い大見出しを追加し、相談欄を本文＋任意URLとコピー操作へ簡略化。
 // 変更履歴: 2026-11-08 再指示により問い合わせ前の動く文字帯を撤去し、一般的な問い合わせ見出しへ変更。
 // 変更履歴: 2026-11-08 サービスを3件ずつ見せる手動横送りへ変更。全4件を左右ボタン・スワイプで閲覧できる。
+// 変更履歴: 2026-11-08 独立した企業理念ページへのリンクをフッターへ追加。
 import { servicePages } from '../data/services';
 const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
 
@@ -297,7 +298,7 @@ const faqs = [
           <span>ウェブのとなり</span>
         </a>
         <p>技術が大きくなる時代に、小さく近くいる。</p>
-        <p class="site-footer__provisional">仮称・サービス設計中</p>
+        <p class="site-footer__provisional"><a href={`${serviceBase}/philosophy/`}>企業理念</a></p>
         <p><small>© 2026 ウェブのとなり</small></p>
       </div>
     </footer>
