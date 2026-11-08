@@ -31,6 +31,9 @@ describe('organizationalDomain', () => {
     expect(organizationalDomain('www.shop.example.co.jp')).toBe('example.co.jp');
     expect(organizationalDomain('www.example.com')).toBe('example.com');
     expect(organizationalDomain('example.jp')).toBe('example.jp');
+    expect(organizationalDomain('www.city.obu.aichi.jp')).toBe('city.obu.aichi.jp');
+    expect(organizationalDomain('www.example.aichi.jp')).toBe('example.aichi.jp');
+    expect(organizationalDomain('www.pref.aichi.jp')).toBe('pref.aichi.jp');
   });
 });
 

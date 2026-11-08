@@ -33,6 +33,9 @@ export interface MailSnapshot {
 
 const PRIVATE_SUFFIXES = ['localhost', '.local', '.internal', '.localhost', '.lan', '.home.arpa', '.invalid', '.test', '.example'];
 const JP_SECOND_LEVELS = new Set(['co', 'or', 'ne', 'ac', 'ad', 'ed', 'go', 'gr', 'lg']);
+// 変更履歴: 2026-11-08 都道府県型JP（例：city.obu.aichi.jp）の確認先が aichi.jp になる誤りを修正するため追加。
+const JP_PREFECTURES = new Set(['hokkaido', 'aomori', 'iwate', 'miyagi', 'akita', 'yamagata', 'fukushima', 'ibaraki', 'tochigi', 'gunma', 'saitama', 'chiba', 'tokyo', 'kanagawa', 'niigata', 'toyama', 'ishikawa', 'fukui', 'yamanashi', 'nagano', 'gifu', 'shizuoka', 'aichi', 'mie', 'shiga', 'kyoto', 'osaka', 'hyogo', 'nara', 'wakayama', 'tottori', 'shimane', 'okayama', 'hiroshima', 'yamaguchi', 'tokushima', 'kagawa', 'ehime', 'kochi', 'fukuoka', 'saga', 'nagasaki', 'kumamoto', 'oita', 'miyazaki', 'kagoshima', 'okinawa', 'sapporo', 'sendai', 'yokohama', 'kawasaki', 'nagoya', 'kobe', 'kitakyushu']);
+const JP_LOCAL_GOVERNMENT = new Set(['city', 'town', 'village']);
 
 /** 入力値を確認対象の公開URLへ正規化する。不正・非公開の宛先は理由コードを返す。 */
 export function normalizeTarget(raw: string): { url: URL } | { error: string } {
@@ -62,8 +65,14 @@ export function isIpLiteral(host: string): boolean {
 export function organizationalDomain(hostname: string): string {
   const labels = hostname.toLowerCase().replace(/\.$/, '').split('.');
   if (labels.length <= 2) return labels.join('.');
-  const keep = labels[labels.length - 1] === 'jp' && JP_SECOND_LEVELS.has(labels[labels.length - 2]) ? 3 : 2;
-  return labels.slice(-keep).join('.');
+  let keep = 2;
+  if (labels[labels.length - 1] === 'jp') {
+    const second = labels[labels.length - 2];
+    if (JP_SECOND_LEVELS.has(second) || JP_PREFECTURES.has(second)) keep = 3;
+    // 市町村（city.obu.aichi.jp など）は4つ目までが組織の単位。県（pref.aichi.jp）は3つ目まで。
+    if (JP_PREFECTURES.has(second) && JP_LOCAL_GOVERNMENT.has(labels[labels.length - 3]) && labels.length >= 4) keep = 4;
+  }
+  return labels.slice(-Math.min(keep, labels.length)).join('.');
 }
 
 function hasHeader(headers: Record<string, string>, name: string): boolean {
