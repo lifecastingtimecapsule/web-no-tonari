@@ -4,24 +4,19 @@
 import { ecColumns, securityColumns } from '../data/learning-columns';
 import '../styles/website-demo.css';
 import '../styles/service-learning.css';
+// 変更履歴: 2026-11-09 ECを運営者向けへ、セキュリティを端末別教材とPHP保守へ拡張。
+import SecurityMessageDemo from './SecurityMessageDemo.astro';
+import PhpMaintenanceColumn from './PhpMaintenanceColumn.astro';
 interface Props { slug: 'ec' | 'security' }
 const { slug } = Astro.props;
 const columns = slug === 'ec' ? ecColumns : securityColumns;
 ---
 <article class="website-demo service-learning" data-website-demo aria-labelledby={slug === 'ec' ? 'ec-learning-title' : 'sample-title'}>
-  {slug === 'ec' ? <header class="learning-intro"><h2 id="ec-learning-title">私が、買いやすいお店を<br />つくるときに考えること。</h2><p>価格、大きさ、届くまでの日数。買う前に知りたいことを、3つの例から考えます。お店づくりにも、普段の買い物にも使える小さなコラムです。</p><p class="learning-note">価格・商品・条件は説明用のサンプルです。実際の販売は行いません。</p></header> : <header class="learning-intro"><p>「知っていたら、一度止まれたかもしれない」。そんな手口を、架空のメールと3つの問いで紹介します。私が大切にしたいのは、見破る自信より、別の方法で確かめる習慣です。</p><p class="learning-note">学習用の見本です。不審なURLへ移動するリンク、入力欄、添付ファイル、実行する文字列はありません。</p><nav class="learning-nav" aria-label="セキュリティ記事の目次"><a href="#learn-security-mail">メールを確かめる</a><a href="#security-other">ほかの手口</a><a href="#security-systems">仕組みで備える</a><a href="#security-help">入力してしまったら</a></nav></header>}
+  {slug === 'ec' ? <header class="learning-intro"><h2 id="ec-learning-title">私が、注文のあとまで<br />設計するときに考えること。</h2><p>売れたあとに、現場が迷わず動けるか。決済の確定、在庫の確保、返品後の処理を、3つの運用判断から掘り下げます。</p><p class="learning-note">架空の運用例です。実際の状態名・処理のタイミングは、利用するECサービスや契約条件に合わせて確認します。</p></header> : <header class="learning-intro"><p>スマホに届くSMS、パソコンで開くメール、サーバーの古いプログラム。人が気をつけることと、管理する側が整えることを、画面の見本から考えます。</p><p class="learning-note">教材内のURL・添付は文字だけです。外部への接続やダウンロードは行いません。</p><nav class="learning-nav" aria-label="セキュリティ記事の目次"><a href="#security-messages">SMSとメール</a><a href="#learn-security-mail">判断を確かめる</a><a href="#security-php">古いPHPのリスク</a><a href="#security-other">ほかの手口</a><a href="#security-help">入力してしまったら</a></nav></header>}
+  {slug === 'security' && <SecurityMessageDemo />}
   {columns.map((column, index) => <section class="design-question" id={`learn-${slug}-${column.id}`} data-design-question aria-labelledby={`learning-title-${column.id}`}>
     <header class="design-question__heading"><span aria-hidden="true">{index + 1}</span><h3 id={`learning-title-${column.id}`}>{column.title}</h3></header>
     <p class="design-question__prompt">{column.prompt}</p>
-    {slug === 'security' && column.id === 'mail' && <div class="learning-mail" aria-label="リンクを偽装した架空メールの見本">
-      <p class="learning-mail__subject">件名：お支払い情報の確認について</p>
-      <details><summary>差出人：くらし便 サポート</summary><p>表示名だけで本人とは判断できません。この見本のアドレスは notice@account-review.test。正規の名前やアドレスになりすます手口もあるため、差出人の表示だけで安心しないようにします。</p></details>
-      <p>ご登録のお支払い情報を確認できませんでした。</p>
-      <details><summary>本日中に確認がない場合、ご利用を停止します。</summary><p>不安や急ぐ気持ちを利用して、確認する時間を奪う言い回しです。期限が書かれていても、届いた案内とは別の公式窓口で状況を確かめます。</p></details>
-      <details class="learning-mail__destination"><summary>表示されたURL：<span>https://kurashibin.example/account</span><small>ここを開くと、見本の行き先を確認できます</small></summary><p>設定された行き先：<strong>https://account-review.test/login</strong></p><p>文字に書かれたURLと、設定された行き先が違います。これは説明のための表示で、どちらにも接続しません。実際のメールではPCのポインター表示などで確認できる場合がありますが、見た目だけの判定に頼らず公式アプリから確かめましょう。</p></details>
-      <details><summary>文中に「账户」「验证」のような文字があったら？</summary><p>日本語向けの案内で普段と違う字形や表現が混ざるのは、確認するきっかけになります。ただし誤訳だけで詐欺とは断定できず、日本語が自然でも安全とは限りません。文字から国籍を推測せず、要求された操作と確認先を見ます。</p></details>
-      <p class="learning-note">会社名・アドレスは架空です。各行を開くと理由が読めます。</p>
-    </div>}
     <div class="design-question__options">
       {column.examples.map((lines, optionIndex) => <div class="design-option"><div class="design-option__example learning-option"><span class="design-option__letter">{optionIndex === 0 ? 'A' : 'B'}</span><div>{lines.map((line, lineIndex) => <p class:list={{ 'learning-option__lead': lineIndex === 0 }}>{line}</p>)}</div></div><button class="design-option__choose" type="button" data-design-choice={optionIndex === 0 ? 'A' : 'B'} aria-label={`問題${index + 1}：${optionIndex === 0 ? 'A' : 'B'}を選ぶ`} aria-controls={`learning-answer-${column.id}`} aria-pressed="false" disabled>{optionIndex === 0 ? 'A' : 'B'}を選ぶ</button></div>)}
     </div>
@@ -29,6 +24,7 @@ const columns = slug === 'ec' ? ecColumns : securityColumns;
     <details class="design-answer" id={`learning-answer-${column.id}`}><summary>{slug === 'security' ? '理由と対策を読む' : '私の考えを読む'}</summary><div class="design-answer__body"><p class="design-answer__choice">この例では、{column.choice}を選びます。</p><h4>{column.heading}</h4><p>{column.body}</p><div class="design-answer__practice"><h5>{slug === 'security' ? '日常で気をつけること' : '私が気をつけること'}</h5><p>{column.tip}</p></div>{column.source && <p class="learning-source">参考：<a href={column.source[1]}>{column.source[0]}</a></p>}</div></details>
   </section>)}
   {slug === 'security' && <>
+    <PhpMaintenanceColumn />
     <section class="learning-reading" id="security-other" aria-labelledby="security-other-title"><h3 id="security-other-title">入口が変わっても、急がせる手口に注意。</h3><p>メール以外にも、SMS、QRコード、SNSのメッセージなどが入口になります。気になる見出しを開くと、対策まで読めます。</p>
       <details><summary>QRコードから、偽のログイン画面へ</summary><p>QRコードの模様から行き先は読めません。「確認してください」と届いても、読み取った先へすぐに情報を入れず、公式アプリで同じ案内があるか確かめます。</p><p class="learning-source"><a href="https://www.ipa.go.jp/publish/wp-security/j5u9nn0000004wk0-att/ISWP2025_ALL.pdf">IPA：情報セキュリティ白書2025（PDF）</a></p></details>
       <details><summary>認証コードまで入力させる</summary><p>偽サイトにパスワードと一時的な認証コードを入力すると、すぐに悪用されることがあります。多要素認証も万能ではありません。コードを他人に伝えず、覚えのない承認通知は許可しないこと。対応サービスでは、偽サイトへのログインに強いパスキーも検討します。</p><p class="learning-source"><a href="https://www.antiphishing.jp/report/antiphishing_guideline_2025.pdf">フィッシング対策協議会：2025年度ガイドライン（PDF）</a></p></details>
@@ -40,6 +36,6 @@ const columns = slug === 'ec' ? ecColumns : securityColumns;
     <p class="learning-source">情報確認日：2026年11月9日。2025年のガイドと、2026年のClickFix注意喚起などを参照しています。網羅的な一覧や、安全性を保証する診断ではありません。<a href="https://www.antiphishing.jp/news/">新しいフィッシングの注意喚起</a>もご確認ください。</p>
     <p class="learning-source">関連資料：<a href="https://www.ipa.go.jp/security/anshin/measures/fakealert.html">IPA：偽警告・サポート詐欺</a> ／ <a href="https://www.caa.go.jp/policies/policy/consumer_policy/caution/caution_033">消費者庁：偽サイトへの注意</a></p>
   </>}
-  {slug === 'ec' && <section class="learning-reading"><h3>お店は、公開してからも続いていく。</h3><p>制作費に加え、利用するECサービスの月額料金や決済手数料、配送費も確認します。私は、日々の商品登録・在庫確認・発送を誰が担当するかまで聞いてから、必要な仕組みを考えます。</p><p class="learning-note"><time datetime="2026-11-09">2026年11月9日 更新</time></p></section>}
+  {slug === 'ec' && <section class="learning-reading"><h3>お店は、公開してからも続いていく。</h3><p>制作費に加え、利用するECサービスの月額料金や決済手数料、配送費も確認します。受注・倉庫・経理がどう引き継ぐか、誰が返金を承認するかまで整理し、既存サービスの標準機能と必要な追加開発を見極めます。</p><p class="learning-source">連携設計の補足：<a href="https://docs.stripe.com/webhooks#handle-duplicate-events">Stripe：決済通知の重複と順序</a></p><p class="learning-note"><time datetime="2026-11-09">2026年11月9日 更新</time></p></section>}
 </article>
 <script>import '../scripts/website-demo';</script>

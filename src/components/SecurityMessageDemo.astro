@@ -1,0 +1,34 @@
+---
+// 変更履歴: 2026-11-09 赤い文章の一覧を、SMSとPCメールの端末別教材へ変更。
+// 役割: 危険箇所を標準detailsで開く。URL・添付は文字だけで接続やダウンロードをしない。
+import '../styles/service-operations.css';
+---
+<section class="message-examples" id="security-messages" aria-labelledby="message-examples-title">
+  <h3 id="message-examples-title">いつもの画面で、どこを確かめる？</h3>
+  <p>下線のある部分を押すと、手口と確認方法が開きます。どちらも架空の見本です。</p>
+  <div class="message-examples__devices">
+    <figure class="sms-example">
+      <figcaption>スマートフォンに届くSMS</figcaption>
+      <div class="sms-phone">
+        <div class="sms-phone__status" aria-hidden="true"><span>9:41</span><svg width="42" height="16" viewBox="0 0 42 16" fill="none"><path d="M1 12V9M6 12V6M11 12V3" stroke="currentColor" stroke-width="3"/><rect x="21" y="3" width="17" height="10" rx="2" stroke="currentColor"/><path d="M40 6V10" stroke="currentColor"/></svg></div>
+        <div class="sms-phone__contact"><span class="sms-phone__avatar" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="7" r="3"/><path d="M5 21v-3a7 7 0 0 1 14 0v3"/></svg></span><strong>配送お知らせ</strong><small>送信者名も偽装されることがあります</small></div>
+        <div class="sms-phone__conversation"><p class="sms-phone__date">本日 9:40 · 学習用</p><div class="sms-phone__bubble"><p>お荷物をお届けできませんでした。</p><details><summary>本日中に再配達のお手続きが必要です。</summary><p>急ぐ気持ちを利用する言葉です。まず公式アプリや手元の伝票から配送状況を確認します。</p></details><details><summary>https://delivery-review.test</summary><p>荷物の心当たりがあっても、SMSのリンクが本物とは限りません。公式の入口から確認し、リンク先でカード情報を入力しないようにします。この見本は接続しません。</p></details><details><summary>再配達の確認費用：100円</summary><p>少額の支払いに見せて、カード番号などを入力させる口実があります。金額の小ささで信用せず、請求の有無を配送会社の公式窓口で確かめます。</p></details></div><p class="sms-phone__notice">返信・入力・リンク移動はできません</p></div>
+        <div class="sms-phone__home" aria-hidden="true"></div>
+      </div>
+    </figure>
+    <figure class="desktop-example">
+      <figcaption>パソコンで開く業務メール</figcaption>
+      <div class="mail-window">
+        <div class="mail-window__bar"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="16" height="12" rx="2"/><path d="m2 5 8 6 8-6"/></svg><span>受信トレイ</span><small>学習用のメール</small></div>
+        <div class="mail-window__content"><p class="mail-window__subject">請求書の確認をお願いします</p><dl class="mail-window__addresses"><div><dt>差出人</dt><dd><details><summary>経理担当 &lt;billing@account-review.test&gt;</summary><p>名前は自由に付けられ、実在のアドレスになりすます場合もあります。表示だけで信用せず、予定のない請求は以前から知っている連絡先へ確認します。</p></details></dd></div><div><dt>宛先</dt><dd>自分（学習用）</dd></div></dl>
+        <p>いつもお世話になっております。<br />今月分のお支払い内容をご確認ください。</p>
+        <details class="mail-window__link"><summary>https://torihiki.example/invoice<small>行き先を確認する</small></summary><p>実際に設定された行き先：<strong>https://account-review.test/login</strong></p><p>見えている文字とリンク先は別に設定できます。これは説明用の表示で、どちらにも接続しません。普段の公式画面から請求の有無を確かめます。</p></details>
+        <details class="mail-window__attachment"><summary>請求明細.zip <small>添付を開く前の確認点</small></summary><p>予定していない添付は、相手に別の経路で確認します。ZIPだから必ず危険という意味ではありません。中身の実行や「表示するために機能を有効化」といった指示を安易に進めないこと。この見本にファイルはありません。</p></details>
+        <details><summary>「账户」「验证」など、普段と違う文字がある</summary><p>字形や日本語の違和感は確認のきっかけ。ただし自然な文章の偽メールもあります。文字だけで詐欺や送信者の国籍を決めず、要求された操作と確認先を見ます。</p></details>
+        </div>
+      </div>
+      <p class="message-examples__takeaway"><strong>見た目より、確かめる経路。</strong><br />メールへ返信するだけでは確認にならない場合があります。登録済みの連絡先・公式アプリを使いましょう。</p>
+    </figure>
+  </div>
+  <p class="learning-source">手口の参考：<a href="https://www.npa.go.jp/bureau/cyber/countermeasures/phishing.html">警察庁：フィッシング対策</a> ／ <a href="https://www.ipa.go.jp/security/support/abuse_email.html">IPA：メールを悪用した攻撃と対策</a></p>
+</section>

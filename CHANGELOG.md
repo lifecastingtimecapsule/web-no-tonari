@@ -2,6 +2,9 @@
 
 ## 2026-11-09
 
+- `EcOperationsDemo.astro` / `learning-columns.ts`: ECを運営者向けに修正。受注管理3場面、承認と売上確定、在庫引き当て、返品・返金・再入庫を説明。旧商品カート・色選択・専用CSSを削除。
+- `SecurityMessageDemo.astro` / `PhpMaintenanceColumn.astro` / `service-operations.css`: SMSとPCメールを端末別UIに変更し、7箇所の理由と対策を表示。PHP公式のサポート表と更新手順を追加。偽URL・添付は文字のみで通信・実行しない。
+- `ServiceLearning.astro` / `ServiceDemo.astro` / `services.ts` / サービスページ: 記事・入口・事業説明を新しい主題へ更新。ECとセキュリティのプレビュー画像・根拠記録・PRODUCT/DESIGNを現行仕様に統一。
 - `ServiceLearning.astro` / `learning-columns.ts` / `service-learning.css`: ECの支払合計・サイズ・発送日の3問、セキュリティの偽メール・HTTPS・偽認証の3問を追加。日常向けの難易度と「私が考えること」の語りを継承し、社会的な誘導とシステム側の備え・被害時の対応を出典付きで説明。
 - `ServiceDemo.astro` / `services.ts` / サービスページ: 新記事への入口とメタ説明を更新し、重複する旧豆知識を非表示。ECの商品選択・カートは維持。`service-demos.ts` / `services.css` の旧メールカウンターと装飾を削除。
 - セキュリティのプレビューを新しいメール教材の画面に更新。PRODUCT / DESIGN / 設計記録 / 出典記録に範囲・根拠・検証を記録。

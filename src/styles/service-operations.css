@@ -1,0 +1,118 @@
+/* 変更履歴: 2026-11-09 運営側の受注管理と端末別の安全教材に、役割に合った画面構造を追加。 */
+/* 役割: 共通の白黒赤を保ち、端末や管理画面の中でも読みやすさと標準操作を優先する。 */
+.service-demo--ec { padding: 0; background: transparent; }
+.operations-demo { max-width: 1000px; margin-inline: auto; border: 1px solid var(--input-border); border-radius: 16px; overflow: clip; }
+.operations-demo__bar { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 28px; background: var(--ink); color: white; }
+.operations-demo__bar h3 { margin: 0; font-size: 20px; }
+.operations-demo__bar h3 span { margin-left: 16px; font-size: 15px; font-weight: 400; }
+.operations-demo__bar > span { font-size: 13px; }
+.operations-demo__instruction, .operations-demo__footnote { max-width: none; padding: 0 28px; font-size: 14px; line-height: 1.9; }
+.operations-demo__workspace { display: grid; grid-template-columns: 230px minmax(0, 1fr); border-top: 1px solid var(--mist); }
+.operations-demo__workspace:has([data-order-picker][hidden]) { grid-template-columns: 1fr; }
+.operations-demo__orders { background: var(--mist-light); padding: 12px; }
+.operations-demo__orders[hidden] { display: none; }
+.operations-demo__orders button { display: block; text-align: left; width: 100%; border: 1px solid transparent; border-radius: 8px; padding: 18px 16px; margin-bottom: 8px; color: var(--ink); background: transparent; font: inherit; cursor: pointer; }
+.operations-demo__orders button[aria-pressed='true'] { border-color: var(--input-border); background: white; }
+.operations-demo__orders button:hover { background: white; }
+.operations-demo__orders :is(span, strong, small) { display: block; }
+.operations-demo__orders span { font-size: 13px; font-variant-numeric: tabular-nums; }
+.operations-demo__orders strong { font-size: 18px; margin-block: 6px; }
+.operations-demo__orders small { font-size: 13px; color: var(--ink-muted); line-height: 1.7; }
+.operations-demo__detail { padding: 28px; min-width: 0; }
+.operations-demo__detail section + section:not([hidden]) { margin-top: 40px; border-top: 1px solid var(--mist); padding-top: 32px; }
+.operations-demo__detail:has(section[hidden]) section { margin-top: 0; border: 0; padding-top: 0; }
+.operations-demo__title { display: flex; justify-content: space-between; gap: 20px; align-items: start; }
+.operations-demo__title h4 { font-size: 24px; margin: 0; }
+.operations-demo__title p { text-align: right; font-size: 24px; font-weight: 700; margin: 0; font-variant-numeric: tabular-nums; }
+.operations-demo__title small { display: block; font-size: 12px; font-weight: 400; color: var(--ink-muted); }
+.operations-demo__statuses { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; padding-block: 22px; border-bottom: 1px solid var(--mist); }
+.operations-demo__statuses dt { font-size: 13px; color: var(--ink-muted); margin-bottom: 8px; }
+.operations-demo__statuses dd { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.7; }
+.operations-demo__item { padding-block: 12px 24px; }
+.operations-demo__item p { font-size: 14px; color: var(--ink-muted); margin-bottom: 0; }
+.operations-demo__next { padding: 22px; border-radius: 12px; background: var(--mist-light); }
+.operations-demo__next > span { font-size: 13px; }
+.operations-demo__next h5 { font-size: 20px; margin: 8px 0 12px; }
+.operations-demo__next p, .operations-demo__history, .operations-demo details { font-size: 15px; line-height: 1.85; }
+.operations-demo__next p { margin: 0; }
+.operations-demo__history { padding-left: 22px; margin-block: 24px; }
+.operations-demo__history li { padding-left: 4px; margin-block: 10px; }
+.operations-demo summary { min-height: 44px; padding-block: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 5px; font-weight: 700; }
+.operations-demo__status { margin: 0; padding: 0 28px; font-size: 14px; line-height: 1.8; }
+.operations-demo__status:empty { display: none; }
+.operations-demo__footnote { color: var(--ink-muted); border-top: 1px solid var(--mist); padding-top: 20px; padding-bottom: 8px; }
+.operations-demo :is(button, summary):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 3px; }
+.message-examples { margin-top: 48px; scroll-margin-top: 120px; }
+.message-examples > h3 { font-size: clamp(25px,3vw,34px); line-height: 1.5; margin-bottom: 14px; }
+.message-examples > p { font-size: 17px; }
+.message-examples__devices { display: grid; grid-template-columns: minmax(0,340px) minmax(0,1fr); gap: 40px; align-items: start; margin-top: 32px; }
+.message-examples figure { margin: 0; min-width: 0; }
+.message-examples figcaption { font-size: 16px; font-weight: 700; margin-bottom: 18px; }
+.sms-phone { border: 8px solid var(--ink); border-radius: 40px; padding: 0 0 16px; background: white; overflow-wrap: anywhere; max-width: 340px; margin-inline: auto; }
+.sms-phone__status { display: flex; justify-content: space-between; padding: 18px 22px; font-size: 13px; font-weight: 700; }
+.sms-phone__contact { display: flex; align-items: center; flex-direction: column; gap: 6px; padding: 0 14px 20px; border-bottom: 1px solid var(--mist); text-align: center; }
+.sms-phone__avatar { display: grid; place-items: center; background: var(--mist-light); border-radius: 50%; width: 44px; height: 44px; }
+.sms-phone__contact small { font-size: 11px; color: var(--ink-muted); }
+.sms-phone__conversation { padding: 20px 14px 24px; }
+.sms-phone__date { text-align: center; font-size: 12px; color: var(--ink-muted); margin: 0 0 20px; }
+.sms-phone__bubble { background: var(--mist-light); padding: 18px; border-radius: 16px 16px 16px 4px; }
+.sms-phone__bubble > p { margin: 0 0 12px; font-size: 15px; }
+.message-examples summary { font-size: 14px; color: var(--signal-deep); text-decoration: underline; text-underline-offset: 4px; font-weight: 600; min-height: 44px; padding-block: 12px; overflow-wrap: anywhere; }
+.message-examples details[open] > summary { text-decoration: none; }
+.message-examples details > p { font-size: 14px; line-height: 1.8; padding-block: 8px; margin: 0 0 8px; }
+.sms-phone__notice { font-size: 11px; color: var(--ink-muted); text-align: center; margin: 20px 0 0; }
+.sms-phone__home { width: 100px; height: 4px; background: var(--ink); border-radius: 4px; margin: 0 auto; }
+.mail-window { border: 1px solid var(--input-border); border-radius: 12px; overflow: clip; overflow-wrap: anywhere; }
+.mail-window__bar { padding: 16px 20px; display: flex; align-items: center; gap: 10px; background: var(--mist-light); border-bottom: 1px solid var(--mist); font-size: 14px; }
+.mail-window__bar small { margin-left: auto; font-size: 12px; color: var(--ink-muted); }
+.mail-window__content { padding: 24px; }
+.mail-window__subject { font-size: 21px; font-weight: 700; margin: 0 0 18px; }
+.mail-window__addresses { font-size: 13px; border-bottom: 1px solid var(--mist); padding-bottom: 20px; margin-bottom: 24px; }
+.mail-window__addresses > div { display: grid; grid-template-columns: 4em minmax(0,1fr); gap: 10px; margin-top: 12px; }
+.mail-window__addresses dt { padding-top: 12px; color: var(--ink-muted); }
+.mail-window__addresses dd { margin: 0; }
+.mail-window__addresses div:last-child dd { padding-top: 12px; }
+.mail-window__content > p { font-size: 15px; }
+.mail-window__link { margin-block: 20px; }
+.mail-window__link summary small, .mail-window__attachment summary small { display: block; color: var(--ink-muted); font-size: 12px; font-weight: 400; margin-top: 5px; }
+.mail-window__attachment { border-block: 1px solid var(--mist); margin-block: 20px; }
+.message-examples__takeaway { font-size: 15px; margin: 24px 0 0; }
+.php-column__example { padding: 24px; background: var(--mist-light); border-radius: 12px; margin-block: 28px; }
+.php-column__example > span { color: var(--ink-muted); font-size: 12px; }
+.php-column__example > p { font-size: 15px; margin-bottom: 0; }
+.php-column__example strong { font-size: 28px; margin-right: 20px; }
+.php-column__example p > span { display: inline-block; color: var(--signal-deep); font-weight: 700; }
+.php-column__table { border-collapse: collapse; width: 100%; margin-block: 32px 20px; font-size: 14px; line-height: 1.8; }
+.php-column__table caption { text-align: left; font-weight: 700; font-size: 15px; padding-bottom: 20px; }
+.php-column__table :is(th,td) { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--mist); }
+.php-column__table thead { background: var(--mist-light); }
+.php-column__table td:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.php-column h4 { font-size: 23px; line-height: 1.5; margin: 40px 0 24px; }
+.php-column__steps { padding-left: 24px; }
+.php-column__steps li { padding-left: 6px; }
+@media(max-width:800px) {
+  .message-examples__devices { grid-template-columns: 1fr; gap: 40px; }
+  .sms-example figcaption { text-align: center; }
+  .operations-demo__workspace { grid-template-columns: 1fr; }
+  .operations-demo__orders { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+  .operations-demo__orders button { margin: 0; padding: 12px 8px; }
+  .operations-demo__orders strong { font-size: 15px; }
+  .operations-demo__orders small { display: none; }
+}
+@media(max-width:480px) {
+  .operations-demo__bar { padding: 18px; flex-wrap: wrap; gap: 6px; }
+  .operations-demo__bar h3 span { margin-left: 8px; }
+  .operations-demo__instruction, .operations-demo__footnote, .operations-demo__status { padding-inline: 18px; }
+  .operations-demo__detail { padding: 20px 18px; }
+  .operations-demo__title { gap: 12px; }
+  .operations-demo__title :is(h4,p) { font-size: 20px; }
+  .operations-demo__statuses { grid-template-columns: 1fr; gap: 12px; }
+  .operations-demo__statuses > div { display: grid; grid-template-columns: 3em minmax(0,1fr); gap: 12px; align-items: baseline; }
+  .operations-demo__statuses dt { margin: 0; }
+  .operations-demo__next { padding: 18px; }
+  .mail-window__content { padding: 18px; }
+  .mail-window__bar { flex-wrap: wrap; padding: 14px 18px; }
+  .mail-window__addresses > div { grid-template-columns: 1fr; gap: 0; }
+  .php-column__table :is(th,td) { padding: 12px 6px; font-size: 13px; }
+  .php-column__example { padding: 20px; }
+}

@@ -1,5 +1,6 @@
 // 変更履歴: 2026-11-08 視線誘導、商品選択、文章整理、メール確認の学習用操作を追加。
 // 役割: 架空サンプル内の表示だけを更新し、購入・生成・外部送信を行わない。
+// 変更履歴: 2026-11-09 受注管理の教材へ変更したため、旧ECカートと色選択の処理を削除。
 // 変更履歴: 2026-11-08 横向きタブで現在のサービスが画面外へ隠れないよう、横方向だけ表示位置を補正。
 /** 現在のサービス名をタブ列の表示範囲に収め、サンプルへの縦スクロールは変えない。 */
 function revealCurrentServiceTab(): void {
@@ -15,25 +16,6 @@ revealCurrentServiceTab();
 window.addEventListener('resize', revealCurrentServiceTab);
 
 // 変更履歴: 2026-11-09 メールの解説を標準detailsへ変更したため、旧カウンター操作を削除。
-
-const productColor = document.querySelector<HTMLSelectElement>('[data-product-color]');
-const productQuantity = document.querySelector<HTMLSelectElement>('[data-product-quantity]');
-const cartStatus = document.querySelector<HTMLElement>('[data-cart-status]');
-const cartItems: { color: string; quantity: number }[] = [];
-productColor?.addEventListener('change', () => {
-  const cup = document.querySelector<HTMLElement>('[data-cup]');
-  if (cup) cup.style.setProperty('--cup-color', ({ sand: '#d7bb8c', red: '#b75d43', ink: '#43464b' } as Record<string, string>)[productColor.value]);
-});
-document.querySelector('[data-cart-add]')?.addEventListener('click', () => {
-  if (!productColor || !productQuantity || !cartStatus) return;
-  cartItems.push({ color: productColor.selectedOptions[0].text, quantity: Number(productQuantity.value) });
-  const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-  cartStatus.textContent = `${cartItems.map(item => `${item.color} ${item.quantity}点`).join('、')}。商品合計 ¥${(totalQuantity * 2400).toLocaleString('ja-JP')} ＋ 送料 ¥600 ＝ ¥${(totalQuantity * 2400 + 600).toLocaleString('ja-JP')}（サンプル・注文されません）`;
-});
-document.querySelector('[data-cart-reset]')?.addEventListener('click', () => {
-  cartItems.length = 0;
-  if (cartStatus) cartStatus.textContent = 'カートを空にしました。注文は行われていません。';
-});
 
 const inquirySamples: Record<string, { message: string; category: string; action: string; reply: string }> = {
   update: { message: '来月から営業時間が10時〜18時になります。ホームページの案内を変更できますか？', category: '既存サイトの更新', action: '対象ページと変更開始日を確認する。', reply: '営業時間変更のご相談ですね。掲載ページのURLと、変更を反映したい日付を教えてください。' },

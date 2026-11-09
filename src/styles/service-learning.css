@@ -1,5 +1,6 @@
 /* 変更履歴: 2026-11-09 既存の記事スタイルにEC・セキュリティの見本と短いコラムを追加。 */
 /* 役割: 長いURLや解説を切り詰めず、白黒赤と同じ読み幅で表示する。 */
+/* 変更履歴: 2026-11-09 旧メール枠を外し、端末別の装飾をservice-operations.cssへ移管。 */
 .service-demo--security { padding: 0; background: transparent; border-radius: 0; }
 .service-learning { margin-block: 48px 0; }
 .learning-intro { max-width: 720px; margin: 0 auto 24px; }
@@ -11,12 +12,6 @@
 .learning-option { min-height: 220px; align-items: flex-start; }
 .learning-option p + p { margin-top: 14px; }
 .learning-option .learning-option__lead { font-size: 20px; font-weight: 700; line-height: 1.6; }
-.learning-mail { border: 1px solid var(--input-border); border-radius: 12px; padding: clamp(18px, 3vw, 32px); margin: 28px 0; overflow-wrap: anywhere; }
-.learning-mail__subject { font-size: 20px; font-weight: 700; margin-top: 0; }
-.learning-mail details { border-top: 1px solid var(--mist); }
-.learning-mail summary { color: var(--signal-deep); }
-.learning-mail__destination span, .learning-mail__destination small { display: block; }
-.learning-mail__destination small { color: var(--ink-muted); font-size: 14px; font-weight: 400; margin-top: 8px; }
 .learning-reading { max-width: 720px; margin: 64px auto 0; scroll-margin-top: 120px; }
 .learning-reading h3 { font-size: clamp(24px, 3vw, 32px); line-height: 1.5; text-wrap: balance; margin: 0 0 24px; }
 .learning-reading details { border-bottom: 1px solid var(--mist); }

@@ -1,0 +1,23 @@
+---
+// 変更履歴: 2026-11-09 PHP公式の期限と、互換性を確認して更新する手順を追加。
+// 役割: サーバー側の保守を説明する。閲覧者のPHPを検出・診断した表示ではない。
+const phpBranches = [
+  ['7.4', '終了', '2022-11-28'],
+  ['8.1', '終了', '2025-12-31'],
+  ['8.2', 'セキュリティ修正のみ', '2026-12-31'],
+  ['8.3', 'セキュリティ修正のみ', '2027-12-31'],
+  ['8.4', '通常サポート中', '2028-12-31'],
+  ['8.5', '通常サポート中', '2029-12-31'],
+];
+---
+<section class="learning-reading php-column" id="security-php" aria-labelledby="php-title">
+  <h3 id="php-title">サイトは動いている。<br />でも、PHPは古いまま？</h3>
+  <p>PHPは、WordPressなどをサーバー上で動かすプログラムです。画面が普段どおり表示されても、サポートが切れていれば、PHP公式からの修正は届きません。</p>
+  <div class="php-column__example"><span>保守で見つかる例 · 実際の検出結果ではありません</span><p><strong>PHP 7.4</strong><span>公式サポート終了</span></p><p>見た目の崩れがなくても、更新計画が必要な状態。</p></div>
+  <details><summary>古いPHPだと、何が困る？</summary><p>不具合や脆弱性が見つかっても、終了した系統にはPHP公式の修正が提供されません。利用している機能や設定、他のソフトとの組み合わせによっては、不正な処理や情報漏えいにつながる可能性があります。「古い＝すでに侵入された」ではありませんが、放置してよい理由にもなりません。</p><p>また、CMSや追加機能が古いPHPへの対応を終え、必要な更新を入れられなくなる場合もあります。PHPだけでなく、サイトを構成するものを一緒に確認します。</p></details>
+  <table class="php-column__table"><caption>代表的な系統の公式サポート状況<br /><time datetime="2026-11-09">2026年11月9日時点</time>。右列はセキュリティ修正の最終期限。</caption><thead><tr><th scope="col">PHP</th><th scope="col">現在の状態</th><th scope="col">最終期限</th></tr></thead><tbody>{phpBranches.map(branch => <tr><th scope="row">{branch[0]}</th><td>{branch[1]}</td><td>{branch[2]}</td></tr>)}</tbody></table>
+  <p class="learning-note">一部の系統を抜粋しています。通常サポートとセキュリティ修正期間は異なります。サポート中でも同じ系統の最新修正版へ更新が必要です。ホスティング会社などの延長保守は、提供範囲と期限を別途確認します。</p>
+  <h4>私は、いきなり本番の設定を変えません。</h4>
+  <ol class="php-column__steps"><li><strong>構成を確認する。</strong>ホスティングの管理画面で実際に使うPHP・CMS・追加機能を確認。確認用の詳細情報ページを一般公開しない。</li><li><strong>戻せる状態をつくる。</strong>ファイルとデータベースのバックアップ、復元方法、作業日時を用意する。</li><li><strong>検証用の環境で試す。</strong>対応するサポート中のバージョンを選び、ログイン・フォーム・購入・通知を確認。決済はテストモードで行う。</li><li><strong>切り替えた後も見る。</strong>本番反映後の表示・処理・エラーを確認。問題があれば用意した復旧手順で戻す。</li></ol>
+  <p class="learning-source">根拠：<a href="https://www.php.net/supported-versions.php">PHP公式：サポート中のバージョン</a> ／ <a href="https://www.php.net/eol.php">終了済みバージョン</a> ／ <a href="https://www.php.net/manual/en/security.current.php">更新の重要性</a>。更新手順は、これらを踏まえた当サイトの運用上の考え方です。</p>
+</section>

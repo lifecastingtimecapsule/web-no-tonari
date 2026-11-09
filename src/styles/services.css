@@ -1,4 +1,5 @@
 /* 変更履歴: 2026-11-09 旧花屋サンプル専用の未使用スタイルを外し、新しい教材CSSへ移管。 */
+/* 変更履歴: 2026-11-09 管理画面への移行に合わせ、旧ECの商品とカート専用スタイルを削除。 */
 /* 変更履歴: 2026-11-08 ヘッダー・フッターを共通化。モバイルのサービス切り替えを1行の横スクロールへ整理。 */
 /* 変更履歴: 2026-11-08 白黒赤の既存世界観を継承し、説明・体験・コラムを読み分ける4ページを追加。 */
 .service-tabs { display:flex; gap:28px; flex-wrap:nowrap; overflow-x:auto; white-space:nowrap; border-block:1px solid var(--mist); padding:10px 0; }
@@ -12,27 +13,16 @@
 .service-task { border-top:1px solid var(--mist); padding:18px 0; }
 .service-task h3 { font-size:16px; margin:0 0 5px; }
 .service-task p { font-size:14px; color:var(--ink-muted); margin:0; line-height:1.8; }
-.service-sample,.service-notes { padding:56px 0; border-top:1px solid var(--mist); scroll-margin-top:24px; }
+.service-sample,.service-notes { padding:56px 0; border-top:1px solid var(--mist); scroll-margin-top:120px; }
 .service-section-heading { display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-bottom:30px; }
 .service-section-heading h2 { font-size:clamp(1.7rem,3vw,2.6rem); line-height:1.4; letter-spacing:-.025em; margin:0; text-wrap:balance; }
 .service-section-heading p { font-size:14px; line-height:1.9; color:var(--ink-muted); max-width:44em; margin:0; }
 .service-demo { background:var(--mist-light); padding:36px; border-radius:16px; }
 .demo-topline { display:flex; justify-content:space-between; align-items:center; gap:16px; border-bottom:1px solid var(--mist); padding-bottom:18px; margin-bottom:24px; }
 .demo-topline span { font-size:12px; color:var(--ink-muted); }
-.demo-feedback { margin:28px 0 0; padding:20px; background:white; min-height:80px; line-height:1.8; font-size:14px; }
-.shop-demo__body,.ai-demo__body { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
-.cup-stage { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:330px; background:#e9e4dc; gap:38px; overflow:hidden; }
-.cup-stage > span { color:#5e554c; font-size:12px; }
-.cup-shape { --cup-color:#d7bb8c; position:relative; width:145px; height:155px; background:var(--cup-color); border-radius:8px 8px 60px 60px; box-shadow:inset -16px 0 25px rgb(0 0 0 / 12%), 0 20px 25px rgb(53 42 27 / 14%); }
-.cup-shape::after { content:''; position:absolute; right:-48px; top:18px; width:60px; height:80px; border:16px solid var(--cup-color); border-left:0; border-radius:0 45px 45px 0; }
-.shop-demo h3 { font-size:28px; margin:0 0 12px; }
-.shop-demo p { line-height:1.8; font-size:14px; }
-.demo-price { font-size:28px; font-variant-numeric:tabular-nums; }
-.demo-price small { font-size:12px; }
+.ai-demo__body { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
 .service-demo label { display:block; font-size:14px; margin:16px 0 6px; }
 .service-demo select { width:100%; padding:12px; min-height:48px; background:white; border:1px solid var(--input-border); color:var(--ink); font:inherit; border-radius:6px; }
-.shop-demo .button { margin-top:24px; width:100%; }
-.demo-reset { font:inherit; font-size:14px; min-height:44px; text-decoration:underline; text-underline-offset:4px; border:0; background:transparent; color:var(--ink-muted); cursor:pointer; }
 .ai-demo blockquote { margin:22px 0; background:white; padding:24px; line-height:1.9; }
 .ai-demo__output { padding:28px; background:white; border-radius:12px; }
 .ai-demo__output h3 { margin:0 0 24px; font-size:17px; }
@@ -51,4 +41,4 @@
 .service-close__price { font-weight:700; }
 .service-close .button { margin:15px 0; }
 .service-close__notice { color:var(--ink-muted); font-size:12px!important; }
-@media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.shop-demo__body,.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.cup-stage { min-height:270px; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }
+@media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }
