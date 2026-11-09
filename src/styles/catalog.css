@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 折りたたみのキーボードフォーカスが固定ヘッダーに隠れないようスクロール余白を追加。 */
 /* 変更履歴: 2026-11-09 サービス一覧・料金の専用ページを、既存の白黒赤・書体・余白へ統一。 */
 /* 役割: 内容と価格を左揃えの行で対応させ、狭い画面では読み順を保って縦に並べる。 */
 .catalog-heading { margin: 32px 0 48px; max-width: 900px; }
@@ -41,7 +42,7 @@
 .pricing-other h3 { margin-top: 0; font-size: 20px; }
 .pricing-other p { font-size: 16px; }
 .pricing-questions details { border-bottom: 1px solid var(--mist); max-width: 900px; }
-.pricing-questions summary { padding: 22px 0; font-weight: 700; cursor: pointer; }
+.pricing-questions summary { scroll-margin-top: 110px; padding: 22px 0; font-weight: 700; cursor: pointer; }
 .pricing-questions details p { max-width: 47em; padding-bottom: 16px; }
 .catalog-page :is(a,summary):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 4px; }
 .catalog-page summary:hover { color: var(--signal-deep); }
