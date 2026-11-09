@@ -1,12 +1,13 @@
 ---
+// 変更履歴: 2026-11-09 配色を選ぶ意図が伝わるよう、色名中心のラベルを目指す印象と用途の説明へ変更。
 // 変更履歴: 2026-11-09 承認済みの文字・余白／配色／レスポンシブの3テーマへ再構成。
 // 役割: 比較とプレビュー操作を通して弊社の設計判断を伝える。学習用で、申込・回答保存・送信はしない。
 import '../styles/website-demo.css';
 import DesignSitePreview from './DesignSitePreview.astro';
 const palettes = [
-  { id: 'warm', label: '木の色になじませる', description: '生成りの背景と茶系の差し色。写真にある木の色を手がかりに、全体の色を揃えた例です。' },
-  { id: 'cool', label: '青で引き締める', description: '青みのある背景と濃い青。写真の暖かい色に対して、文字と操作の部分をすっきり分けた例です。' },
-  { id: 'bold', label: '赤を効かせる', description: '淡い赤の背景と深い赤。申し込みなど、次の行動を示す部分に存在感を持たせた例です。' },
+  { id: 'warm', label: '茶系：温かさ・親しみ', description: '目指すのは、温かく親しみやすい印象。生成りと茶色を写真の木の色になじませ、自然体で相談しやすい雰囲気をつくります。人柄や素材のぬくもりを伝えたいときの配色例です。' },
+  { id: 'cool', label: '青系：落ち着き・信頼感', description: '目指すのは、落ち着いて信頼感のある印象。淡い青と濃い青で画面を整え、説明をじっくり読める雰囲気をつくります。丁寧さや専門性を伝えたいときの配色例です。' },
+  { id: 'bold', label: '赤系：力強さ・活気', description: '目指すのは、力強く活気のある印象。淡い背景に深い赤を効かせ、メッセージや次の行動に存在感を持たせます。熱意や新しい取り組みを伝えたいときの配色例です。' },
 ];
 ---
 <article class="website-demo" data-website-demo aria-labelledby="sample-title">
@@ -23,12 +24,12 @@ const palettes = [
 
   <section class="design-question" id="quiz-color" aria-labelledby="question-color" data-palette-demo>
     <header class="design-question__heading"><span aria-hidden="true">2</span><h3 id="question-color">同じ写真でも、配色で印象は変わる。</h3></header>
-    <p class="design-question__prompt">下の配色を選んでみてください。文章・写真・配置はそのままに、背景・文字・ボタンの色がセットで変わります。どの雰囲気を伝えたいか、見比べてみましょう。</p>
+    <p class="design-question__prompt">まずは「どんな印象を届けたいか」を決めてみましょう。温かさ、信頼感、活気。下のボタンで、同じ文章・写真・配置でも配色によって雰囲気が変わる様子を比べられます。</p>
     <div class="design-controls" role="group" aria-label="配色を選ぶ">{palettes.map((palette, index) => <button type="button" data-palette-choice={palette.id} data-palette-description={palette.description} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls="palette-preview" disabled>{palette.label}</button>)}</div>
     <div class="design-palette" data-palette="warm" data-accent-area="small" id="palette-preview"><DesignSitePreview /><dl class="palette-roles"><div><dt><i class="palette-roles__base" aria-hidden="true"></i>背景</dt><dd>画面の土台</dd></div><div><dt><i class="palette-roles__ink" aria-hidden="true"></i>文字</dt><dd>内容を読む</dd></div><div><dt><i class="palette-roles__accent" aria-hidden="true"></i>差し色</dt><dd>行動を示す</dd></div></dl></div>
     <div class="design-controls design-controls--area" role="group" aria-label="差し色を使う面積"><span>同じ色で、使う面積を変える</span><button type="button" data-accent-choice="small" aria-pressed="true" aria-controls="palette-preview" disabled>ボタンだけ</button><button type="button" data-accent-choice="large" aria-pressed="false" aria-controls="palette-preview" disabled>背景にも使う</button></div>
     <p class="design-demo-feedback" data-palette-feedback role="status" aria-live="polite">{palettes[0].description} 差し色はボタンだけに使っています。</p>
-    <details class="design-answer"><summary>弊社が配色で考えること</summary><div class="design-answer__body"><h4>色を選ぶ。役割を決める。面積で調整する。</h4><p>まず、誰にどんな雰囲気を届けたいかを整理します。写真やロゴにある色を手がかりに、背景・文字・差し色を組み合わせます。この見本では、木の色になじませる案、青で引き締める案、赤を効かせる案を用意しました。</p><p>同じ配色でも、差し色を背景まで広げると、ボタンだけに使う場合とは印象が変わります。色数だけでなく、どこに、どのくらい使うかも設計します。「必ず3色」「必ず決まった比率」という正解があるわけではありません。</p><div class="design-answer__practice"><h5>雰囲気と、読みやすさを両方見る</h5><p>好みに合う色でも、文字が背景に埋もれたら調整します。写真や書体との組み合わせで確認し、注意や必須の意味は色だけに任せず、言葉でも示します。色名だけで「この印象になる」と決めつけません。</p></div><p class="design-source">参考：<a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/color-palette.html">Adobeの配色クイズ</a> ／ <a href="https://www.canva.com/ja_jp/learn/100-color-combinations/">Canvaの配色見本</a> ／ <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3Cのコントラスト指針（英語）</a></p></div></details>
+    <details class="design-answer"><summary>弊社が配色で考えること</summary><div class="design-answer__body"><h4>届けたい印象を決めてから、色を選ぶ。</h4><p>「親しみやすく相談できそう」「落ち着いて任せられそう」「熱意が伝わってくる」。まず、見た人にどう感じてほしいかを言葉にします。そのうえで、この見本では温かさを目指す茶系、落ち着きと信頼感を目指す青系、力強さと活気を目指す赤系を組みました。</p><p>同じ配色でも、差し色を背景まで広げると、ボタンだけに使う場合とは印象が変わります。色数だけでなく、どこに、どのくらい使うかも設計します。「必ず3色」「必ず決まった比率」という正解があるわけではありません。</p><div class="design-answer__practice"><h5>雰囲気と、読みやすさを両方見る</h5><p>好みに合う色でも、文字が背景に埋もれたら調整します。写真や書体との組み合わせで確認し、注意や必須の意味は色だけに任せず、言葉でも示します。ここで挙げた印象は、この見本で目指したものです。同じ色でも、明るさ・鮮やかさ・面積や写真との組み合わせで受け取られ方は変わります。</p></div><p class="design-source">参考：<a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/color-palette.html">Adobeの配色クイズ</a> ／ <a href="https://www.canva.com/ja_jp/learn/100-color-combinations/">Canvaの配色見本</a> ／ <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3Cのコントラスト指針（英語）</a></p></div></details>
   </section>
 
   <section class="design-question" id="quiz-responsive" aria-labelledby="question-responsive" data-responsive-demo>
