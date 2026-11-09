@@ -1,5 +1,12 @@
 # 変更履歴
 
+## 2026-11-09：似た手口を、異なる判断材料の三問へ
+
+- `phishing-scenarios.ts`: 催促・誤字・金額の分かりやすい手がかりを減らし、URLの構造、添付PDFのQR、アプリ連携の権限へ変更。名称だけ変えた同種の問題にならないようにする。
+- `PhishingExperience.astro` / `phishing-experience.css`: 添付プレビューと認可画面を追加。場面に合わせた操作名・ヒント・解説を表示し、既存の次問導線を維持。
+- `services.ts` / `security.png` / `PROVENANCE.md`: 入口の紹介と画像を現行の三問に同期。
+- `PRODUCT.md` / `DESIGN.md` / 設計記録: 現行方針、一次資料、学習例の限界と動作検証を記録。
+
 ## 2026-11-09：解説の近くから次の問題へ
 
 - `PhishingExperience.astro` / `phishing-experience.ts` / `phishing-experience.css`: 次問ボタンを上部から各解説の直下へ移動。回答後は判定・リンク操作を隠し、再挑戦で戻す。全解説に短い表示演出を付け、縮小モーションを尊重。「リンクを開く（体験）」を「リンクを開く」へ短縮。操作の行き来と重複を減らすため。

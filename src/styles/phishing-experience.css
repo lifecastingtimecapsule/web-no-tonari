@@ -89,3 +89,29 @@
 .phishing-result__next { min-height: 52px; padding: 14px 20px; border: 1px solid var(--ink); border-radius: 8px; background: var(--ink); color: white; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
 .phishing-result__next:hover { background: #39393d; }
 .phishing-result__navigation .phishing-experience__reset { padding: 10px 0; justify-self: start; }
+
+/* 変更履歴: 2026-11-09 添付PDFと認可画面を追加。既存のメール・判定欄と同じ余白と色を継承する。 */
+.phishing-attachment { border-top: 1px solid var(--mist); margin-top: 24px; padding-top: 16px; }
+.phishing-attachment summary { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px; cursor: pointer; border: 1px solid var(--input-border); border-radius: 8px; }
+.phishing-attachment summary:hover { background: var(--mist-light); }
+.phishing-attachment summary svg { flex-shrink: 0; }
+.phishing-attachment summary small { display: block; font-size: 12px; color: var(--ink-muted); }
+.phishing-attachment[open] summary small { display: none; }
+.phishing-attachment__document { margin-top: 16px; padding: 24px 16px; background: var(--mist-light); text-align: center; }
+.phishing-attachment__document p { font-size: 14px; margin: 0 0 16px; }
+.phishing-attachment__document .phishing-attachment__heading { font-size: 18px; font-weight: 700; }
+.phishing-attachment__qr { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 12px; }
+.phishing-attachment__qr svg { background: white; color: var(--ink); }
+.phishing-attachment__qr span { font-size: 13px; text-decoration: underline; }
+.phishing-attachment__sample { display: block; margin-top: 8px; font-size: 11px; color: var(--ink-muted); }
+.phishing-permission { margin: 0; min-width: 0; border: 1px solid var(--input-border); border-radius: 12px; overflow: hidden; background: white; }
+.phishing-permission figcaption { display: flex; justify-content: space-between; gap: 10px; padding: 18px 20px; background: var(--mist-light); font-size: 14px; }
+.phishing-permission figcaption span { color: var(--ink-muted); font-size: 12px; }
+.phishing-permission__address { width: 100%; padding: 14px 20px; border-bottom: 1px solid var(--mist); font-size: 12px; overflow-wrap: anywhere; }
+.phishing-permission__body { padding: 28px 24px; }
+.phishing-permission__app { font-size: 22px; font-weight: 700; margin-top: 12px; }
+.phishing-permission__body p { font-size: 15px; line-height: 1.8; margin: 0 0 22px; }
+.phishing-permission__body .phishing-permission__provider { color: var(--ink-muted); font-size: 12px; }
+.phishing-permission__scopes { width: 100%; font-size: 15px; padding: 16px 0; border-block: 1px solid var(--mist); line-height: 2; }
+.phishing-permission__body .phishing-permission__notice { color: var(--ink-muted); font-size: 12px; margin: 18px 0 0; }
+@media(max-width:640px) { .phishing-permission__body { padding: 24px 20px; } }
