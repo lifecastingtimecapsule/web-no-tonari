@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-09 色と併せて正解・不正解・ヒントを見出しに明示し、読み上げでも判定を区別。
 // 変更履歴: 2026-11-09 解説の直下から次問へ進め、回答操作は再挑戦時に戻す。
 // 変更履歴: 2026-11-09 登録不要のフィッシング体験を追加。結果は画面内だけに表示する。
 // 役割: 箇所の指摘・詐欺の判定・疑似リンク・やり直しを扱う。通信や保存は行わない。
@@ -30,7 +31,9 @@ function initializePhishingExperience(root: HTMLElement) {
     actions.hidden = true;
     result.hidden = false;
     result.dataset.tone = response.tone;
-    title.textContent = response.title;
+    // 見出しへのフォーカス時にも判定を伝え、既存の「正解。」とは重複させない。
+    const verdictLabel = response.tone === 'found' ? '正解。' : response.tone === 'trap' ? '不正解。' : 'ヒント。';
+    title.textContent = response.title.startsWith(verdictLabel) ? response.title : `${verdictLabel}${response.title}`;
     explanation.textContent = response.explanation;
     takeaway.textContent = response.takeaway;
     simulation.hidden = action !== 'open';

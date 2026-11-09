@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 判定を見分けやすくするため、正解は緑・危険な操作は赤・ヒントは黄系の面と見出しで表示。 */
 /* 変更履歴: 2026-11-09 登録不要のSMS一問体験。端末と判断を主役にし、説明は回答後に開示。 */
 /* 役割: iPhoneを参考にした受信画面と、既存ブランドに沿う静かな回答欄を整える。 */
 .service-demo--security { background: transparent; padding: 0; }
@@ -38,10 +39,13 @@
 .phishing-experience__actions button:disabled { opacity: .5; cursor: default; }
 .phishing-experience__reset { border: 0; background: transparent; font: inherit; font-size: 14px; padding: 16px 0 0; min-height: 44px; cursor: pointer; text-decoration: underline; text-underline-offset: 5px; }
 .phishing-experience__reset:hover { color: var(--signal-deep); }
-.phishing-result__icon { margin-bottom: 20px; color: var(--ink); }
-.phishing-result[data-tone='hint'] .phishing-result__icon { display: none; }
-.phishing-result[data-tone='trap'] { background: #fff0f2; padding: 26px; border-radius: 12px; }
-.phishing-result[data-tone='trap'] :is(h3, .phishing-result__icon) { color: #a3172d; }
+/* 判定の色は結果欄に限定し、本文と次問ボタンは共通の読みやすさを保つ。 */
+.phishing-result { --result-ink: #17633e; --result-surface: #edf8f1; background: var(--result-surface); padding: 26px; border-radius: 12px; }
+.phishing-result[data-tone='hint'] { --result-ink: #80520b; --result-surface: #fff7e5; }
+.phishing-result[data-tone='trap'] { --result-ink: #a3172d; --result-surface: #fff0f2; }
+.phishing-result :is(h3, .phishing-result__icon) { color: var(--result-ink); }
+.phishing-result__icon { display: block; margin-bottom: 20px; }
+@media(max-width:640px) { .phishing-result { padding: 22px; } }
 .phishing-result .phishing-result__takeaway { font-weight: 700; font-size: 15px; margin-bottom: 0; }
 .phishing-result .phishing-experience__hint { margin-top: 20px; margin-bottom: 0; color: #793743; }
 .phishing-experience :is(button, summary, [tabindex='-1']):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 4px; }
@@ -54,8 +58,8 @@
 
 .phishing-experience .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.phishing-result [data-phishing-cross], .phishing-result[data-tone="trap"] [data-phishing-check] { display: none; }
-.phishing-result[data-tone="trap"] [data-phishing-cross] { display: inline; }
+.phishing-result :is([data-phishing-cross], [data-phishing-hint-icon]), .phishing-result:is([data-tone="trap"], [data-tone="hint"]) [data-phishing-check] { display: none; }
+.phishing-result[data-tone="trap"] [data-phishing-cross], .phishing-result[data-tone="hint"] [data-phishing-hint-icon] { display: inline; }
 /* 変更履歴: 2026-11-09 問題を縦に並べず一問ずつ切り替えるナビと、業務メールの画面を追加。PHPリンクの旧装飾は削除。 */
 .phishing-quiz { max-width: 1000px; margin-inline: auto; }
 .phishing-quiz [hidden] { display: none !important; }
