@@ -12,7 +12,7 @@ const { service } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 // 変更履歴: 2026-11-09 EC・安全確認の入口を記事に合わせ、重複する旧豆知識を省く。
 // 変更履歴: 2026-11-09 ECの操作名を管理画面へ合わせる。
-const sampleAction = service.slug === 'ec' ? '管理画面と考え方を見る' : service.slug === 'security' ? '画面を見ながら対策を知る' : service.slug === 'websites' ? 'クイズで、考え方を読む' : 'サンプルを触ってみる';
+const sampleAction = service.slug === 'ec' ? '管理画面と考え方を見る' : service.slug === 'security' ? 'フィッシングを見抜いてみる' : service.slug === 'websites' ? 'クイズで、考え方を読む' : 'サンプルを触ってみる';
 ---
 <SiteLayout title={`${service.name}・${service.slug === 'websites' ? 'デザインの考え方' : '体験サンプル'}｜ウェブのとなり`} description={service.description}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></nav><nav class="service-tabs" aria-label="サービス別ページ">{servicePages.map(item => <a href={`${home}services/${item.slug}/`} aria-current={service.slug === item.slug ? 'page' : undefined}>{item.name}</a>)}</nav>

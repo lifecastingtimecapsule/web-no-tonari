@@ -1,0 +1,59 @@
+/* 変更履歴: 2026-11-09 登録不要のSMS一問体験。端末と判断を主役にし、説明は回答後に開示。 */
+/* 役割: iPhoneを参考にした受信画面と、既存ブランドに沿う静かな回答欄を整える。 */
+.service-demo--security { background: transparent; padding: 0; }
+.phishing-experience { max-width: 1000px; margin-inline: auto; }
+.phishing-experience [hidden] { display: none !important; }
+.phishing-experience__stage { display: grid; grid-template-columns: 340px minmax(0,1fr); gap: clamp(40px,7vw,100px); align-items: center; padding: 30px 36px 40px; }
+.phishing-phone { margin: 0; border: 7px solid #252528; border-radius: 44px; background: white; overflow: hidden; color: #202023; font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans JP', sans-serif; }
+.phishing-phone__status { display: flex; align-items: center; justify-content: space-between; height: 58px; padding: 0 21px; position: relative; font-size: 14px; font-weight: 700; }
+.phishing-phone__status i { position: absolute; width: 80px; height: 23px; border-radius: 24px; background: #141416; left: 50%; top: 13px; transform: translateX(-50%); }
+.phishing-phone__contact { display: flex; align-items: center; flex-direction: column; position: relative; background: #fafafa; border-bottom: 1px solid #e5e5ea; padding-top: 7px; }
+.phishing-phone__back { position: absolute; left: 18px; top: 20px; color: #005ac1; }
+.phishing-phone__avatar { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #8e8e93; color: white; overflow: hidden; }
+.phishing-point { display: block; border: 0; border-radius: 4px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; min-height: 44px; padding: 8px 0; line-height: 1.65; text-underline-offset: 4px; }
+.phishing-point:hover, .phishing-point.is-selected { background: #f9dfe4; color: #8d1e2e; }
+.phishing-point:disabled { cursor: default; }
+.phishing-phone__sender { font-size: 13px; text-align: center; padding-inline: 9px; }
+.phishing-phone__conversation { padding: 20px 15px 26px; }
+.phishing-phone__date { color: #636368; font-size: 11px; text-align: center; line-height: 1.6; margin: 0 0 24px; }
+.phishing-phone__bubble { background: #e9e9eb; border-radius: 18px 18px 18px 5px; padding: 15px; margin-right: 10px; font-size: 15px; }
+.phishing-phone__bubble p { font-size: inherit; line-height: 1.65; margin: 0; }
+.phishing-phone__bubble .phishing-point { width: 100%; }
+.phishing-phone__url { text-decoration: underline; color: #0051ad; overflow-wrap: anywhere; }
+.phishing-phone__sample { color: #636368; text-align: center; font-size: 11px; margin: 26px 0 0; }
+.phishing-phone__composer { display: flex; gap: 12px; align-items: center; color: #636368; padding: 0 14px 24px; }
+.phishing-phone__composer > svg { flex-shrink: 0; }
+.phishing-phone__composer span { border: 1px solid #bcbcc1; border-radius: 24px; font-size: 11px; padding: 9px 12px; flex: 1; }
+.phishing-phone__home { width: 108px; height: 5px; border-radius: 4px; background: #202023; margin: 0 auto 11px; }
+.phishing-experience__decision { min-width: 0; }
+.phishing-experience__decision h3 { font-size: clamp(26px,3vw,36px); line-height: 1.45; margin: 0 0 22px; letter-spacing: -.025em; text-wrap: balance; }
+.phishing-experience__decision p { font-size: 16px; line-height: 1.9; margin: 0 0 20px; }
+.phishing-experience__decision .phishing-experience__hint { font-size: 13px; color: var(--ink-muted); }
+.phishing-experience__actions { display: grid; gap: 12px; margin-top: 28px; }
+.phishing-experience__actions button { font: inherit; font-size: 15px; font-weight: 700; min-height: 52px; padding: 14px 20px; border-radius: 8px; cursor: pointer; }
+.phishing-experience__answer { color: white; background: var(--ink); border: 1px solid var(--ink); }
+.phishing-experience__answer:hover { background: #39393d; }
+.phishing-experience__open { color: var(--ink); background: white; border: 1px solid var(--input-border); }
+.phishing-experience__open:hover { background: var(--mist-light); }
+.phishing-experience__actions button:disabled { opacity: .5; cursor: default; }
+.phishing-experience__reset { border: 0; background: transparent; font: inherit; font-size: 14px; padding: 16px 0 0; min-height: 44px; cursor: pointer; text-decoration: underline; text-underline-offset: 5px; }
+.phishing-experience__reset:hover { color: var(--signal-deep); }
+.phishing-result__icon { margin-bottom: 20px; color: var(--ink); }
+.phishing-result[data-tone='hint'] .phishing-result__icon { display: none; }
+.phishing-result[data-tone='trap'] { background: #fff0f2; padding: 26px; border-radius: 12px; }
+.phishing-result[data-tone='trap'] :is(h3, .phishing-result__icon) { color: #a3172d; }
+.phishing-result .phishing-result__takeaway { font-weight: 700; font-size: 15px; margin-bottom: 0; }
+.phishing-result .phishing-experience__hint { margin-top: 20px; margin-bottom: 0; color: #793743; }
+.phishing-experience :is(button, summary, [tabindex='-1']):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 4px; }
+.phishing-experience :is(button, summary) { touch-action: manipulation; }
+.phishing-experience__footnote { border-top: 1px solid var(--mist); padding-top: 20px; font-size: 13px; line-height: 1.9; color: var(--ink-muted); }
+.phishing-experience__footnote p { margin: 0 0 8px; }
+.phishing-experience__footnote summary { cursor: pointer; padding-block: 10px; min-height: 44px; color: var(--ink); }
+.phishing-experience__article { display: inline-block; margin-top: 12px; min-height: 44px; padding-block: 10px; color: var(--ink); }
+@media(max-width:800px) { .phishing-experience__stage { grid-template-columns: minmax(0,320px) minmax(0,1fr); gap: 30px; padding-inline: 0; } }
+@media(max-width:640px) { .phishing-experience__stage { grid-template-columns: 1fr; gap: 32px; padding-top: 8px; } .phishing-phone { width: min(100%,320px); margin-inline: auto; } .phishing-experience__decision { max-width: 430px; width: 100%; margin-inline: auto; } .phishing-experience__decision h3 { font-size: 26px; } }
+
+.phishing-experience .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.phishing-result [data-phishing-cross], .phishing-result[data-tone="trap"] [data-phishing-check] { display: none; }
+.phishing-result[data-tone="trap"] [data-phishing-cross] { display: inline; }

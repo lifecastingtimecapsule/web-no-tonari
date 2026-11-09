@@ -1,0 +1,29 @@
+---
+// 変更履歴: 2026-11-09 長い啓発記事を、登録なしで一通のSMSを判断する体験に置換。
+// 役割: 怪しい箇所の発見とリンクを開く疑似体験を提供。入力・外部接続・回答保存を行わない。
+import '../styles/phishing-experience.css';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<div class="phishing-experience" data-phishing-experience>
+  <div class="phishing-experience__stage">
+    <figure class="phishing-phone">
+      <figcaption class="visually-hidden">日本郵便を名乗るSMSの学習用サンプル</figcaption>
+      <div class="phishing-phone__status" aria-hidden="true"><span>9:41</span><i></i><svg width="42" height="16" viewBox="0 0 42 16" fill="none"><path d="M2 12V9M7 12V6M12 12V3" stroke="currentColor" stroke-width="3"/><rect x="23" y="3" width="15" height="10" rx="2" stroke="currentColor"/><path d="M40 6v4" stroke="currentColor" stroke-width="2"/></svg></div>
+      <div class="phishing-phone__contact"><svg class="phishing-phone__back" aria-hidden="true" width="14" height="24" viewBox="0 0 14 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m10 3-8 9 8 9"/></svg><span class="phishing-phone__avatar" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span><button type="button" class="phishing-point phishing-phone__sender" data-phishing-point="sender" aria-label="送信元の090-XXXX-XXXXが怪しいと思う" aria-controls="phishing-result" disabled>090-XXXX-XXXX <span aria-hidden="true">›</span></button></div>
+      <div class="phishing-phone__conversation"><p class="phishing-phone__date">テキストメッセージ • SMS<br />本日 9:40</p><div class="phishing-phone__bubble"><p>【日本郵便】<br />お荷物をお届けできませんでした。</p><button type="button" class="phishing-point" data-phishing-point="urgency" aria-label="本日中に再配達の手続き、という期限が怪しいと思う" aria-controls="phishing-result" disabled>本日中に再配達のお手続きをお願いします。</button><button type="button" class="phishing-point phishing-phone__url" data-phishing-point="url" aria-label="https://japanpost-delivery.test のURLが怪しいと思う" aria-controls="phishing-result" disabled>https://japanpost-delivery.test</button><p>再配達の確認費用：100円</p></div><p class="phishing-phone__sample">学習用サンプル</p></div>
+      <div class="phishing-phone__composer" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18"/></svg><span>テキストメッセージ • SMS</span></div><div class="phishing-phone__home" aria-hidden="true"></div>
+    </figure>
+    <div class="phishing-experience__decision">
+      <div data-phishing-intro><h3>この不在通知、<br />信じていい？</h3><p>荷物を待っているときに届いた一通。<br />怪しいと思う部分を押してみてください。</p><p class="phishing-experience__hint">番号・文章・URLから選べます。</p></div>
+      <div class="phishing-result" id="phishing-result" data-phishing-result hidden>
+        <svg class="phishing-result__icon" aria-hidden="true" width="44" height="44" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3 38 9v12c0 10-10 17-16 20C16 38 6 31 6 21V9Z"/><path data-phishing-check d="m14 22 6 6 11-13"/><path data-phishing-cross d="m16 16 12 12m0-12L16 28"/></svg>
+        <h3 data-phishing-title tabindex="-1"></h3><p data-phishing-explanation></p><p class="phishing-result__takeaway" data-phishing-takeaway></p><p class="phishing-experience__hint" data-phishing-simulation hidden>実際のサイトは開いていません。リンクを押しただけで情報が盗まれた、という意味ではありません。</p>
+      </div>
+      <div class="phishing-experience__actions"><button type="button" class="phishing-experience__answer" data-phishing-action="judge" aria-controls="phishing-result" disabled>フィッシングだと思う</button><button type="button" class="phishing-experience__open" data-phishing-action="open" aria-controls="phishing-result" disabled>リンクを開く（体験）</button></div>
+      <button type="button" class="phishing-experience__reset" data-phishing-reset hidden>もう一度見る</button>
+      <noscript><details><summary>答えと確認ポイントを読む</summary><p>これはフィッシングを想定した例です。会社名を含むURLでも公式とは限りません。届いたリンクを使わず、不在票や公式アプリで確認しましょう。操作体験にはJavaScriptが必要です。</p></details></noscript>
+    </div>
+  </div>
+  <div class="phishing-experience__footnote"><p>登録不要・情報の入力なし。番号とURLは教材用です。日本郵便・Appleの公式教材ではありません。</p><details><summary>出典と、実際に困ったときの確認先</summary><p><a href="https://www.post.japanpost.jp/notification/notice/fraud-mail.html">日本郵便の注意喚起・公式窓口</a> ／ <a href="https://www.npa.go.jp/bureau/cyber/countermeasures/phishing.html">警察庁のフィッシング対策</a></p><p>入力してしまった場合は、公式の窓口からパスワード変更やカード会社への連絡を。SMSの形式だけで偽物と決めつけず、利用したサービスの公式案内を確認します。</p></details><a class="phishing-experience__article" href={`${home}services/security/php/`}>サイトを管理する方へ：古いPHPで、何が起きる？</a></div>
+</div>
+<script>import '../scripts/phishing-experience';</script>

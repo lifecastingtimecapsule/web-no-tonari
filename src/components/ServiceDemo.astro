@@ -5,6 +5,8 @@
 import WebsiteDesignDemo from './WebsiteDesignDemo.astro';
 // 変更履歴: 2026-11-09 ECと安全確認を日常に役立つクイズ付き記事へ拡張。
 import ServiceLearning from './ServiceLearning.astro';
+// 変更履歴: 2026-11-09 安全確認を一通のSMSの体験へ絞る。
+import PhishingExperience from './PhishingExperience.astro';
 // 変更履歴: 2026-11-09 購入後の業務を説明するため、商品選択を受注管理の見本へ置換。
 import EcOperationsDemo from './EcOperationsDemo.astro';
 const { slug } = Astro.props;
@@ -16,6 +18,6 @@ const { slug } = Astro.props;
     <div class="demo-topline"><strong>問い合わせ整理ノート</strong><span>生成せず、表示を体験</span></div>
     <div class="ai-demo__body"><div><label for="sample-inquiry">問い合わせサンプルを選ぶ</label><select id="sample-inquiry" name="sampleInquiry" data-inquiry><option value="update">営業時間を変更したい</option><option value="renew">サイトを作り直したい</option><option value="shop">オンラインで商品を売りたい</option></select><blockquote data-inquiry-text>来月から営業時間が10時〜18時になります。ホームページの案内を変更できますか？</blockquote><button class="button button--human" type="button" data-inquiry-organize>整理したサンプルを見る</button></div><div class="ai-demo__output"><h3>人が確認するための下書き</h3><div role="status" aria-live="polite" data-inquiry-output><p>左の問い合わせを選んで、整理した内容を表示できます。</p></div><small>返信の送信・AIへの情報送信は行いません。</small></div></div>
   </div>}
-  {slug === 'security' && <ServiceLearning slug="security" />}
+  {slug === 'security' && <PhishingExperience />}
 </div>
 {slug === 'ec' && <ServiceLearning slug="ec" />}

@@ -1,5 +1,33 @@
 # 変更履歴
 
+## 2026-11-09：登録不要のフィッシング体験（現行）
+
+ユーザーがGoogleの方向を選択したため、直前の採用保留を解除。情報量を減らし、SMS一通と回答後の短い解説へ置換。
+
+- `PhishingExperience.astro` / `phishing-experience.ts` / `phishing-experience.css`: 番号・期限・URLの指摘、全体の判定、疑似リンクでの詐欺演出、やり直しを実装。登録・情報入力・外部送信は行わず、縮小モーションとキーボードに対応。
+- `ServiceDemo.astro` / `services.ts` / `pages/services/[slug].astro`: 新体験へ導線と表示を切り替え。
+- `ServiceLearning.astro` / `learning-columns.ts` / `service-learning.css` / `service-operations.css`: EC部分を維持し、旧セキュリティ長文3問・一覧・メール装飾を除去。旧 `SecurityMessageDemo.astro` を削除。
+- `pages/services/security/php.astro` / `PhpMaintenanceColumn.astro`: 管理者向けPHP記事を別ページへ移し、見出し階層を調整。
+- `PRODUCT.md` / `DESIGN.md` / `docs/design/2026-11-09-phishing-experience.md` / 同日の参考候補・運用教材の記録: 現行仕様と旧案の置換を記録。
+- `security.png` / `PROVENANCE.md`: サービス一覧の画像を現行の一問体験へ更新。
+- 検証：35ファイルのチェックと静的10ページ生成、4画面幅での全5操作、キーボード・縮小モーション・JavaScriptなし・偽ドメイン通信0を確認。
+
+
+## 2026-11-09：追加改訂の採用保留
+
+- ユーザーの「情報量が多すぎる」という指示により、下記の法人表現・セキュリティ追加案は未公開のローカル変更で止める。`docs/design/2026-11-09-security-reference-shortlist.md` に初心者向けの参考5件と検証範囲を記録。次の実装は候補選定後とする。
+
+
+## 2026-11-09：法人の語り口と、具体的なセキュリティ教材
+
+- `src/components/SecurityMessageDemo.astro` / `src/styles/service-operations.css`: iPhoneの番号表示・灰色のSMS吹き出し・入力欄の形を参考に再構成。日本郵便をかたる偽SMSと明記し、正規の確認先・電話番号は端末外へ分離。実在の送信番号や公式ロゴは使用しない。
+- `src/data/learning-columns.ts` / `src/components/ServiceLearning.astro`: HTTPS・ClickFixの主問題を、URLの一文字違い・紛らわしいドメイン・認証コードの窃取へ置換。文字差分を解説で可視化し、重複する認証コードの補足を整理。
+- `src/components/PhpMaintenanceColumn.astro`: 情報漏えい・改ざん・業務停止や踏み台化の可能性を先に説明。IPAの実例とPHP 5.6/8.0の終了日を補い、更新手順は折り畳みへ。終了済みという事実と侵害の診断を区別。
+- `src/components/WebsiteDesignDemo.astro` / `EcOperationsDemo.astro` / `ServiceLearning.astro` / `src/data/services.ts` / `src/data/learning-columns.ts` / `src/scripts/website-demo.ts` / `src/pages/philosophy.astro`: 個人の語りを「弊社」または会社の設計方針へ変更。既存変数名・教材の操作は維持。
+- `PRODUCT.md` / `DESIGN.md` / `docs/design/2026-11-09-service-operations.md`: 新しい内容・出典・名称と番号の扱いを記録。旧決定は更新履歴として残す。
+- `public/images/services/security.png` / `ec.png` / `PROVENANCE.md`: 現行画面と会社としての表現に合わせて紹介画像を更新。
+
+
 ## 2026-11-09
 
 - `EcOperationsDemo.astro` / `learning-columns.ts`: ECを運営者向けに修正。受注管理3場面、承認と売上確定、在庫引き当て、返品・返金・再入庫を説明。旧商品カート・色選択・専用CSSを削除。

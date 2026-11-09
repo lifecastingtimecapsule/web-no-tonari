@@ -1,0 +1,16 @@
+---
+// 変更履歴: 2026-11-09 SMS体験の情報量を抑えるため、PHPの管理者向けコラムを別ページへ移動。
+// 役割: 共通のブランド・ナビゲーションで、古いPHPの被害と期限を説明する。
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import PhpMaintenanceColumn from '../../../components/PhpMaintenanceColumn.astro';
+import '../../../styles/service-learning.css';
+import '../../../styles/service-operations.css';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<SiteLayout title="古いPHPで、何が起きる？｜ウェブのとなり" description="古いPHPによる情報漏えい・改ざん・業務停止のリスクと、公式サポートが終わったバージョンを解説します。">
+  <div class="shell service-learning php-article"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><a href={`${home}services/security/`}>保守・セキュリティ</a><span aria-hidden="true">/</span><span aria-current="page">古いPHPのリスク</span></nav><h1>古いPHPで、<br />何が起きる？</h1><PhpMaintenanceColumn /><p class="php-article__back"><a href={`${home}services/security/#sample`}>フィッシング体験に戻る</a></p></div>
+</SiteLayout>
+<style>
+  .php-article > h1 { max-width: 720px; margin: 40px auto; font-size: clamp(32px,5vw,52px); line-height: 1.4; letter-spacing: -.025em; }
+  .php-article__back { max-width: 720px; margin: 40px auto 0; font-size: 15px; }
+</style>

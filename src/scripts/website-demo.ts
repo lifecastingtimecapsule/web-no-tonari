@@ -19,7 +19,7 @@ function setupWebsiteDesignDemo(): void {
           choice.setAttribute('aria-label', `${question.querySelector('h3')!.textContent}：${choice.textContent}`);
         });
         answer.open = true;
-        feedback.textContent = `${button.dataset.designChoice}を選びました。すぐ下に、私がこの目的で選ぶ案と理由を表示しました。`;
+        feedback.textContent = `${button.dataset.designChoice}を選びました。すぐ下に、弊社がこの目的で選ぶ案と理由を表示しました。`;
         // 縦積みの比較で解説が画面外になる場合だけ、固定ヘッダーの下へ読み始めを移す。
         const answerPosition = answer.getBoundingClientRect();
         if (answerPosition.top > window.innerHeight - 120 || answerPosition.top < 100) {
