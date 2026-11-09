@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-09 漏えい履歴チェックの範囲と受付状況を料金一覧・詳細へ追加。
 // 変更履歴: 2026-11-09 AI画像の準備方針と専門診断の公開価格例を追加。自社料金との誤認を防ぐ。
 // 変更履歴: 2026-11-09 料金を独立ページにし、対象範囲・オプション・合計例を明示。
 // 役割: 既存の金額と任意契約方針を保ち、依頼前に費用の内訳を判断できるようにする。
@@ -13,7 +14,7 @@ const examples = [
   { title: '保守＋月2回の更新＋レポート', formula: '基本保守＋軽微な更新＋月次レポート', amount: pricingPlans[1].amount + pricingOptions[3].amount + pricingOptions[5].amount, unit: '月額', note: '新しい機能の開発や大幅な改修は含みません。' },
 ];
 ---
-<SiteLayout title="料金・含まれる内容と追加オプション｜ウェブのとなり" description="ウェブサイト制作110,000円、基本保守月額9,800円、基本セキュリティ確認55,000円。税込固定料金の範囲、オプション、合計金額の例をご案内します。">
+<SiteLayout title="料金・含まれる内容と追加オプション｜ウェブのとなり" description="ウェブサイト制作110,000円、基本保守月額9,800円、基本セキュリティ確認55,000円、メールアドレスの漏えい履歴チェック16,500円（受付準備中）。税込固定料金の範囲、オプション、合計金額の例をご案内します。">
 <div class="shell catalog-page pricing-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">料金</span></nav>
   <header class="catalog-heading"><h1>内容も、金額も。<br />始める前に、はっきりと。</h1><p>掲載金額はすべて税込です。合意した範囲の作業で、後から料金を追加しません。内容を増やすときは、追加費用を先に提示し、了承をいただいてから進めます。</p></header>
@@ -22,7 +23,7 @@ const examples = [
   <nav class="pricing-jump" aria-label="料金ページの目次"><a href="#included">基本料金の範囲</a><a href="#specialist-security">専門診断の参考費用</a><a href="#options">追加オプション</a><a href="#examples">合計金額の例</a><a href="#other-costs">個別見積もり・外部費用</a></nav>
 
   <section class="pricing-section" id="included" aria-labelledby="included-title"><h2 id="included-title">この料金で、ここまで。</h2>
-    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3><p class="price-detail__amount">{formatPrice(plan.amount)}<span>税込・{plan.unit}</span></p><p>{plan.lead}</p><a class="text-link" href={`${home}?service=${encodeURIComponent(plan.service)}#contact`}>この内容を相談する</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>オプション・別途確認する内容</h4><p>{plan.excluded}</p></div></article>)}
+    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{formatPrice(plan.amount)}<span>税込・{plan.unit}</span></p><p>{plan.lead}</p><a class="text-link" href={`${home}?service=${encodeURIComponent(plan.service)}#contact`}>この内容を相談する</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>オプション・別途確認する内容</h4><p>{plan.excluded}</p></div></article>)}
   </section>
 
   <section class="pricing-section pricing-questions" id="specialist-security" aria-labelledby="specialist-security-title">

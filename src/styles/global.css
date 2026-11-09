@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 四料金を2列に揃え、受付準備状況を濃い文字で表示。 */
 /* 変更履歴: 2026-11-09 問い合わせのURL欄を常時表示し、案内・未送信の説明を本文サイズと濃い文字色へ変更。 */
 /* 変更履歴: 2026-11-09 サービス紹介をPC3件・タブレット2件・スマホ1件の手動横送りへ復元。 */
 /* 変更履歴: 2026-11-04 対話線を核にした全体レイアウト、状態、レスポンシブ、縮小モーションを実装。 */
@@ -611,7 +612,7 @@ p {
 
 .pricing__primary {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
 }
@@ -623,9 +624,10 @@ p {
   padding: clamp(24px, 3vw, 42px);
 }
 
-.pricing__primary-item + .pricing__primary-item {
-  border-left: 1px solid var(--mist);
-}
+.pricing__primary-item:nth-child(even) { border-left: 1px solid var(--mist); }
+.pricing__primary-item:nth-child(n + 3) { border-top: 1px solid var(--mist); }
+.pricing__primary-item .pricing-plan-status,
+.pricing-page .price-detail .pricing-plan-status { color: var(--ink); font-size: 1rem; font-weight: 700; margin: 0 0 16px; }
 
 .pricing__primary-item p {
   margin-bottom: 36px;

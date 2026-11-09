@@ -1,10 +1,11 @@
 ---
 // 変更履歴: 2026-11-09 ホームと専用ページで同じ税込料金を表示するため追加。
-// 役割: 基本三料金とそれぞれの対象範囲へのリンクを表示する。
+// 変更履歴: 2026-11-09 漏えいチェックを含む四料金と受付準備状況を表示。
+// 役割: 基本料金とそれぞれの対象範囲へのリンクを表示する。
 import { pricingPlans, formatPrice } from '../data/pricing';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 <div class="pricing__primary" aria-label="基本料金・すべて税込">
-  {pricingPlans.map(plan => <article class="pricing__primary-item"><p>{plan.name}</p><strong>{formatPrice(plan.amount)}{plan.monthly && <small> / 月</small>}</strong><span>{plan.summary}</span><a class="text-link pricing-summary__link" href={`${home}pricing/#${plan.id}`}>{plan.name}に含まれる内容</a></article>)}
+  {pricingPlans.map(plan => <article class="pricing__primary-item"><p>{plan.name}</p>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<strong>{formatPrice(plan.amount)}{plan.monthly && <small> / 月</small>}</strong><span>{plan.summary}</span><a class="text-link pricing-summary__link" href={`${home}pricing/#${plan.id}`}>{plan.name}に含まれる内容</a></article>)}
 </div>
 <style>.pricing-summary__link { margin-top: 20px; font-size: 14px; padding-block: 8px; }</style>
