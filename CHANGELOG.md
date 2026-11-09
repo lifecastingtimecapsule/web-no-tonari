@@ -1,5 +1,10 @@
 # 変更履歴
 
+## 2026-11-09：解説の近くから次の問題へ
+
+- `PhishingExperience.astro` / `phishing-experience.ts` / `phishing-experience.css`: 次問ボタンを上部から各解説の直下へ移動。回答後は判定・リンク操作を隠し、再挑戦で戻す。全解説に短い表示演出を付け、縮小モーションを尊重。「リンクを開く（体験）」を「リンクを開く」へ短縮。操作の行き来と重複を減らすため。
+- `PRODUCT.md` / `DESIGN.md` / `docs/design/2026-11-09-phishing-experience.md`: 導線と表示条件の現行仕様を記録。
+
 ## 2026-11-09：前後の文章を接続し、体験を三問へ拡張
 
 - `src/data/services.ts` / `src/pages/services/[slug].astro`: 日常の管理と不審な連絡への備えを先に説明。SMS・メール体験の後はサイトの管理状況確認へ戻り、料金・相談につなぐ。PHPリンクを相談欄へ移動。他サービスの文章・料金・範囲は維持。

@@ -82,3 +82,10 @@
 .phishing-quiz__fallback summary { padding-block: 14px; cursor: pointer; }
 
 [data-phishing-question] > span { display: block; }
+
+/* 変更履歴: 2026-11-09 解説直下に主操作と再挑戦をまとめ、次の行動を近くに配置。 */
+.phishing-result { scroll-margin-top: 110px; }
+.phishing-result__navigation { display: grid; gap: 8px; margin-top: 28px; }
+.phishing-result__next { min-height: 52px; padding: 14px 20px; border: 1px solid var(--ink); border-radius: 8px; background: var(--ink); color: white; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.phishing-result__next:hover { background: #39393d; }
+.phishing-result__navigation .phishing-experience__reset { padding: 10px 0; justify-self: start; }

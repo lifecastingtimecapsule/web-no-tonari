@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-09 解説の直下から次問へ進め、回答操作は再挑戦時に戻す。
 // 変更履歴: 2026-11-09 登録不要のフィッシング体験を追加。結果は画面内だけに表示する。
 // 役割: 箇所の指摘・詐欺の判定・疑似リンク・やり直しを扱う。通信や保存は行わない。
 import { phishingScenarios, type PhishingAction } from '../data/phishing-scenarios';
@@ -13,18 +14,20 @@ function initializePhishingExperience(root: HTMLElement) {
   const explanation = root.querySelector<HTMLElement>('[data-phishing-explanation]');
   const takeaway = root.querySelector<HTMLElement>('[data-phishing-takeaway]');
   const simulation = root.querySelector<HTMLElement>('[data-phishing-simulation]');
+  const actions = root.querySelector<HTMLElement>('[data-phishing-actions]');
   const reset = root.querySelector<HTMLButtonElement>('[data-phishing-reset]');
-  if (!intro || !result || !title || !explanation || !takeaway || !simulation || !reset) return;
+  if (!intro || !result || !title || !explanation || !takeaway || !simulation || !reset || !actions) return;
   const controls = root.querySelectorAll<HTMLButtonElement>('[data-phishing-point], [data-phishing-action]');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let revealAnimation: Animation | undefined;
 
-  // 回答に応じて同じ領域を更新。危険なリンクの演出は一度の短い動きに限定する。
+  // 回答に応じて同じ領域を更新。解説は一度の短い動きで表示し、直下の次問操作へつなぐ。
   function showResult(action: PhishingAction, control: HTMLButtonElement) {
     const response = phishingResponses[action];
-    if (!result || !intro || !title || !explanation || !takeaway || !simulation || !reset) return;
+    if (!result || !intro || !title || !explanation || !takeaway || !simulation || !reset || !actions) return;
     revealAnimation?.cancel();
     intro.hidden = true;
+    actions.hidden = true;
     result.hidden = false;
     result.dataset.tone = response.tone;
     title.textContent = response.title;
@@ -36,7 +39,7 @@ function initializePhishingExperience(root: HTMLElement) {
     title.focus({ preventScroll: true });
     const resultBounds = title.getBoundingClientRect();
     if (resultBounds.top < 100 || resultBounds.bottom > window.innerHeight) title.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
-    if (action === 'open' && !reducedMotion.matches) revealAnimation = result.animate([{ opacity: 0.6, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 340, easing: 'cubic-bezier(.16,1,.3,1)' });
+    if (!reducedMotion.matches) revealAnimation = result.animate([{ opacity: 0.6, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 340, easing: 'cubic-bezier(.16,1,.3,1)' });
   }
 
   controls.forEach(control => {
@@ -50,6 +53,7 @@ function initializePhishingExperience(root: HTMLElement) {
   reset.addEventListener('click', () => {
     revealAnimation?.cancel();
     intro.hidden = false;
+    actions.hidden = false;
     result.hidden = true;
     reset.hidden = true;
     simulation.hidden = true;
@@ -66,16 +70,15 @@ document.querySelectorAll<HTMLElement>('[data-phishing-quiz]').forEach(quiz => {
   const panels = Array.from(quiz.querySelectorAll<HTMLElement>('[data-phishing-panel]'));
   const navigation = quiz.querySelector<HTMLElement>('[data-phishing-navigation]');
   const previous = quiz.querySelector<HTMLButtonElement>('[data-phishing-previous]');
-  const next = quiz.querySelector<HTMLButtonElement>('[data-phishing-next]');
+  const next = quiz.querySelectorAll<HTMLButtonElement>('[data-phishing-next]');
   const progress = quiz.querySelector<HTMLElement>('[data-phishing-progress]');
-  if (!panels.length || !navigation || !previous || !next || !progress) return;
+  if (!panels.length || !navigation || !previous || !next.length || !progress) return;
   let activeQuestion = 0;
   // 一問だけを表示し、問題番号と操作名を同時に更新する。
   function selectQuestion(position: number, moveFocus = true) {
     activeQuestion = position;
     panels.forEach((panel, index) => { panel.hidden = index !== activeQuestion; });
     previous!.disabled = activeQuestion === 0;
-    next!.textContent = activeQuestion === panels.length - 1 ? '最初の問題へ' : '次の問題';
     progress!.textContent = `問題 ${activeQuestion + 1} / ${panels.length}`;
     if (moveFocus) {
       const panel = panels[activeQuestion];
@@ -88,5 +91,5 @@ document.querySelectorAll<HTMLElement>('[data-phishing-quiz]').forEach(quiz => {
   selectQuestion(0, false);
   navigation.hidden = false;
   previous.addEventListener('click', () => selectQuestion(Math.max(0, activeQuestion - 1)));
-  next.addEventListener('click', () => selectQuestion((activeQuestion + 1) % panels.length));
+  next.forEach(button => button.addEventListener('click', () => selectQuestion((activeQuestion + 1) % panels.length)));
 });
