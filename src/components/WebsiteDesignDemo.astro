@@ -1,24 +1,43 @@
 ---
-/* 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
- * 役割: 独自の比較図と一人称の解説で、優先順位・近接・行動の設計を体験する。 */
+/* 変更履歴: 2026-11-09 初歩的な比較を、制約・実装・検証を扱う3つの設計ケースへ深化。
+ * 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
+ * 役割: 独自の比較図と一人称の解説で、情報構造・レスポンシブ・入力設計の判断を伝える。 */
 import '../styles/website-demo.css';
 const questions = [
-  { id: 'hierarchy', title: '最初に、何を伝えますか？', prompt: '「相談は無料」と、ひと目で伝えたい。あなたなら、どちらの文字の組み方にしますか？', choice: 'B', heading: '私なら、最初に届けたい言葉を大きくします。', body: '今回は「まずは気軽に相談できる」と伝えたいので、Bを選びます。すべての文字を同じ強さにすると、読む人に優先順位を決めてもらうことになります。だから私は、最初に知ってほしいことを一つ決め、見出しと補足に差をつけます。', nuance: 'もし「予約が必要」という条件が最優先なら、そこを強くします。大きい文字の場所は、見た目の好みだけでは決めません。', practice: '制作では、見出しだけを拾い読みしても内容が伝わるか、スマホの幅でも意味の切れ目が自然かを確かめます。' },
-  { id: 'spacing', title: '余白にも、意味はある？', prompt: '受付時間と対応方法。それぞれの説明がどこにつながるか、分かりやすいのはどちらでしょう。文字と並び順は同じです。', choice: 'A', heading: '私は、関係のある情報を近づけます。', body: 'この場合はAです。「受付時間」とその説明、「対応方法」とその説明を近くに置き、別のまとまりの間を空けています。余白は、ただ画面をすっきりさせるためのものではありません。「ここまでが一つの話」と伝える役目があります。', nuance: '余白は広ければよいわけでもありません。離しすぎると関係が見えなくなるので、画面の広さや文章量に合わせて調整します。', practice: '制作では、枠線を足す前に情報をまとめ直します。スマホで縦に並んでも、見出しと説明が離れすぎないかを確認します。' },
-  { id: 'action', title: '押した後を、想像できますか？', prompt: '次に開くのは、制作の進め方を説明するページ。初めて訪れた人が行き先を想像しやすい言葉はどちらでしょう。', choice: 'B', heading: '私は、行き先が分かる言葉を選びます。', body: '今回はBを選びます。「詳しく見る」でも操作はできますが、何を詳しく知れるかは周りの文章に頼ります。「制作の流れを見る」なら、押す前から行き先を想像できます。ボタンを目立たせる前に、その一歩を分かりやすくしたいと考えています。', nuance: '周囲の説明で行き先が十分に伝わるなら、短い言葉が合うこともあります。大事なのは、文言と実際に開く内容が一致することです。', practice: '制作では、リンク名だけでも意味が伝わるか、指で押せる大きさか、キーボードでも迷わず操作できるかを確かめます。' },
+  { id: 'hierarchy', title: '魅力を伝えるか、条件を比べやすくするか。',
+    prompt: '導入候補を絞り込んだ担当者が、2つのプランを比較する場面です。編集者数や承認機能の違いから、自社に合うものを判断してもらいたい。最初に見せる構成をどう選びますか？',
+    choice: 'B', heading: '比較の軸が決まっているなら、私は差分を横に揃えます。',
+    body: 'この段階ではBの比較表を軸にします。Aはプランごとの魅力を一つのまとまりで伝えやすい構成ですが、同じ条件を比べるには、視線を往復させて内容を覚えておく必要があります。Bは「承認機能は必要か」のように、判断軸を固定して違いを追えます。色や文字サイズを調整する前に、読む人が何を比較するのかを定義します。',
+    nuance: 'ただし、初めて訪れた人には項目名の意味が分からないかもしれません。その場合は、用途から選べる短い説明を先に置き、比較表を補助にします。すべての機能を最初から並べると、重要な差分が埋もれるためです。',
+    practice: 'データとして比較する箇所はHTMLのtableを使い、captionと行・列の見出しの関係を定義します。スマホでも列名を失わない構成を選びます。項目が多い場合は表の領域内で横スクロールできるようにし、ページ全体の横はみ出しと混同しません。',
+    verify: '「承認機能が必要なチーム向けのプランを選ぶ」など、具体的な課題で試します。判断までの時間だけでなく、選び間違い・見落とした条件・選択理由を確認します。クリック数が少ないだけでは、比較しやすいとは判断しません。' },
+  { id: 'spacing', title: 'スマホでは、何を先に残しますか？',
+    prompt: '制作会社を比較中の担当者が、移動中に事例を読む想定です。今回の目的は「似た課題を解決できそうか」の判断。PCでは並んでいた概要と画面写真を、スマホでどう再構成しますか？',
+    choice: 'A', heading: 'この目的なら、私は判断に必要な要約を先に置きます。',
+    body: 'Aを選び、対象・課題・対応内容を先にまとめます。単に2列を1列へ変えるだけでは、画面写真が長く続き、判断材料が後ろへ押し出されることがあります。私は「狭い画面に収めること」と「短い時間でも内容を判断できること」を別々に確認します。',
+    nuance: '一方、写真・ファッション・映像など、表現そのものが依頼の決め手になる場合はBの順序が合うこともあります。スクロール量を一律に減らすのではなく、訪問の目的と証拠として必要な素材から順序を決めます。',
+    practice: '意味の通る順序をHTML側に持たせ、CSS GridでPCの並列表示を組みます。CSSのorderだけで見た目を入れ替えた場合は、読み上げやTabキーでの移動と食い違わないかを確認。ブレークポイントは端末名だけで決めず、実際の文章と画像が窮屈になる幅を見て調整します。',
+    verify: '狭い画面、横向き、文字の拡大、長い案件名で確認します。画像には寸法を確保して読込中の位置ずれを抑え、本文・画像・リンクの順序をキーボードと読み上げでも確認します。「スマホで表示できた」を完了条件にしません。' },
+  { id: 'action', title: '入力項目は、少ないほどよいのでしょうか？',
+    prompt: '新規制作とリニューアルを一つの相談窓口で受け付けます。既存URLや移行の有無は後者に必要ですが、新規制作の人には該当しません。入力負担と、受け付けた後の確認作業をどう両立しますか？',
+    choice: 'B', heading: '私は、項目数より「その人に必要か」で分けます。',
+    body: '今回はBを選び、共通項目の後に、選んだ相談種別に関係する短い質問を表示します。むやみに項目を減らすと、受付後の往復が増え、かえって判断に時間がかかることもあります。逆に、初回の相談に不要な予算の内訳や詳細仕様まで求めると、まだ決めていない人を止めてしまいます。',
+    nuance: '条件分岐も増やせばよいわけではありません。補足が一つなら任意欄だけで十分な場合があります。複数の長い質問や大きく違う申込経路が必要なら、関連項目の開閉ではなく、段階を分けたフォームを検討します。',
+    practice: '分岐の表示だけでなく、非表示項目の必須判定・送信対象・選択を戻したときの値を設計します。追加項目の出現を読み上げでも把握できるかを確認し、入力はブラウザ側とサーバー側の両方で検証。送信中・失敗・再試行の状態を定義し、ボタンの無効化だけに頼らず、サーバー側で同じ依頼を重複処理しない方法も検討します。',
+    verify: '完了率だけでなく、入力ミス、分岐ごとの離脱、受付後の追加確認の件数を併せて評価します。計測するなら氏名・メール・相談本文を解析イベントに含めず、必要なイベントと取り扱いを先に決めます。項目を減らせば成果が上がる、とは断定しません。' },
 ];
 ---
 <article class="website-demo" data-website-demo aria-labelledby="sample-title">
-  <div class="reading-experiment" aria-label="文字の強さで読む順序をつくる見本">
-    <p class="reading-experiment__first">まず、ここに<br />目がいきませんでしたか。</p>
-    <p class="reading-experiment__second">次に、この一文。</p>
-    <p class="reading-experiment__last">そして、この小さな説明へ。<br />文字の大きさと余白で、読む順序のきっかけをつくっています。</p>
+  <div class="reading-experiment" aria-label="設計の判断と制約を考える記事の導入">
+    <p class="reading-experiment__first">見た目が整っても、<br />判断しやすいとは限らない。</p>
+    <p class="reading-experiment__second">私は、画面の前に「選ぶ条件」を設計します。</p>
+    <p class="reading-experiment__last">情報構造・レスポンシブ・入力体験。<br />意図と制約がぶつかる3つの場面から、設計の判断をひもときます。</p>
   </div>
   <div class="design-essay__intro">
-    <p>同じページでも、文字の大きさや情報の置き方で、受け取る印象は変わります。私はデザインするとき、「何を最初に知ってほしいか」から考えます。</p>
-    <p>ここでは、その判断を3つの小さなクイズにしました。自分ならどうするかを選んでから、私の考えを読んでみてください。</p>
-    <p class="design-essay__note">見る順番は人や目的によって変わります。視線を計測したり、回答を送信したりすることはありません。比較図の案内内容は説明用の例です。</p>
-    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 文字の優先順位</a><a href="#quiz-spacing">2. 余白の役割</a><a href="#quiz-action">3. ボタンの言葉</a></nav>
+    <p>見やすい画面をつくるだけでは、使いやすいサイトにはなりません。比較したい人、まず概要を知りたい人、具体的に相談したい人。それぞれに必要な情報と、選ぶための条件が違うからです。</p>
+    <p>以下は、どちらにも採用する理由がある3つの設計ケースです。前提を読んで案を選ぶと、私の判断、別案が合う条件、実装と検証の観点を読めます。</p>
+    <p class="design-essay__note">図と条件は設計を説明するための仮定です。実際のサービス仕様・顧客事例・計測結果ではありません。回答の保存・送信は行いません。</p>
+    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 比較するための情報構造</a><a href="#quiz-spacing">2. レスポンシブの判断</a><a href="#quiz-action">3. 入力と受付の設計</a></nav>
   </div>
   {questions.map((question, questionIndex) => <section class="design-question" id={`quiz-${question.id}`} data-design-question aria-labelledby={`question-${question.id}`}>
     <header class="design-question__heading"><span aria-hidden="true">{questionIndex + 1}</span><h3 id={`question-${question.id}`}>{question.title}</h3></header>
@@ -27,9 +46,12 @@ const questions = [
       {['A', 'B'].map(option => <div class="design-option">
         <div class={`design-option__example design-option__example--${question.id} design-option__example--${option.toLowerCase()}`}>
           <span class="design-option__letter">{option}</span>
-          {question.id === 'hierarchy' && <div class="type-comparison"><p class="type-comparison__main">相談は無料です。</p><p class="type-comparison__support">気になることから、お聞かせください。</p><p class="type-comparison__condition">オンライン対応・事前予約制</p></div>}
-          {question.id === 'spacing' && <div class="space-comparison"><p class="space-comparison__label">受付時間</p><p>平日 10:00〜17:00</p><p class="space-comparison__label">対応方法</p><p>オンラインでご相談</p></div>}
-          {question.id === 'action' && <div class="action-comparison"><p>ご相談から公開まで、<br />制作の進め方をご案内します。</p><span class="action-comparison__button">{option === 'A' ? '詳しく見る' : '制作の流れを見る'}</span><small>ボタンの文言を比べる見本</small></div>}
+          {question.id === 'hierarchy' && <div class="decision-example">
+            <p class="decision-example__title">{option === 'A' ? 'プラン単位で読む' : '条件を横に比較する'}</p>
+            {option === 'A' ? <div class="plan-sequence"><div><strong>ライト</strong><p>編集者1人 / 承認機能なし</p></div><div><strong>チーム</strong><p>編集者5人 / 承認機能あり</p></div></div> : <table class="decision-table"><caption>説明用の2プランの機能比較</caption><thead><tr><th scope="col">条件</th><th scope="col">ライト</th><th scope="col">チーム</th></tr></thead><tbody><tr><th scope="row">編集者</th><td>1人</td><td>5人</td></tr><tr><th scope="row">承認機能</th><td>なし</td><td>あり</td></tr></tbody></table>}
+          </div>}
+          {question.id === 'spacing' && <div class="decision-example"><p class="decision-example__title">{option === 'A' ? '課題との適合を先に判断' : '表現の印象を先に判断'}</p><ol class="decision-sequence">{(option === 'A' ? ['対象・課題・対応の要約', '改善した画面と説明', '詳しい設計プロセス'] : ['完成画面のビジュアル', '画面の細部と演出', '対象・課題・対応の要約']).map(label => <li>{label}</li>)}</ol><p class="decision-example__note">スマホでの掲載順序を比較</p></div>}
+          {question.id === 'action' && <div class="decision-example"><p class="decision-example__title">{option === 'A' ? '全員に同じ項目を表示' : '共通項目＋短い条件分岐'}</p><div class="decision-fields"><p>連絡先・相談内容</p>{option === 'A' ? <><p>既存URL・移行の有無</p><p>未該当なら空欄で進む</p></> : <><p>新規制作 / リニューアル</p><p class="decision-fields__branch">リニューアルを選んだ場合<br /><strong>既存URL・移行の有無</strong></p></>}</div><p class="decision-example__note">入力画面の構成図。送信機能はありません。</p></div>}
         </div>
         <button type="button" class="design-option__choose" data-design-choice={option} aria-label={`問題${questionIndex + 1}：${option}を選ぶ`} aria-pressed="false" aria-controls={`answer-${question.id}`} disabled>{option}を選ぶ</button>
       </div>)}
@@ -37,24 +59,28 @@ const questions = [
     <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
     <details class="design-answer" id={`answer-${question.id}`}>
       <summary>私の考えを読む</summary>
-      <div class="design-answer__body"><p class="design-answer__choice">この目的なら、私は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>実際につくるときは</h5><p>{question.practice}</p></div></div>
+      <div class="design-answer__body"><p class="design-answer__choice">この目的なら、私は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>実装で詰めること</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>どう検証するか</h5><p>{question.verify}</p></div></div>
     </details>
   </section>)}
   <section class="design-essay__closing" aria-labelledby="design-closing-title">
-    <h3 id="design-closing-title">見た目の一つひとつに、<br />理由を持たせたい。</h3>
-    <p>文字を大きくする。余白を空ける。ボタンの言葉を変える。小さな選択でも、「誰に、何を伝えたいか」に立ち戻ると、選ぶ理由が見えてきます。</p>
-    <p>私がつくりたいのは、眺めて終わるサイトではなく、必要な情報が見つかり、納得して次の一歩を選べるサイトです。</p>
-    <details class="design-essay__checks"><summary>読みやすさのために、ほかにも確かめること</summary><ul>
-      <li><strong>文字と行間：</strong>この記事の本文は16px以上、行間は1.85を採用。長い文章の幅を抑え、端末や文字の拡大にも対応します。数値はこのページの設計値です。</li>
-      <li><strong>文字と背景：</strong>通常の文字は4.5:1以上のコントラストを基準にします。選択中の状態は色だけでなく、文言でも伝えます。</li>
-      <li><strong>操作と読み順：</strong>キーボードで選べること、拡大しても情報が欠けないこと、見出しの順序が分かることを確認します。</li>
-      <li><strong>公開してから：</strong>設計の意図どおりに伝わるとは限りません。実際の利用者の反応を確かめ、必要に応じて見直すことを大切にします。</li>
+    <h3 id="design-closing-title">選んだ理由だけでなく、<br />選ばなかった理由も説明したい。</h3>
+    <p>一覧性を優先すると、個別の魅力が薄くなることがあります。入力を短くすると、受付後の確認が増えることもあります。私は、こうした得るものと失うものを整理してから、構成や実装を選びたいと考えています。</p>
+    <p>設計は仮説です。目的に合う評価方法を決め、実装の制約も説明し、公開後の反応から見直せる状態までを考えます。見た目と、その後の運用がつながっていることを大切にしています。</p>
+    <details class="design-essay__checks"><summary>設計を実装へ渡すときの確認項目</summary><ul>
+      <li><strong>構造と読み順：</strong>見出し階層、表の見出し、フォームのラベル、HTML上の順序とフォーカス順を設計に含めます。</li>
+      <li><strong>可変のコンテンツ：</strong>長い名称、項目数の増減、画像未読込、文字拡大でも、意味のまとまりと操作が保たれるかを確かめます。</li>
+      <li><strong>状態と復帰：</strong>空・処理中・成功・失敗・再試行を定義します。正常な画面一枚だけで実装仕様を終わらせません。</li>
+      <li><strong>検証の前提：</strong>何を改善したいか、どの利用者で確かめるか、どの指標を悪化させたくないかを先に整理します。実績や効果は、未計測のまま数値にしません。</li>
     </ul></details>
   </section>
   <details class="design-references"><summary>参考にした記事と公開ガイド</summary><p>クイズと解説を組み合わせる構成を参考にしています。比較図・問題・本文は、このサイト向けに作成したものです。</p><ul>
     <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html">Adobe：余白を考えるデザインクイズ</a></li>
     <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html">Adobe：視線誘導を考えるデザインクイズ</a></li>
     <li><a href="https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html">Learn UI Design：作り手の視点で解説するUIデザイン</a></li>
+    <li><a href="https://www.w3.org/WAI/tutorials/tables/">W3C WAI：比較表の見出しとデータの関係</a></li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html">W3C：意味の通る読み順</a></li>
+    <li><a href="https://www.w3.org/WAI/tutorials/forms/validation/">W3C WAI：入力検証とサーバー側の検証</a></li>
+    <li><a href="https://design-system.service.gov.uk/components/radios/">GOV.UK：選択肢に応じた関連質問の表示</a></li>
     <li><a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁：タイポグラフィ</a></li>
     <li><a href="https://www.nngroup.com/articles/text-scanning-patterns-eyetracking/">NN/g：複数の読み飛ばし方を扱う視線研究（2019年）</a></li>
     <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3C：文字のコントラスト</a></li>
