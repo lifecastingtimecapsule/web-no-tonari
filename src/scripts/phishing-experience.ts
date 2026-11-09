@@ -1,17 +1,12 @@
 // 変更履歴: 2026-11-09 登録不要のフィッシング体験を追加。結果は画面内だけに表示する。
 // 役割: 箇所の指摘・詐欺の判定・疑似リンク・やり直しを扱う。通信や保存は行わない。
-const phishingResponses = {
-  sender: { title: '番号だけでは、まだ分かりません。', explanation: '知らない番号は立ち止まるきっかけ。ただ、表示された番号だけでは本物かどうかを判断できません。', takeaway: '次は、本文やURLも確かめてみましょう。', tone: 'hint' },
-  urgency: { title: '急がせる言葉に、気づきました。', explanation: '「本日中に」と焦らせ、確認する前に操作させる手口があります。期限のある連絡がすべて詐欺という意味ではありません。', takeaway: 'そのまま進まず、不在票や公式アプリで確認。', tone: 'found' },
-  url: { title: '怪しいURLに、気づけました。', explanation: '「japanpost」と書かれていても、日本郵便の公式サイトとは別です。この見本の.testは説明用のドメインです。', takeaway: '見慣れた名前だけで信じず、普段の公式の入口から。', tone: 'found' },
-  judge: { title: '正解。この例はフィッシングです。', explanation: '再配達の少額料金を口実に、偽の支払い画面へ誘導するケースです。会社名や金額の小ささで信用しないことが大切です。', takeaway: '届いたリンクを使わず、不在票や公式アプリで確認。', tone: 'found' },
-  open: { title: 'これは、詐欺の誘導です。', explanation: 'この先にあるのは、カード情報を入力させる偽の支払い画面。少額の再配達料金は、その入口です。', takeaway: '開いても、入力せず閉じる。公式の入口で確かめる。', tone: 'trap' },
-} as const;
-
-type PhishingAction = keyof typeof phishingResponses;
+import { phishingScenarios, type PhishingAction } from '../data/phishing-scenarios';
 
 // 一つの教材内で結果を入れ替え、キーボード利用者にも結果の見出しを届ける。
 function initializePhishingExperience(root: HTMLElement) {
+  const scenario = phishingScenarios.find(item => item.id === root.dataset.phishingScenario);
+  if (!scenario) return;
+  const phishingResponses = scenario.responses;
   const intro = root.querySelector<HTMLElement>('[data-phishing-intro]');
   const result = root.querySelector<HTMLElement>('[data-phishing-result]');
   const title = root.querySelector<HTMLElement>('[data-phishing-title]');
@@ -64,3 +59,34 @@ function initializePhishingExperience(root: HTMLElement) {
 }
 
 document.querySelectorAll<HTMLElement>('[data-phishing-experience]').forEach(initializePhishingExperience);
+
+// 変更履歴: 2026-11-09 三問を一つずつ表示。移動先の見出しへフォーカスし、各問の回答はその場で保持する。
+// 役割: 前後移動と最初の問題への循環を行う。URL・保存領域へ回答情報を書き込まない。
+document.querySelectorAll<HTMLElement>('[data-phishing-quiz]').forEach(quiz => {
+  const panels = Array.from(quiz.querySelectorAll<HTMLElement>('[data-phishing-panel]'));
+  const navigation = quiz.querySelector<HTMLElement>('[data-phishing-navigation]');
+  const previous = quiz.querySelector<HTMLButtonElement>('[data-phishing-previous]');
+  const next = quiz.querySelector<HTMLButtonElement>('[data-phishing-next]');
+  const progress = quiz.querySelector<HTMLElement>('[data-phishing-progress]');
+  if (!panels.length || !navigation || !previous || !next || !progress) return;
+  let activeQuestion = 0;
+  // 一問だけを表示し、問題番号と操作名を同時に更新する。
+  function selectQuestion(position: number, moveFocus = true) {
+    activeQuestion = position;
+    panels.forEach((panel, index) => { panel.hidden = index !== activeQuestion; });
+    previous!.disabled = activeQuestion === 0;
+    next!.textContent = activeQuestion === panels.length - 1 ? '最初の問題へ' : '次の問題';
+    progress!.textContent = `問題 ${activeQuestion + 1} / ${panels.length}`;
+    if (moveFocus) {
+      const panel = panels[activeQuestion];
+      const intro = panel.querySelector<HTMLElement>('[data-phishing-intro]');
+      const heading = panel.querySelector<HTMLElement>(intro?.hidden ? '[data-phishing-title]' : '[data-phishing-question]');
+      heading?.focus({ preventScroll: true });
+      navigation!.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  }
+  selectQuestion(0, false);
+  navigation.hidden = false;
+  previous.addEventListener('click', () => selectQuestion(Math.max(0, activeQuestion - 1)));
+  next.addEventListener('click', () => selectQuestion((activeQuestion + 1) % panels.length));
+});

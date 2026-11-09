@@ -49,7 +49,6 @@
 .phishing-experience__footnote { border-top: 1px solid var(--mist); padding-top: 20px; font-size: 13px; line-height: 1.9; color: var(--ink-muted); }
 .phishing-experience__footnote p { margin: 0 0 8px; }
 .phishing-experience__footnote summary { cursor: pointer; padding-block: 10px; min-height: 44px; color: var(--ink); }
-.phishing-experience__article { display: inline-block; margin-top: 12px; min-height: 44px; padding-block: 10px; color: var(--ink); }
 @media(max-width:800px) { .phishing-experience__stage { grid-template-columns: minmax(0,320px) minmax(0,1fr); gap: 30px; padding-inline: 0; } }
 @media(max-width:640px) { .phishing-experience__stage { grid-template-columns: 1fr; gap: 32px; padding-top: 8px; } .phishing-phone { width: min(100%,320px); margin-inline: auto; } .phishing-experience__decision { max-width: 430px; width: 100%; margin-inline: auto; } .phishing-experience__decision h3 { font-size: 26px; } }
 
@@ -57,3 +56,29 @@
 
 .phishing-result [data-phishing-cross], .phishing-result[data-tone="trap"] [data-phishing-check] { display: none; }
 .phishing-result[data-tone="trap"] [data-phishing-cross] { display: inline; }
+/* 変更履歴: 2026-11-09 問題を縦に並べず一問ずつ切り替えるナビと、業務メールの画面を追加。PHPリンクの旧装飾は削除。 */
+.phishing-quiz { max-width: 1000px; margin-inline: auto; }
+.phishing-quiz [hidden] { display: none !important; }
+.phishing-quiz__navigation { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--mist); scroll-margin-top: 110px; }
+.phishing-quiz__navigation span { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.phishing-quiz__navigation button { min-height: 44px; border: 1px solid var(--input-border); border-radius: 6px; background: white; color: var(--ink); font: inherit; font-size: 14px; padding: 10px 15px; cursor: pointer; }
+.phishing-quiz__navigation button:hover:not(:disabled) { background: var(--mist-light); }
+.phishing-quiz__navigation button:disabled { opacity: .45; cursor: default; }
+.phishing-quiz__navigation button:focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 3px; }
+.phishing-message-copy { white-space: pre-line; }
+.phishing-experience__stage--email { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 36px; padding-inline: 0; }
+.phishing-mail { margin: 0; border: 1px solid var(--input-border); border-radius: 12px; overflow: hidden; min-width: 0; }
+.phishing-mail figcaption { padding: 18px 20px; background: var(--mist-light); font-size: 14px; display: flex; justify-content: space-between; gap: 10px; }
+.phishing-mail figcaption span { color: var(--ink-muted); font-size: 12px; }
+.phishing-mail__body { padding: 24px; font-size: 15px; line-height: 1.9; overflow-wrap: anywhere; }
+.phishing-mail .phishing-mail__subject { font-size: 20px; font-weight: 700; margin: 0 0 24px; }
+.phishing-mail .phishing-mail__label { font-size: 12px; margin: 0; color: var(--ink-muted); }
+.phishing-mail__sender { font-size: 13px; width: 100%; padding-bottom: 16px; margin-bottom: 24px; border-bottom: 1px solid var(--mist); }
+.phishing-mail .phishing-point { width: 100%; overflow-wrap: anywhere; }
+.phishing-mail__body > p:last-child { margin-bottom: 0; }
+@media(max-width:640px) { .phishing-experience__stage--email { grid-template-columns: 1fr; } .phishing-mail__body { padding: 20px; } .phishing-quiz__navigation { gap: 8px; } .phishing-quiz__navigation button { padding-inline: 10px; font-size: 13px; } }
+
+.phishing-quiz__fallback { margin-block: 24px; font-size: 15px; line-height: 1.9; }
+.phishing-quiz__fallback summary { padding-block: 14px; cursor: pointer; }
+
+[data-phishing-question] > span { display: block; }

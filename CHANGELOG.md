@@ -1,5 +1,13 @@
 # 変更履歴
 
+## 2026-11-09：前後の文章を接続し、体験を三問へ拡張
+
+- `src/data/services.ts` / `src/pages/services/[slug].astro`: 日常の管理と不審な連絡への備えを先に説明。SMS・メール体験の後はサイトの管理状況確認へ戻り、料金・相談につなぐ。PHPリンクを相談欄へ移動。他サービスの文章・料金・範囲は維持。
+- `src/data/phishing-scenarios.ts`: 不在SMS・請求メール・アカウント停止SMSの表示と解説を定義。第三問は普段のURLを提示して一文字違いを判断できるようにする。
+- `src/components/PhishingExperience.astro` / `src/scripts/phishing-experience.ts` / `src/styles/phishing-experience.css`: 既存の体験操作を維持して三問を切替。個別ID・前後ボタン・問題番号・フォーカス移動・JavaScriptなしの解説を追加。初期HTMLでも一問だけ表示し、情報が一度に増えないようにする。PHPリンクの未使用装飾を除去。
+- `PRODUCT.md` / `DESIGN.md` / `docs/design/2026-11-09-phishing-experience.md`: 三問と説明順の現行仕様、検証結果を記録。
+
+
 ## 2026-11-09：登録不要のフィッシング体験（現行）
 
 ユーザーがGoogleの方向を選択したため、直前の採用保留を解除。情報量を減らし、SMS一通と回答後の短い解説へ置換。
