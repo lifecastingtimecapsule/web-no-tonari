@@ -15,7 +15,7 @@
 
 - `websites.webp`: 2026-11-09の日常で使えるデザインの工夫への改訂に合わせ、「伝える内容は同じ。読みやすさは、変えられる。」の導入を撮影して1000×644のWebPへ更新。入口と本文の内容を統一。
 - `websites.png`: 以前の花屋サンプルの保管用画像。現在のトップからは参照しない。
-- `ec.png`: `/services/ec/` の架空の受注管理画面（入金待ちの注文）。
+- `ec.png`: EC詳細ページの削除に伴い削除済み。
 - `ai-apps.png`: `/services/ai-apps/` の問い合わせ整理サンプル（事前に用意した出力を表示）。
 - `security.png`: `/services/security/` の登録不要の三問体験の第一問（URLの構造を確認するSMS）。
 
@@ -26,3 +26,11 @@
 - 素材: `public/images/demos/florist-bouquet.webp`（1200×900、ページからWebPを取得）
 - ライセンス: https://unsplash.com/license （2026-11-09確認。商用利用・コピー・変更・配信可。写真そのものの販売や競合サービスの構築は不可）
 - 作者名は作品ページのog:titleとog:descriptionで照合。サンプル内にも出典を表示。商品・店舗は架空で、写真の商品を販売する表示ではない。
+
+## 2026-11-09 三テーマへの再構成
+
+- 変更履歴：`websites.webp` は「文字、色、配置。伝わる理由を、見てみよう。」の新しい導入画面へ更新。1000×644、自作HTML/CSS。撮影時だけ導入高さ644pxとし、共通ヘッダー・開発ツールを非表示。
+- `../demos/design-workspace.webp`: ergonofis / Unsplash, “Wooden standing desk in home office”。1200×1800。配色・レスポンシブ教材の同一写真として使用。弊社の実際のオフィスや実績ではない。
+- 作品：https://unsplash.com/photos/wooden-standing-desk-in-home-office-tdnYk4qOGhc
+- 取得元：https://images.unsplash.com/photo-1623177623442-979c1e42c255?auto=format&fit=crop&w=1200&q=80&fm=webp
+- ライセンス：https://unsplash.com/license （2026-11-09確認）。本文にも作者・作品・ライセンスを掲載。

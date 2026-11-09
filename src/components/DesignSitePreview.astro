@@ -1,0 +1,13 @@
+---
+// 変更履歴: 2026-11-09 配色・レスポンシブで内容を固定して比べる、共通の独自見本を追加。
+// 役割: 同じ写真・文章を使い、変えた設計要素の違いを観察できるようにする。実際の申込機能はない。
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<div class="sample-site">
+  <div class="sample-site__header"><strong>デザインの公開講座</strong><span>学習用の見本</span></div>
+  <div class="sample-site__hero">
+    <div class="sample-site__copy"><h4>伝え方を整える。<br />仕事が、少し変わる。</h4><p>伝えたいことを、届くかたちに。<br />ウェブと日々の資料に使える、デザインの考え方を学びます。</p><span class="sample-site__action">講座の内容を見る</span></div>
+    <img src={`${home}images/demos/design-workspace.webp`} width="1200" height="1800" loading="lazy" decoding="async" alt="木の机と緑のある、窓辺のワークスペース" />
+  </div>
+  <dl class="sample-site__facts"><div><dt>学ぶこと</dt><dd>文字・色・レイアウト</dd></div><div><dt>参加方法</dt><dd>オンライン</dd></div><div><dt>対象</dt><dd>仕事で情報を伝える方</dd></div></dl>
+</div>

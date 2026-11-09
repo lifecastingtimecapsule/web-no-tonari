@@ -1,7 +1,8 @@
 ---
+// 変更履歴: 2026-11-09 詳細を三サービスへ整理し、ウェブ教材の入口を三体験へ合わせる。
 // 変更履歴: 2026-11-08 サービスごとの事業説明、操作サンプル、豆知識を独立ページとして追加。
 // 変更履歴: 2026-11-09 安全確認ページは、体験後にサイト側の備えと相談へつなぐ文章へ変更。
-// 役割: 共通のブランドとナビを保ち、4領域の提供内容を具体的に説明する。
+// 役割: 共通のブランドとナビを保ち、3領域の提供内容を具体的に説明する。
 // 変更履歴: 2026-11-08 トップと同じ共通レイアウト・ナビ・ロゴを適用。
 // 変更履歴: 2026-11-09 ウェブ制作の体験を記事形式に変更し、タイトルと入口の操作名を内容に合わせた。
 import SiteLayout from '../../layouts/SiteLayout.astro';
@@ -13,13 +14,13 @@ const { service } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 // 変更履歴: 2026-11-09 EC・安全確認の入口を記事に合わせ、重複する旧豆知識を省く。
 // 変更履歴: 2026-11-09 ECの操作名を管理画面へ合わせる。
-const sampleAction = service.slug === 'ec' ? '管理画面と考え方を見る' : service.slug === 'security' ? 'フィッシングを見抜いてみる' : service.slug === 'websites' ? 'クイズで、考え方を読む' : 'サンプルを触ってみる';
+const sampleAction = service.slug === 'security' ? 'フィッシングを見抜いてみる' : service.slug === 'websites' ? '体験で、考え方を知る' : 'サンプルを触ってみる';
 ---
 <SiteLayout title={`${service.name}・${service.slug === 'websites' ? 'デザインの考え方' : '体験サンプル'}｜ウェブのとなり`} description={service.description}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></nav><nav class="service-tabs" aria-label="サービス別ページ">{servicePages.map(item => <a href={`${home}services/${item.slug}/`} aria-current={service.slug === item.slug ? 'page' : undefined}>{item.name}</a>)}</nav>
 <section class="service-intro"><div><h1>{service.title.split('\n').map(line => <span>{line}</span>)}</h1><p>{service.lead}</p><a class="button button--human" href="#sample">{sampleAction}</a></div><aside><h2>{service.name}でできること</h2>{service.tasks.map(([title, body]) => <div class="service-task"><h3>{title}</h3><p>{body}</p></div>)}</aside></section>
 <section class="service-sample" id="sample" aria-labelledby="sample-title"><div class="service-section-heading"><h2 id="sample-title">{service.sampleTitle}</h2><p>{service.sampleIntro}</p></div><ServiceDemo slug={service.slug} /></section>
-{!['ec', 'security'].includes(service.slug) && <section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div>{service.source && <p class="service-source">参考資料：<a href={service.source} target="_blank" rel="noopener noreferrer">{service.sourceLabel}（別タブ）</a></p>}</section>}
+{service.slug !== 'security' && <section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div>{service.source && <p class="service-source">参考資料：<a href={service.source} target="_blank" rel="noopener noreferrer">{service.sourceLabel}（別タブ）</a></p>}</section>}
 <section class="service-close"><h2>{service.slug === 'security' ? 'サイトの備えも、一緒に確認しませんか。' : 'この先は、あなたの仕事に合わせて。'}</h2>{service.slug === 'security' && <><p>不審な連絡への注意に加え、サイト側の更新やバックアップも大切です。今の管理状況を確認し、必要な対策と費用を整理します。</p><p><a href={`${home}services/security/php/`}>更新を止めると何が起きる？ 古いPHPのリスクを読む</a></p></>}<p class="service-close__price">{service.price}</p><p>{service.priceNote}</p><a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>{service.slug === 'security' ? 'サイトの相談内容をまとめる' : '相談内容をまとめる'}</a><p class="service-close__notice">相談受付用のメールアドレスは準備中です。現在は入力内容の整理まで利用できます。</p></section>
 </div><script>import '../../scripts/service-demos';</script>
 </SiteLayout>

@@ -1,7 +1,5 @@
-/* 変更履歴: 2026-11-09 同じ文字内容を余白・段落・項目整理だけで比較する図へ変更。 */
-/* 変更履歴: 2026-11-09 花屋の見本を、既存の白黒赤を継承する体験記事へ置換。 */
-/* 変更履歴: 2026-11-09 比較表・掲載順序・フォーム分岐の構成図に更新。不要になった初級見本の装飾を削除。 */
-/* 役割: 読む部分の幅を抑え、比較図だけを広くして、問いと判断理由を読み分ける。 */
+/* 変更履歴: 2026-11-09 旧四問を、文字比較・配色切替・端末幅切替の三体験へ再構成。 */
+/* 役割: 既存ブランドの読み幅と文字を保ち、教材だけで配色・配置の変化を示す。 */
 .service-demo--websites { padding: 0; background: transparent; border-radius: 0; }
 .service-sample:has(.website-demo) > .service-section-heading { grid-template-columns: 1fr; gap: 20px; max-width: 1000px; margin-inline: auto; }
 .service-sample:has(.website-demo) .service-section-heading h2 { max-width: 23em; }
@@ -10,11 +8,11 @@
 .reading-experiment { padding: clamp(28px, 6vw, 72px); background: var(--mist-light); border-radius: 16px; }
 .reading-experiment p { margin: 0; }
 .reading-experiment .reading-experiment__first { font-family: 'Zen Kaku Gothic New', sans-serif; font-weight: 900; font-size: clamp(28px, 4.3vw, 54px); line-height: 1.4; letter-spacing: -.025em; }
-.reading-experiment .reading-experiment__second { margin-top: 28px; font-size: clamp(22px, 2.4vw, 30px); font-weight: 700; }
+.reading-experiment .reading-experiment__second { margin-top: 28px; font-size: clamp(20px, 2.4vw, 28px); font-weight: 700; }
 .reading-experiment .reading-experiment__last { margin-top: 20px; font-size: 16px; color: var(--ink-muted); }
 .design-essay__intro, .design-essay__closing { max-width: 720px; margin: 40px auto 0; }
 .design-essay__intro > p, .design-essay__closing > p { font-size: 18px; margin: 0 0 20px; }
-.design-essay__intro .design-essay__note { font-size: 14px; color: var(--ink-muted); }
+.website-demo .design-essay__note { font-size: 14px; color: var(--ink-muted); }
 .design-essay__contents { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; }
 .design-essay__contents a { padding-block: 12px; font-size: 16px; text-underline-offset: 5px; }
 .design-question { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--mist); scroll-margin-top: 120px; }
@@ -24,68 +22,98 @@
 .design-question__prompt { max-width: 42em; margin: 16px 0 28px; font-size: 17px; }
 .design-question__options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .design-option { min-width: 0; display: flex; flex-direction: column; }
-.design-option__example { position: relative; flex: 1; display: flex; align-items: center; padding: 64px 28px 32px; min-height: 300px; border-radius: 12px; background: var(--mist-light); }
+.design-option__example { position: relative; flex: 1; display: flex; align-items: center; padding: 64px 28px 32px; min-height: 380px; border-radius: 12px; background: var(--mist-light); }
 .design-option__letter { position: absolute; top: 18px; left: 24px; font-size: 18px; font-weight: 700; }
-.design-option__example p { margin: 0; font-size: 16px; }
-.everyday-spacing, .everyday-message, .everyday-invitation { width: 100%; min-width: 0; }
-.everyday-spacing__label { font-weight: 700; }
-.design-option__example--a .everyday-spacing p + p { margin-top: 16px; }
-.design-option__example--b .everyday-spacing p:nth-child(2n) { margin-top: 4px; }
-.design-option__example--b .everyday-spacing p:nth-child(3) { margin-top: 40px; }
-.everyday-message p + p { margin-top: 24px; }
-.design-option__example--spacing { align-items: flex-start; }
-.everyday-invitation dl { margin: 0; }
-.everyday-invitation dl > div { display: grid; grid-template-columns: 5em minmax(0, 1fr); gap: 12px; margin-bottom: 20px; font-size: 16px; line-height: 1.85; }
-.everyday-invitation dl > div:last-child { margin-bottom: 0; }
-.everyday-invitation dt { font-weight: 700; }
-.everyday-invitation dd { margin: 0; }
-@media (max-width: 380px) {
-  .everyday-invitation dl > div { grid-template-columns: 1fr; gap: 4px; }
-}
-.design-option__choose { min-height: 48px; margin-top: 12px; padding: 12px 20px; border: 1px solid var(--input-border); border-radius: 8px; font: inherit; font-weight: 700; background: var(--paper); color: var(--ink); cursor: pointer; transition: background-color 160ms ease, color 160ms ease; }
-.design-option__choose:hover:not(:disabled):not([aria-pressed='true']) { background: var(--mist-light); }
-.design-option__choose[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-.design-option__choose:disabled { cursor: default; opacity: .55; }
-.design-question__feedback { font-size: 14px; margin: 16px 0; color: var(--ink-muted); }
+.type-example__content { width: 100%; }
+.type-example p, .type-example dl, .type-example dd { margin: 0; font-size: 16px; font-weight: 400; }
+.type-example dl { line-height: 1.85; }
+.type-example--a :is(p + p,dl,dl > div + div,dd) { margin-top: 14px; }
+.type-example--b .type-example__title { font-size: 28px; font-weight: 700; line-height: 1.5; }
+.type-example--b .type-example__intro { margin-top: 12px; }
+.type-example--b dl { margin-top: 28px; }
+.type-example--b dt { font-size: 14px; font-weight: 700; }
+.type-example--b dd { margin-top: 4px; }
+.type-example--b dl > div + div { margin-top: 20px; }
+.design-option__choose, .design-controls button { min-height: 48px; padding: 12px 20px; border: 1px solid var(--input-border); border-radius: 8px; font: inherit; font-size: 15px; font-weight: 700; background: var(--paper); color: var(--ink); cursor: pointer; }
+.design-option__choose { margin-top: 12px; }
+.website-demo button:hover:not(:disabled):not([aria-pressed='true']) { background: var(--mist-light); }
+.website-demo button[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.website-demo button:disabled { cursor: default; opacity: .55; }
+.design-question__feedback, .design-demo-feedback { font-size: 14px; margin: 16px 0; color: var(--ink-muted); }
 .design-question__feedback:empty { display: none; }
 .website-demo summary { cursor: pointer; padding: 18px 0; font-size: 16px; font-weight: 700; min-height: 48px; }
 .design-answer { margin-top: 12px; scroll-margin-top: 120px; }
 .design-answer > summary { color: var(--signal-deep); text-decoration: underline; text-underline-offset: 5px; }
 .design-answer__body { max-width: 720px; margin: 16px auto 8px; }
-.design-answer__choice { color: var(--signal-deep); font-weight: 700; font-size: 16px; margin: 0 0 16px; }
 .design-answer h4 { font-size: 24px; line-height: 1.5; margin: 0 0 20px; text-wrap: balance; }
-.design-answer__body > p:not(.design-answer__choice), .design-answer__practice p { font-size: 17px; }
+.design-answer__body > p, .design-answer__practice p { font-size: 17px; }
 .design-answer__practice { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--mist); }
 .design-answer__practice h5 { font-size: 17px; margin: 0 0 8px; }
 .design-answer__practice p { margin: 0; }
 .design-essay__closing { margin-top: 64px; }
 .design-essay__closing h3 { font-size: clamp(24px, 3vw, 36px); line-height: 1.5; margin: 0 0 24px; }
-.design-essay__checks { border-block: 1px solid var(--mist); margin-top: 32px; }
-.design-essay__checks li { margin-bottom: 16px; font-size: 16px; line-height: 1.85; }
 .design-references { max-width: 720px; margin: 24px auto 0; color: var(--ink-muted); }
-.design-references p, .design-references li { font-size: 14px; line-height: 1.85; }
-.design-references li { margin-block: 12px; }
-.website-demo ul { padding-left: 24px; }
+.design-references p, .design-answer__body .design-source { font-size: 14px; line-height: 1.85; }
 .website-demo a { text-underline-offset: 4px; overflow-wrap: anywhere; }
 .website-demo :is(button, summary, a):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 4px; }
-@media (max-width: 600px) {
-  .design-question__options { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .design-option__example { min-height: 250px; padding-inline: 24px; }
+.website-demo :is(button, summary) { touch-action: manipulation; }
+.design-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.design-controls--area { margin-block: 20px 0; align-items: center; }
+.design-controls--area > span { margin-right: 10px; font-size: 14px; }
+.design-palette { --sample-base: #f3ede2; --sample-ink: #39342d; --sample-accent: #7c3528; color: var(--sample-ink); background: var(--sample-base); }
+.design-palette[data-palette='cool'] { --sample-base: #edf3f8; --sample-ink: #1c3149; --sample-accent: #244f88; }
+.design-palette[data-palette='bold'] { --sample-base: #f9eeee; --sample-ink: #302328; --sample-accent: #b41636; }
+#palette-preview { border-radius: 12px; overflow: clip; }
+.sample-site { container: sample-layout / inline-size; }
+.sample-site__header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding: 24px 32px; font-size: 15px; }
+.sample-site__header > span { font-size: 12px; }
+.sample-site__hero { display: grid; grid-template-columns: 1fr 1fr; }
+.sample-site__copy { padding: 40px 32px; }
+.sample-site__copy h4 { font-size: clamp(28px,4cqi,42px); line-height: 1.45; margin: 0 0 24px; letter-spacing: -.025em; }
+.sample-site__copy p { font-size: 16px; margin: 0; }
+.sample-site__action { display: inline-block; padding: 15px 24px; margin-top: 28px; border-radius: 6px; font-size: 15px; font-weight: 700; background: var(--sample-accent); color: #fff; text-align: center; }
+.sample-site__hero > img { display: block; width: 100%; height: 420px; min-height: 0; object-fit: cover; object-position: 50% 50%; }
+.sample-site__facts { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 0; padding: 28px 32px; }
+.sample-site__facts dt { font-size: 12px; margin-bottom: 8px; }
+.sample-site__facts dd { margin: 0; font-size: 15px; line-height: 1.7; font-weight: 700; }
+[data-accent-area='large'] .sample-site__copy { background: var(--sample-accent); color: #fff; }
+[data-accent-area='large'] .sample-site__action { background: #fff; color: var(--sample-accent); }
+.palette-roles { margin: 0; padding: 20px 32px; display: flex; flex-wrap: wrap; gap: 20px 36px; background: #fff; color: var(--ink); }
+.palette-roles dt { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; }
+.palette-roles dd { margin: 6px 0 0 30px; font-size: 12px; color: var(--ink-muted); }
+.palette-roles i { display: block; width: 20px; height: 20px; border: 1px solid #86868e; border-radius: 4px; }
+.palette-roles__base { background: var(--sample-base); }
+.palette-roles__ink { background: var(--sample-ink); }
+.palette-roles__accent { background: var(--sample-accent); }
+.responsive-preview { background: var(--mist-light); border-radius: 12px; padding: 16px; }
+.responsive-preview__frame { width: 100%; border: 1px solid var(--input-border); border-radius: 8px; overflow: clip; }
+.responsive-preview[data-ready] { position: relative; padding: 0; overflow: hidden; }
+.responsive-preview[data-ready] .responsive-preview__frame { position: absolute; top: 16px; left: 50%; transform-origin: top center; }
+@container sample-layout (max-width:720px) {
+  .sample-site__hero { grid-template-columns: 1fr; }
+  .sample-site__copy { padding: 28px 32px; }
+  .sample-site__hero > img { height: 250px; min-height: 0; }
+  .sample-site__copy h4 { font-size: 34px; }
+}
+@container sample-layout (max-width:440px) {
+  .sample-site__header { padding: 20px 24px; }
+  .sample-site__copy { padding: 24px; }
+  .sample-site__copy h4 { font-size: 28px; }
+  .sample-site__hero > img { height: 200px; }
+  .sample-site__action { display: block; }
+  .sample-site__facts { grid-template-columns: 1fr; gap: 18px; padding: 24px; }
+  .sample-site__facts > div { display: grid; grid-template-columns: 5em 1fr; gap: 12px; }
+  .sample-site__facts dt { margin: 0; }
+}
+@media(max-width:600px) {
+  .design-question__options { grid-template-columns: 1fr; }
+  .design-option__example { padding-inline: 24px; }
   .design-essay__intro > p, .design-essay__closing > p { font-size: 16px; }
   .design-question { margin-top: 48px; padding-top: 28px; }
   .design-question__heading { gap: 14px; }
   .design-question__heading > span { font-size: 28px; }
   .design-essay__contents { flex-direction: column; gap: 0; }
+  .design-controls button { padding-inline: 12px; flex: 1 1 auto; }
+  .design-controls--area > span { flex-basis: 100%; }
+  .palette-roles { padding-inline: 24px; gap: 16px; }
 }
-@media (prefers-reduced-motion: reduce) { .design-option__choose { transition: none; } }
-
-/* 変更履歴: 2026-11-09 同じ案内を色だけ変えて比較する第四問。文字寸法・面積・配置はA/B共通。 */
-.design-option__example--color { background: #ffffff; border: 1px solid var(--mist); }
-.everyday-color { width: 100%; color: #202023; }
-.everyday-color .everyday-color__title { font-size: 26px; font-weight: 700; line-height: 1.5; }
-.everyday-color .everyday-color__description { margin-top: 20px; font-size: 15px; }
-.everyday-color .everyday-color__details { margin-top: 20px; font-size: 14px; }
-.everyday-color__action { display: block; margin-top: 28px; padding: 14px 12px; background: #bb1829; color: #ffffff; text-align: center; font-size: 15px; font-weight: 700; border-radius: 6px; }
-.design-option__example--a .everyday-color__title { color: #185c85; }
-.design-option__example--a .everyday-color__description { color: #6c377f; }
-.design-option__example--a .everyday-color__details { color: #14634c; }

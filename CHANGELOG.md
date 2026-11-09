@@ -1,5 +1,13 @@
 # 変更履歴
 
+## 2026-11-09：ウェブ教材を三テーマへ統合し、ECページを削除
+
+- `WebsiteDesignDemo.astro` / 新規 `DesignSitePreview.astro` / `website-demo.css` / `website-demo.ts`: 文字サイズと余白の比較、配色と差し色面積の切り替え、PC・タブレット・スマホ配置のプレビューへ再構成。重複感を減らし、実際の変化で理解できる内容にする。
+- `services.ts` / `ServiceDemo.astro` / `[slug].astro` / `index.astro`: 三テーマの紹介へ同期。ECのデータを除き、ルート・トップ・フッター・サービスタブから入口を削除。
+- `EcOperationsDemo.astro` / `ServiceLearning.astro` / `learning-columns.ts` / `ec.png` を削除。`service-operations.css` / `service-learning.css` のEC専用装飾を整理し、PHP共用部分を維持。
+- `design-workspace.webp` / `websites.webp` / `PROVENANCE.md`: 教材の写真を追加し、トップ紹介画像と出典を更新。写真を実績として扱わない。
+- PRODUCT / DESIGN / 教材仕様 / 参考資料・運営教材の設計記録: 承認範囲、EC削除、現行仕様、検証を記録。会社概要のEC事業表記は保持。
+
 ## 2026-11-09：ウェブ制作に配色の第四問を追加
 
 - `WebsiteDesignDemo.astro` / `website-demo.css`: 色数・役割・面積・印象を考える比較を追加。同じ案内を色だけ変えて比べ、日常での使い方と弊社の確認項目を解説。目次と結びも同期。

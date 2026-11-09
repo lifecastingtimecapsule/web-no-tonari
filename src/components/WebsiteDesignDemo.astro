@@ -1,104 +1,47 @@
 ---
-/* 変更履歴: 2026-11-09 色数・面積・印象を考える比較を第四問として追加。
- * 変更履歴: 2026-11-09 余白・段落・案内の整理を題材に、日常で使える読みやすさのクイズへ調整。
- * 変更履歴: 2026-11-09 初歩的な比較を、制約・実装・検証を扱う3つの設計ケースへ深化。
- * 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
- * 役割: 独自の比較図と弊社の解説で、余白・段落・情報整理・配色の判断を伝える。 */
+// 変更履歴: 2026-11-09 承認済みの文字・余白／配色／レスポンシブの3テーマへ再構成。
+// 役割: 比較とプレビュー操作を通して弊社の設計判断を伝える。学習用で、申込・回答保存・送信はしない。
 import '../styles/website-demo.css';
-const questions = [
-  { id: 'hierarchy', title: '余白だけで、情報のまとまりは変わる？',
-    prompt: '受付時間と会場を案内する文章です。文字・大きさ・並び順は同じ。見出しと説明のつながりが分かりやすいのは、どちらでしょう？',
-    choice: 'B', heading: '弊社では、近づける余白と、離す余白を使い分けます。',
-    body: 'Bでは「受付時間」とその説明を近づけ、次の「会場」までは少し広く空けています。Aはすべて同じ間隔なので、どこまでが一つの話かを文字で読み取る必要があります。余白に大小をつけると、内容を読む前にも、まとまりが分かりやすくなります。',
-    nuance: '弊社が確認するのは、余白の広さそのものより、内側と外側の差です。全部を広げるだけでは、関連する情報まで離れてしまいます。',
-    practice: 'メールで「お願い」と「参考情報」を分けるときも同じです。それぞれの中は近く、話題の切れ目に空行を入れる。枠や色を増やす前に、間隔だけで整理してみてください。',
-    verify: '弊社では、見出しが前の説明より次の説明に近いかを確認します。スマホで折り返したときも、このつながりが保たれるように整えます。' },
-  { id: 'spacing', title: '文章を削らず、読みやすくするには？',
-    prompt: '資料の確認をお願いするメールです。両方とも同じ文章ですが、段落の分け方が違います。「何を確認して、いつまでに返すか」を拾いやすいのはどちらでしょう？',
-    choice: 'A', heading: '弊社では、一つの段落を、一つの話題にします。',
-    body: 'Aは「資料の共有」「確認してほしいこと」「返信のお願い」を分けています。文字を減らしていなくても、話題の切れ目が見えると、必要な箇所へ戻りやすくなります。読む人が途中で別の作業をしても、どこから読み直せばよいかを探しやすい構成です。',
-    nuance: '一文ごとに大きく空けるのではなく、意味がつながる文は同じ段落にまとめます。「ここで話題が変わったか」を区切りの目安にしています。',
-    practice: '仕事のメールやお知らせを書くとき、まず「報告」「確認」「お願い」に分けてみると整理しやすくなります。伝えたいことを全部短文にする必要はありません。',
-    verify: '弊社では、文章の途中に空行を入れる前に、何についての段落かを一言で言えるか確かめます。文字の大きさや行間も揃え、段落の区切りが伝わるようにします。' },
-  { id: 'action', title: '必要な情報だけ、すぐ見つかりますか？',
-    prompt: '打ち合わせの案内を見返して、会場だけを確認したい場面です。同じ日時・会場・締切を伝えるなら、どちらが探しやすいでしょう？',
-    choice: 'B', heading: '弊社では、見返す情報に「探す目印」をつけます。',
-    body: 'Bは日時・会場・返信締切を項目名で区切っています。「どこだっけ」と思った人は、文章を最初から読み直さずに「会場」を探せます。一度通して読む文章と、あとから特定の情報を確認する案内では、読み方が違います。',
-    nuance: '項目名と内容を別々に離すのではなく、同じ行や近い位置に置くのがポイントです。項目名の並ぶ位置を揃えると、目印を縦に追いやすくなります。',
-    practice: 'イベントの案内、集合場所の連絡、商品の説明にも使えます。「日時・場所・持ち物」のように、相手があとから確認しそうなことに名前をつけて並べてみてください。',
-    verify: '弊社では、必要な情報が文章に埋もれていないか、項目名だけを見て確かめます。スマホで内容が2行になっても、どの項目の説明か分かる並びにします。' },
-  { id: 'color', title: '色を増やせば、伝わりやすくなる？',
-    prompt: '同じ相談会の案内です。文字・大きさ・配置は同じで、配色だけを変えています。「申し込み」を優先して目立たせたいとき、どちらを選びますか？',
-    choice: 'B', heading: '弊社では、色を増やす前に、色の役割を決めます。',
-    body: 'Aは見出し・説明・開催情報にそれぞれ違う色を使っています。Bは文章の色を揃え、申し込みの部分に赤を残しました。この目的なら、弊社ではBを選びます。強調する色をあちこちで使うより、見てほしい場所に絞る方針です。',
-    nuance: 'まずは「背景の土台」「読むための文字」「目立たせる差し色」の3つの役割から考えます。必ず3色以内という決まりではありません。色の数が同じでも、鮮やかな色で画面を広く埋めるか、小さく添えるかでバランスは変わります。',
-    practice: '案内資料では、見出しごとに別の色を増やす前に、本文を一色に揃えてみてください。締切や次の行動など、本当に強調したい箇所だけに差し色を使うと、色の役割が整理できます。',
-    verify: '弊社では、落ち着き・親しみやすさなど、目指す印象を先に共有します。色名だけで印象を決めず、明るさ・鮮やかさ・使う面積を、写真や書体と合わせて確認します。文字と背景の見分けやすさを確保し、必須や注意は色だけでなく言葉でも伝えます。' },
-];
-const messageParagraphs = [
-  '打ち合わせ資料をお送りします。前回のご意見を反映しました。',
-  '2ページ目の日程と、3ページ目の担当をご確認ください。変更したい箇所があればお知らせください。',
-  '確認結果は木曜日までにご返信ください。修正がない場合も、その旨をお知らせいただけると助かります。',
+import DesignSitePreview from './DesignSitePreview.astro';
+const palettes = [
+  { id: 'warm', label: '木の色になじませる', description: '生成りの背景と茶系の差し色。写真にある木の色を手がかりに、全体の色を揃えた例です。' },
+  { id: 'cool', label: '青で引き締める', description: '青みのある背景と濃い青。写真の暖かい色に対して、文字と操作の部分をすっきり分けた例です。' },
+  { id: 'bold', label: '赤を効かせる', description: '淡い赤の背景と深い赤。申し込みなど、次の行動を示す部分に存在感を持たせた例です。' },
 ];
 ---
 <article class="website-demo" data-website-demo aria-labelledby="sample-title">
-  <div class="reading-experiment" aria-label="日常にも使えるデザインの考え方">
-    <p class="reading-experiment__first">伝える内容は同じ。<br />読みやすさは、変えられる。</p>
-    <p class="reading-experiment__second">余白・並べ方・色に、読む人への気づかいを。</p>
-    <p class="reading-experiment__last">メール、お知らせ、ちょっとした資料にも。<br />4つの比較から、今日から使える工夫をご紹介します。</p>
-  </div>
-  <div class="design-essay__intro">
-    <p>伝えたいことは書いてあるのに、なぜか読みにくい。そんなとき、弊社では言葉を増やす前に、余白や文章のまとまり、色の使い方を見直します。</p>
-    <p>ここでは、同じ内容を、並べ方や配色を変えて比べる4つのクイズを用意しました。選んだあとに、読みやすさが変わる理由と、普段の連絡や資料にも使えるコツをお話しします。</p>
-    <p class="design-essay__note">例文の日時や会場は説明用のものです。実際の開催案内ではありません。回答の保存・送信は行いません。</p>
-    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 余白でまとめる</a><a href="#quiz-spacing">2. 段落で区切る</a><a href="#quiz-action">3. 情報を見つけやすくする</a><a href="#quiz-color">4. 色の役割を決める</a></nav>
-  </div>
-  {questions.map((question, questionIndex) => <section class="design-question" id={`quiz-${question.id}`} data-design-question aria-labelledby={`question-${question.id}`}>
-    <header class="design-question__heading"><span aria-hidden="true">{questionIndex + 1}</span><h3 id={`question-${question.id}`}>{question.title}</h3></header>
-    <p class="design-question__prompt">{question.prompt}</p>
-    <div class="design-question__options">
-      {['A', 'B'].map(option => <div class="design-option">
-        <div class={`design-option__example design-option__example--${question.id} design-option__example--${option.toLowerCase()}`}>
-          <span class="design-option__letter">{option}</span>
-          {question.id === 'hierarchy' && <div class="everyday-spacing"><p class="everyday-spacing__label">受付時間</p><p>13:30〜14:00</p><p class="everyday-spacing__label">会場</p><p>2階 ミーティングルーム</p></div>}
-          {question.id === 'spacing' && <div class="everyday-message">{option === 'A' ? messageParagraphs.map(paragraph => <p>{paragraph}</p>) : <p>{messageParagraphs.join('')}</p>}</div>}
-          {question.id === 'action' && <div class="everyday-invitation">{option === 'A' ? <p>日時は12月8日 14:00〜15:00、会場は2階 ミーティングルームです。返信締切は12月5日です。</p> : <dl><div><dt>日時</dt><dd>12月8日 14:00〜15:00</dd></div><div><dt>会場</dt><dd>2階 ミーティングルーム</dd></div><div><dt>返信締切</dt><dd>12月5日</dd></div></dl>}</div>}
-          {question.id === 'color' && <div class="everyday-color" aria-label={`${option}の配色例。申し込み表示は操作できない見本です。`}>
-            <p class="everyday-color__title">小さな事業の<br />ウェブ相談会</p>
-            <p class="everyday-color__description">サイトの更新や集客の悩みを、<br />一緒に整理します。</p>
-            <p class="everyday-color__details">オンライン開催<br />30分・予約制</p>
-            <span class="everyday-color__action">相談会に申し込む</span>
-          </div>}
-        </div>
-        <button type="button" class="design-option__choose" data-design-choice={option} aria-label={`問題${questionIndex + 1}：${option}を選ぶ`} aria-pressed="false" aria-controls={`answer-${question.id}`} disabled>{option}を選ぶ</button>
-      </div>)}
-    </div>
+  <div class="reading-experiment"><p class="reading-experiment__first">文字、色、配置。<br />伝わる理由を、見てみよう。</p><p class="reading-experiment__second">見比べる。色を変える。画面を切り替える。</p><p class="reading-experiment__last">3つの体験から、弊社がデザインで考えていることをご紹介します。</p></div>
+  <div class="design-essay__intro"><p>同じ文章や写真でも、文字の強弱、配色、画面への並べ方で伝わり方は変わります。実際に触りながら、その違いを確かめてみてください。</p><p class="design-essay__note">講座の案内と申込表示は学習用の見本です。実際の開催・申込はありません。選択内容の保存・送信も行いません。</p><nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 文字サイズと余白</a><a href="#quiz-color">2. 配色とバランス</a><a href="#quiz-responsive">3. 画面に合わせた配置</a></nav></div>
+
+  <section class="design-question" id="quiz-hierarchy" data-design-question aria-labelledby="question-hierarchy">
+    <header class="design-question__heading"><span aria-hidden="true">1</span><h3 id="question-hierarchy">どこから読むか、迷わないために。</h3></header>
+    <p class="design-question__prompt">同じ講座の案内です。文字サイズと余白を変えると、講座名・日時・参加方法の関係はどう見えるでしょう？ 読み取りやすい方を選んでみてください。</p>
+    <div class="design-question__options">{['A', 'B'].map(option => <div class="design-option"><div class={`design-option__example type-example type-example--${option.toLowerCase()}`}><span class="design-option__letter">{option}</span><div class="type-example__content"><p class="type-example__title">伝わるデザインの基本</p><p class="type-example__intro">文字・色・配置の工夫を、<br />身近な例から学ぶ講座です。</p><dl><div><dt>日時</dt><dd>12月8日 14:00〜15:00</dd></div><div><dt>参加方法</dt><dd>オンライン・事前予約制</dd></div></dl></div></div><button type="button" class="design-option__choose" data-design-choice={option} aria-label={`文字サイズと余白：${option}を選ぶ`} aria-pressed="false" aria-controls="answer-hierarchy" disabled>{option}を選ぶ</button></div>)}</div>
     <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
-    <details class="design-answer" id={`answer-${question.id}`}>
-      <summary>設計の考え方を読む</summary>
-      <div class="design-answer__body"><p class="design-answer__choice">この例では、弊社は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>日常で使うなら</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>弊社が制作で確認すること</h5><p>{question.verify}</p></div></div>
-    </details>
-  </section>)}
-  <section class="design-essay__closing" aria-labelledby="design-closing-title">
-    <h3 id="design-closing-title">読む人が、<br />探し回らずに済むように。</h3>
-    <p>関係するものは近づける。話題が変わったら区切る。見返す情報には目印をつける。色には役割を持たせる。こうした工夫は、ウェブサイトでも一通のメールでも役に立ちます。</p>
-    <p>弊社では、読んだ人が「結局いつ？」「どこを見ればいい？」と迷わずに済むよう、一つひとつの間隔や並び方、色の使い方を整えたいと考えています。</p>
-    <details class="design-essay__checks"><summary>送る前・公開する前の、小さな見直し</summary><ul>
-      <li><strong>余白：</strong>見出しと説明は近くにありますか。別の話題との間には区切りがありますか。</li>
-      <li><strong>段落：</strong>一つの段落に、報告・確認・お願いを詰め込んでいませんか。</li>
-      <li><strong>目印：</strong>日時や場所など、あとで見返す情報はすぐに見つかりますか。</li>
-      <li><strong>色：</strong>強調する色を使いすぎていませんか。文字は読みやすく、色がなくても意味が伝わりますか。</li>
-      <li><strong>スマホ：</strong>手元の画面でも一度読んで、折り返した文章や項目のつながりを確認してみてください。</li>
-    </ul></details>
+    <details class="design-answer" id="answer-hierarchy"><summary>弊社が文字と余白で考えること</summary><div class="design-answer__body"><h4>文字の強弱で順番を。余白でまとまりを。</h4><p>この案内ではBを選びます。講座名を大きくして入口をつくり、説明は読みやすい大きさに。日時と参加方法は、それぞれの見出しと内容を近づけ、別の話題との間を空けています。</p><p>Aは文字の大きさも間隔も揃っているため、重要度やまとまりを文章から読み取る必要があります。Bでは、色や枠を増やさずに情報の関係を示しました。</p><div class="design-answer__practice"><h5>日常で使うなら</h5><p>資料の表題を大きくし、説明文と補足に差をつける。関係する文は近づける。全部を太くする、全部の間隔を広げるより、「何から読んでほしいか」を決めることが先です。</p></div><p class="design-source">参考：<a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁の文字設計</a> ／ <a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html">Adobeの余白クイズ</a></p></div></details>
   </section>
-  <details class="design-references"><summary>参考にした記事と公開ガイド</summary><p>クイズと解説を組み合わせる構成を参考にしています。比較図・問題・本文は、このサイト向けに作成したものです。</p><ul>
-    <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html">Adobe：余白を考えるデザインクイズ</a></li>
-    <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html">Adobe：視線誘導を考えるデザインクイズ</a></li>
-    <li><a href="https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html">Learn UI Design：作り手の視点で解説するUIデザイン</a></li>
-    <li><a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁：タイポグラフィ</a></li>
-    <li><a href="https://design.digital.go.jp/dads/foundations/color/">デジタル庁：色の役割と配色</a></li>
-    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">W3C：色だけで情報を伝えない（英語）</a></li>
-    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3C：文字と背景のコントラスト（英語）</a></li>
-  </ul><p>2026年11月9日 更新</p></details>
+
+  <section class="design-question" id="quiz-color" aria-labelledby="question-color" data-palette-demo>
+    <header class="design-question__heading"><span aria-hidden="true">2</span><h3 id="question-color">同じ写真でも、配色で印象は変わる。</h3></header>
+    <p class="design-question__prompt">下の配色を選んでみてください。文章・写真・配置はそのままに、背景・文字・ボタンの色がセットで変わります。どの雰囲気を伝えたいか、見比べてみましょう。</p>
+    <div class="design-controls" role="group" aria-label="配色を選ぶ">{palettes.map((palette, index) => <button type="button" data-palette-choice={palette.id} data-palette-description={palette.description} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls="palette-preview" disabled>{palette.label}</button>)}</div>
+    <div class="design-palette" data-palette="warm" data-accent-area="small" id="palette-preview"><DesignSitePreview /><dl class="palette-roles"><div><dt><i class="palette-roles__base" aria-hidden="true"></i>背景</dt><dd>画面の土台</dd></div><div><dt><i class="palette-roles__ink" aria-hidden="true"></i>文字</dt><dd>内容を読む</dd></div><div><dt><i class="palette-roles__accent" aria-hidden="true"></i>差し色</dt><dd>行動を示す</dd></div></dl></div>
+    <div class="design-controls design-controls--area" role="group" aria-label="差し色を使う面積"><span>同じ色で、使う面積を変える</span><button type="button" data-accent-choice="small" aria-pressed="true" aria-controls="palette-preview" disabled>ボタンだけ</button><button type="button" data-accent-choice="large" aria-pressed="false" aria-controls="palette-preview" disabled>背景にも使う</button></div>
+    <p class="design-demo-feedback" data-palette-feedback role="status" aria-live="polite">{palettes[0].description} 差し色はボタンだけに使っています。</p>
+    <details class="design-answer"><summary>弊社が配色で考えること</summary><div class="design-answer__body"><h4>色を選ぶ。役割を決める。面積で調整する。</h4><p>まず、誰にどんな雰囲気を届けたいかを整理します。写真やロゴにある色を手がかりに、背景・文字・差し色を組み合わせます。この見本では、木の色になじませる案、青で引き締める案、赤を効かせる案を用意しました。</p><p>同じ配色でも、差し色を背景まで広げると、ボタンだけに使う場合とは印象が変わります。色数だけでなく、どこに、どのくらい使うかも設計します。「必ず3色」「必ず決まった比率」という正解があるわけではありません。</p><div class="design-answer__practice"><h5>雰囲気と、読みやすさを両方見る</h5><p>好みに合う色でも、文字が背景に埋もれたら調整します。写真や書体との組み合わせで確認し、注意や必須の意味は色だけに任せず、言葉でも示します。色名だけで「この印象になる」と決めつけません。</p></div><p class="design-source">参考：<a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/color-palette.html">Adobeの配色クイズ</a> ／ <a href="https://www.canva.com/ja_jp/learn/100-color-combinations/">Canvaの配色見本</a> ／ <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3Cのコントラスト指針（英語）</a></p></div></details>
+  </section>
+
+  <section class="design-question" id="quiz-responsive" aria-labelledby="question-responsive" data-responsive-demo>
+    <header class="design-question__heading"><span aria-hidden="true">3</span><h3 id="question-responsive">小さくするだけで、スマホに合う？</h3></header>
+    <p class="design-question__prompt">同じ内容を、PC・タブレット・スマホで表示します。画像と説明の並び、情報の列数、ボタンの幅が変わるところを見てください。</p>
+    <div class="design-controls" role="group" aria-label="見本の画面幅を選ぶ"><button type="button" data-device-choice="desktop" aria-pressed="true" aria-controls="responsive-preview" disabled>PC</button><button type="button" data-device-choice="tablet" aria-pressed="false" aria-controls="responsive-preview" disabled>タブレット</button><button type="button" data-device-choice="phone" aria-pressed="false" aria-controls="responsive-preview" disabled>スマホ</button></div>
+    <div class="responsive-preview" data-responsive-stage><div class="responsive-preview__frame" id="responsive-preview" data-responsive-frame><div class="design-palette" data-palette="cool"><DesignSitePreview /></div></div></div>
+    <p class="design-demo-feedback" data-device-feedback role="status" aria-live="polite">画面幅に合わせた見本を表示しています。</p>
+    <noscript><p class="design-essay__note">切り替えにはJavaScriptが必要です。いまの画面幅に合う配置と、下の解説はそのまま読めます。</p></noscript>
+    <details class="design-answer"><summary>弊社がスマホ対応で考えること</summary><div class="design-answer__body"><h4>縮小するより、読みやすい順番に組み直す。</h4><p>PCでは説明と画像を横に置き、下の情報も3列で比較できます。タブレットでは説明と画像を縦に、スマホでは下の情報も1列にして、ボタンを広げます。内容を削らず、読み順を保ちながら配置を変えています。</p><p>これはこの見本の設計です。実際には端末の名前だけで区切らず、見出しが窮屈になる、ボタンが押しにくいなど、内容に無理が出る幅で調整します。</p><div class="design-answer__practice"><h5>弊社が公開前に確認すること</h5><p>小さい画面でも文字が読めるか、横にはみ出さないか、重要な説明がなくなっていないか。画面幅を変え、文字を拡大し、操作の順番も確かめます。</p></div><p class="design-source">参考：<a href="https://web.dev/learn/design/macro-layouts?hl=ja">Google web.devのレイアウト解説</a> ／ <a href="https://web.dev/learn/design/typography?hl=ja">画面に合わせた文字設計</a></p></div></details>
+  </section>
+
+  <section class="design-essay__closing"><h3>見た目の理由を、<br />一つずつ説明できるように。</h3><p>文字と余白で、読む順番を。配色で、伝えたい雰囲気を。画面ごとの配置で、使いやすさを。弊社では、こうした判断を積み重ねてサイトをつくります。</p></section>
+  <details class="design-references"><summary>見本と写真について</summary><p>比較図・文章・見本の画面は独自に制作しています。写真は弊社のオフィスや開催実績を示すものではありません。</p><p>写真：<a href="https://unsplash.com/photos/wooden-standing-desk-in-home-office-tdnYk4qOGhc">ergonofis / Unsplash</a>（<a href="https://unsplash.com/license">Unsplash License</a>）。<time datetime="2026-11-09">2026年11月9日 更新</time></p></details>
 </article>
 <script>import '../scripts/website-demo';</script>
