@@ -39,10 +39,7 @@
 .ai-demo__output p { margin:8px 0 22px; font-size:14px; line-height:1.8; }
 .ai-demo__output strong { font-size:13px; color:var(--signal-deep); }
 .ai-demo__output small { color:var(--ink-muted); font-size:12px; }
-.mail-demo > p { font-size:15px; line-height:1.8; }
-.mail-demo__point { display:block; padding:16px; width:100%; text-align:left; border:1px dashed #7c7c83; background:white; color:var(--ink); font:inherit; font-size:14px; margin:16px 0; cursor:pointer; overflow-wrap:anywhere; }
-.mail-demo__point[data-checked] { background:#fcecef; border-style:solid; border-color:var(--signal); }
-.mail-demo__point:hover { border-color:var(--signal); }
+/* 変更履歴: 2026-11-09 メール教材の更新に伴い、未使用となった旧クリックポイントの装飾を削除。 */
 .service-notes__articles { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
 .service-notes article { border-top:2px solid var(--ink); padding-top:20px; }
 .service-notes article h3 { font-size:19px; line-height:1.6; margin:0 0 14px; }

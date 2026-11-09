@@ -3,6 +3,8 @@
 // 役割: 実績や実サービスと区別した、外部送信のない体験を表示する。
 // 変更履歴: 2026-11-09 ウェブ制作の体験を写真・解説・余白・文字比較の教材へ差し替え。
 import WebsiteDesignDemo from './WebsiteDesignDemo.astro';
+// 変更履歴: 2026-11-09 ECと安全確認を日常に役立つクイズ付き記事へ拡張。
+import ServiceLearning from './ServiceLearning.astro';
 const { slug } = Astro.props;
 ---
 <div class:list={['service-demo', `service-demo--${slug}`]}>
@@ -16,8 +18,6 @@ const { slug } = Astro.props;
     <div class="demo-topline"><strong>問い合わせ整理ノート</strong><span>生成せず、表示を体験</span></div>
     <div class="ai-demo__body"><div><label for="sample-inquiry">問い合わせサンプルを選ぶ</label><select id="sample-inquiry" name="sampleInquiry" data-inquiry><option value="update">営業時間を変更したい</option><option value="renew">サイトを作り直したい</option><option value="shop">オンラインで商品を売りたい</option></select><blockquote data-inquiry-text>来月から営業時間が10時〜18時になります。ホームページの案内を変更できますか？</blockquote><button class="button button--human" type="button" data-inquiry-organize>整理したサンプルを見る</button></div><div class="ai-demo__output"><h3>人が確認するための下書き</h3><div role="status" aria-live="polite" data-inquiry-output><p>左の問い合わせを選んで、整理した内容を表示できます。</p></div><small>返信の送信・AIへの情報送信は行いません。</small></div></div>
   </div>}
-  {slug === 'security' && <div class="mail-demo">
-    <div class="demo-topline"><strong>受信メールのサンプル</strong><span>0 / 3か所を確認</span></div>
-    <p>件名：本日中にアカウントの確認が必要です</p><button class="mail-demo__point" type="button" data-mail-point="差出人の名前だけで判断しない" data-demo-note="表示名が『管理サポート』でも本人とは限りません。差出人アドレスと普段の連絡方法を確認し、必要なら既知の窓口に問い合わせます。">差出人：管理サポート &lt;notice@account-example.test&gt;</button><p>いつもご利用ありがとうございます。</p><button class="mail-demo__point" type="button" data-mail-point="急がせる依頼は立ち止まる" data-demo-note="『今日中』『利用停止』など、急いで判断させる表現に注意します。業務上の依頼でも、そのメールだけで判断せず別の経路で確かめます。">本日中に手続きしない場合、すべてのサービスが停止します。</button><button class="mail-demo__point" type="button" data-mail-point="リンクから情報を入力する前に確認" data-demo-note="メールのリンクからパスワードを入力せず、普段使っているブックマークや公式アプリを開いて確認します。このサンプルに実際のリンクはありません。">アカウントを確認する（学習用・リンクなし）</button><p class="demo-feedback" role="status" data-demo-feedback>差出人、急がせる文章、手続きボタン。順番は自由です。</p>
-  </div>}
+  {slug === 'security' && <ServiceLearning slug="security" />}
 </div>
+{slug === 'ec' && <ServiceLearning slug="ec" />}

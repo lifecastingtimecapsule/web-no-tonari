@@ -1,0 +1,45 @@
+---
+// 変更履歴: 2026-11-09 ECとセキュリティへ、既存記事と同じ操作・書体のコラムを追加。
+// 役割: 身近な比較と対処を示す。偽URLは文字のみで、認証・送信・コピー・実行処理は持たない。
+import { ecColumns, securityColumns } from '../data/learning-columns';
+import '../styles/website-demo.css';
+import '../styles/service-learning.css';
+interface Props { slug: 'ec' | 'security' }
+const { slug } = Astro.props;
+const columns = slug === 'ec' ? ecColumns : securityColumns;
+---
+<article class="website-demo service-learning" data-website-demo aria-labelledby={slug === 'ec' ? 'ec-learning-title' : 'sample-title'}>
+  {slug === 'ec' ? <header class="learning-intro"><h2 id="ec-learning-title">私が、買いやすいお店を<br />つくるときに考えること。</h2><p>価格、大きさ、届くまでの日数。買う前に知りたいことを、3つの例から考えます。お店づくりにも、普段の買い物にも使える小さなコラムです。</p><p class="learning-note">価格・商品・条件は説明用のサンプルです。実際の販売は行いません。</p></header> : <header class="learning-intro"><p>「知っていたら、一度止まれたかもしれない」。そんな手口を、架空のメールと3つの問いで紹介します。私が大切にしたいのは、見破る自信より、別の方法で確かめる習慣です。</p><p class="learning-note">学習用の見本です。不審なURLへ移動するリンク、入力欄、添付ファイル、実行する文字列はありません。</p><nav class="learning-nav" aria-label="セキュリティ記事の目次"><a href="#learn-security-mail">メールを確かめる</a><a href="#security-other">ほかの手口</a><a href="#security-systems">仕組みで備える</a><a href="#security-help">入力してしまったら</a></nav></header>}
+  {columns.map((column, index) => <section class="design-question" id={`learn-${slug}-${column.id}`} data-design-question aria-labelledby={`learning-title-${column.id}`}>
+    <header class="design-question__heading"><span aria-hidden="true">{index + 1}</span><h3 id={`learning-title-${column.id}`}>{column.title}</h3></header>
+    <p class="design-question__prompt">{column.prompt}</p>
+    {slug === 'security' && column.id === 'mail' && <div class="learning-mail" aria-label="リンクを偽装した架空メールの見本">
+      <p class="learning-mail__subject">件名：お支払い情報の確認について</p>
+      <details><summary>差出人：くらし便 サポート</summary><p>表示名だけで本人とは判断できません。この見本のアドレスは notice@account-review.test。正規の名前やアドレスになりすます手口もあるため、差出人の表示だけで安心しないようにします。</p></details>
+      <p>ご登録のお支払い情報を確認できませんでした。</p>
+      <details><summary>本日中に確認がない場合、ご利用を停止します。</summary><p>不安や急ぐ気持ちを利用して、確認する時間を奪う言い回しです。期限が書かれていても、届いた案内とは別の公式窓口で状況を確かめます。</p></details>
+      <details class="learning-mail__destination"><summary>表示されたURL：<span>https://kurashibin.example/account</span><small>ここを開くと、見本の行き先を確認できます</small></summary><p>設定された行き先：<strong>https://account-review.test/login</strong></p><p>文字に書かれたURLと、設定された行き先が違います。これは説明のための表示で、どちらにも接続しません。実際のメールではPCのポインター表示などで確認できる場合がありますが、見た目だけの判定に頼らず公式アプリから確かめましょう。</p></details>
+      <details><summary>文中に「账户」「验证」のような文字があったら？</summary><p>日本語向けの案内で普段と違う字形や表現が混ざるのは、確認するきっかけになります。ただし誤訳だけで詐欺とは断定できず、日本語が自然でも安全とは限りません。文字から国籍を推測せず、要求された操作と確認先を見ます。</p></details>
+      <p class="learning-note">会社名・アドレスは架空です。各行を開くと理由が読めます。</p>
+    </div>}
+    <div class="design-question__options">
+      {column.examples.map((lines, optionIndex) => <div class="design-option"><div class="design-option__example learning-option"><span class="design-option__letter">{optionIndex === 0 ? 'A' : 'B'}</span><div>{lines.map((line, lineIndex) => <p class:list={{ 'learning-option__lead': lineIndex === 0 }}>{line}</p>)}</div></div><button class="design-option__choose" type="button" data-design-choice={optionIndex === 0 ? 'A' : 'B'} aria-label={`問題${index + 1}：${optionIndex === 0 ? 'A' : 'B'}を選ぶ`} aria-controls={`learning-answer-${column.id}`} aria-pressed="false" disabled>{optionIndex === 0 ? 'A' : 'B'}を選ぶ</button></div>)}
+    </div>
+    <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
+    <details class="design-answer" id={`learning-answer-${column.id}`}><summary>{slug === 'security' ? '理由と対策を読む' : '私の考えを読む'}</summary><div class="design-answer__body"><p class="design-answer__choice">この例では、{column.choice}を選びます。</p><h4>{column.heading}</h4><p>{column.body}</p><div class="design-answer__practice"><h5>{slug === 'security' ? '日常で気をつけること' : '私が気をつけること'}</h5><p>{column.tip}</p></div>{column.source && <p class="learning-source">参考：<a href={column.source[1]}>{column.source[0]}</a></p>}</div></details>
+  </section>)}
+  {slug === 'security' && <>
+    <section class="learning-reading" id="security-other" aria-labelledby="security-other-title"><h3 id="security-other-title">入口が変わっても、急がせる手口に注意。</h3><p>メール以外にも、SMS、QRコード、SNSのメッセージなどが入口になります。気になる見出しを開くと、対策まで読めます。</p>
+      <details><summary>QRコードから、偽のログイン画面へ</summary><p>QRコードの模様から行き先は読めません。「確認してください」と届いても、読み取った先へすぐに情報を入れず、公式アプリで同じ案内があるか確かめます。</p><p class="learning-source"><a href="https://www.ipa.go.jp/publish/wp-security/j5u9nn0000004wk0-att/ISWP2025_ALL.pdf">IPA：情報セキュリティ白書2025（PDF）</a></p></details>
+      <details><summary>認証コードまで入力させる</summary><p>偽サイトにパスワードと一時的な認証コードを入力すると、すぐに悪用されることがあります。多要素認証も万能ではありません。コードを他人に伝えず、覚えのない承認通知は許可しないこと。対応サービスでは、偽サイトへのログインに強いパスキーも検討します。</p><p class="learning-source"><a href="https://www.antiphishing.jp/report/antiphishing_guideline_2025.pdf">フィッシング対策協議会：2025年度ガイドライン（PDF）</a></p></details>
+      <details><summary>社長・取引先を名乗り、送金先を変えさせる</summary><p>「急ぎ」「内密に」「口座を変更した」と頼むなりすましです。知っている相手のメールが乗っ取られる場合もあります。返信で確認を済ませず、以前から把握している電話番号など別の連絡手段で確認し、送金は複数人で確かめます。</p><p class="learning-source"><a href="https://www.ipa.go.jp/security/support/abuse_email.html">IPA：メールを悪用した攻撃の手口と対策</a></p></details>
+      <details><summary>請求書や共有資料に見せかける</summary><p>添付ファイルを開かせたり、共有資料を見る名目で偽のログインへ誘導したりします。見覚えのある件名でも、予定していないファイルは送信者に別の経路で確認。「表示するために機能を有効化」「アプリを導入」と求められても、その場で進めないようにします。</p><p class="learning-source"><a href="https://www.ipa.go.jp/security/support/abuse_email.html">IPA：メールを悪用した攻撃の手口と対策</a></p></details>
+    </section>
+    <section class="learning-reading" id="security-systems" aria-labelledby="security-systems-title"><h3 id="security-systems-title">注意する人を、仕組みでも支える。</h3><p>人の信頼や焦りを利用する方法を「ソーシャルエンジニアリング」と呼びます。一方で、更新されていないソフトの欠陥や、公開設定のミスが入口になることも。私は、人の注意と日々の管理を組み合わせて考えます。</p><dl class="learning-system-list"><div><dt>更新を止めない</dt><dd>OS・ブラウザ・CMS・追加機能を把握し、公式の更新を適用。サポートが終わったものは置き換えを検討します。</dd></div><div><dt>ログインと権限を整える</dt><dd>パスワードを使い回さず、多要素認証やパスキーを利用。管理者権限は必要な人だけにし、退職・異動時に見直します。</dd></div><div><dt>公開範囲を確かめる</dt><dd>顧客資料やバックアップを誰でも見られる場所へ置かない。共有リンク・外部サービスの権限も確認します。</dd></div><div><dt>戻せる備えと連絡先</dt><dd>バックアップは本体と分けて保護し、復元できるか確認。不審なログインや改ざんに気づいたときの連絡先を決めます。バックアップだけで情報漏えいを防げるわけではありません。</dd></div></dl><p class="learning-source"><a href="https://www.ipa.go.jp/security/guide/sme/about.html">IPA：中小企業の情報セキュリティ対策ガイドライン</a></p></section>
+    <section class="learning-reading learning-help" id="security-help" aria-labelledby="security-help-title"><h3 id="security-help-title">入力・操作してしまったら。</h3><p>気づいた時点からの対応が大切です。一人で抱えず、被害に合った窓口へ相談してください。</p><ul><li><strong>パスワードを入力した：</strong>信頼できる端末から公式サービスを開いて変更し、使い回していた他サービスも変更。ログイン中の端末・連携アプリ・復旧先も確認し、不審なものを解除します。</li><li><strong>カード情報・送金に関わる：</strong>カード会社・金融機関の公式窓口へ速やかに連絡します。不正利用や被害は警察にも相談してください。</li><li><strong>アプリ導入・文字列の実行・遠隔操作をした：</strong>ネットワークを切り、社内の担当者や信頼できる専門窓口へ。疑わしい端末ではパスワード変更をしないでください。</li></ul><p>可能な範囲でメール・時刻・画面などを残します。記録のためにリンクを開き直したり、再実行したりする必要はありません。リンクを開いただけでも、ダウンロード・入力・操作がなかったかを確認します。</p><p class="learning-source"><a href="https://www.npa.go.jp/bureau/cyber/countermeasures/phishing.html">警察庁：被害に遭った場合の対処</a> ／ <a href="https://www.ipa.go.jp/security/anshin/">IPA：情報セキュリティ安心相談窓口</a></p></section>
+    <p class="learning-source">情報確認日：2026年11月9日。2025年のガイドと、2026年のClickFix注意喚起などを参照しています。網羅的な一覧や、安全性を保証する診断ではありません。<a href="https://www.antiphishing.jp/news/">新しいフィッシングの注意喚起</a>もご確認ください。</p>
+    <p class="learning-source">関連資料：<a href="https://www.ipa.go.jp/security/anshin/measures/fakealert.html">IPA：偽警告・サポート詐欺</a> ／ <a href="https://www.caa.go.jp/policies/policy/consumer_policy/caution/caution_033">消費者庁：偽サイトへの注意</a></p>
+  </>}
+  {slug === 'ec' && <section class="learning-reading"><h3>お店は、公開してからも続いていく。</h3><p>制作費に加え、利用するECサービスの月額料金や決済手数料、配送費も確認します。私は、日々の商品登録・在庫確認・発送を誰が担当するかまで聞いてから、必要な仕組みを考えます。</p><p class="learning-note"><time datetime="2026-11-09">2026年11月9日 更新</time></p></section>}
+</article>
+<script>import '../scripts/website-demo';</script>

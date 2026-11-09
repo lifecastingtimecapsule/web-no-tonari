@@ -14,19 +14,7 @@ function revealCurrentServiceTab(): void {
 revealCurrentServiceTab();
 window.addEventListener('resize', revealCurrentServiceTab);
 
-const demoFeedback = document.querySelector<HTMLElement>('[data-demo-feedback]');
-const checkedMailPoints = new Set<Element>();
-document.querySelectorAll<HTMLButtonElement>('[data-demo-note]').forEach(button => {
-  button.addEventListener('click', () => {
-    if (demoFeedback) demoFeedback.textContent = button.dataset.demoNote ?? '';
-    if (button.hasAttribute('data-mail-point')) {
-      checkedMailPoints.add(button);
-      button.dataset.checked = 'true';
-      const counter = document.querySelector('.demo-topline span');
-      if (counter) counter.textContent = `${checkedMailPoints.size} / 3か所を確認`;
-    }
-  });
-});
+// 変更履歴: 2026-11-09 メールの解説を標準detailsへ変更したため、旧カウンター操作を削除。
 
 const productColor = document.querySelector<HTMLSelectElement>('[data-product-color]');
 const productQuantity = document.querySelector<HTMLSelectElement>('[data-product-quantity]');
