@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-09 ウェブ制作記事の配色追加に合わせて紹介画像の代替テキストを更新。
 // 変更履歴: 2026-11-04 承認済みのブランドストーリーと全ページ構成を初回実装。
 // 変更履歴: 2026-11-09 ウェブ制作のプレビューをクイズ記事へ揃え、実績や架空店舗と混同しない表記へ変更。
 // 変更履歴: 2026-11-09 日常で使えるデザイン記事への調整に合わせ、画像の代替文を更新。
@@ -130,7 +131,7 @@ const faqs = [
             {servicePages.map(service => (
               <article class="service-row" aria-labelledby={`service-${service.slug}`}>
                 <a class="service-row__preview" href={`${serviceBase}/services/${service.slug}/#sample`} aria-label={service.slug === 'websites' ? 'クイズで、デザインの考え方を読む' : `${service.name}の体験サンプルを触る`}>
-                  <img src={`${serviceBase}/images/services/${service.slug}.${service.slug === 'websites' ? 'webp' : 'png'}`} alt={service.slug === 'websites' ? '余白・段落・情報の整理で読みやすさを比べる記事' : `${service.name}の体験サンプル画面`} width={service.slug === 'websites' ? 1000 : 900} height={service.slug === 'websites' ? 644 : 680} loading="lazy" decoding="async" />
+                  <img src={`${serviceBase}/images/services/${service.slug}.${service.slug === 'websites' ? 'webp' : 'png'}`} alt={service.slug === 'websites' ? '余白・段落・情報の整理・配色を比べる記事' : `${service.name}の体験サンプル画面`} width={service.slug === 'websites' ? 1000 : 900} height={service.slug === 'websites' ? 644 : 680} loading="lazy" decoding="async" />
                   <span>{service.slug === 'websites' ? 'クイズで読む' : '体験サンプル'}</span>
                 </a>
                 <h3 id={`service-${service.slug}`}><a href={`${serviceBase}/services/${service.slug}/`}>{service.name}</a></h3>

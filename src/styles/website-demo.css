@@ -78,3 +78,14 @@
   .design-essay__contents { flex-direction: column; gap: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .design-option__choose { transition: none; } }
+
+/* 変更履歴: 2026-11-09 同じ案内を色だけ変えて比較する第四問。文字寸法・面積・配置はA/B共通。 */
+.design-option__example--color { background: #ffffff; border: 1px solid var(--mist); }
+.everyday-color { width: 100%; color: #202023; }
+.everyday-color .everyday-color__title { font-size: 26px; font-weight: 700; line-height: 1.5; }
+.everyday-color .everyday-color__description { margin-top: 20px; font-size: 15px; }
+.everyday-color .everyday-color__details { margin-top: 20px; font-size: 14px; }
+.everyday-color__action { display: block; margin-top: 28px; padding: 14px 12px; background: #bb1829; color: #ffffff; text-align: center; font-size: 15px; font-weight: 700; border-radius: 6px; }
+.design-option__example--a .everyday-color__title { color: #185c85; }
+.design-option__example--a .everyday-color__description { color: #6c377f; }
+.design-option__example--a .everyday-color__details { color: #14634c; }

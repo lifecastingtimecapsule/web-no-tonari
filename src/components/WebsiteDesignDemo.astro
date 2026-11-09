@@ -1,8 +1,9 @@
 ---
-/* 変更履歴: 2026-11-09 余白・段落・案内の整理を題材に、日常で使える読みやすさのクイズへ調整。
+/* 変更履歴: 2026-11-09 色数・面積・印象を考える比較を第四問として追加。
+ * 変更履歴: 2026-11-09 余白・段落・案内の整理を題材に、日常で使える読みやすさのクイズへ調整。
  * 変更履歴: 2026-11-09 初歩的な比較を、制約・実装・検証を扱う3つの設計ケースへ深化。
  * 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
- * 役割: 独自の比較図と一人称の解説で、余白・段落・必要な情報の見つけやすさを伝える。 */
+ * 役割: 独自の比較図と弊社の解説で、余白・段落・情報整理・配色の判断を伝える。 */
 import '../styles/website-demo.css';
 const questions = [
   { id: 'hierarchy', title: '余白だけで、情報のまとまりは変わる？',
@@ -26,6 +27,13 @@ const questions = [
     nuance: '項目名と内容を別々に離すのではなく、同じ行や近い位置に置くのがポイントです。項目名の並ぶ位置を揃えると、目印を縦に追いやすくなります。',
     practice: 'イベントの案内、集合場所の連絡、商品の説明にも使えます。「日時・場所・持ち物」のように、相手があとから確認しそうなことに名前をつけて並べてみてください。',
     verify: '弊社では、必要な情報が文章に埋もれていないか、項目名だけを見て確かめます。スマホで内容が2行になっても、どの項目の説明か分かる並びにします。' },
+  { id: 'color', title: '色を増やせば、伝わりやすくなる？',
+    prompt: '同じ相談会の案内です。文字・大きさ・配置は同じで、配色だけを変えています。「申し込み」を優先して目立たせたいとき、どちらを選びますか？',
+    choice: 'B', heading: '弊社では、色を増やす前に、色の役割を決めます。',
+    body: 'Aは見出し・説明・開催情報にそれぞれ違う色を使っています。Bは文章の色を揃え、申し込みの部分に赤を残しました。この目的なら、弊社ではBを選びます。強調する色をあちこちで使うより、見てほしい場所に絞る方針です。',
+    nuance: 'まずは「背景の土台」「読むための文字」「目立たせる差し色」の3つの役割から考えます。必ず3色以内という決まりではありません。色の数が同じでも、鮮やかな色で画面を広く埋めるか、小さく添えるかでバランスは変わります。',
+    practice: '案内資料では、見出しごとに別の色を増やす前に、本文を一色に揃えてみてください。締切や次の行動など、本当に強調したい箇所だけに差し色を使うと、色の役割が整理できます。',
+    verify: '弊社では、落ち着き・親しみやすさなど、目指す印象を先に共有します。色名だけで印象を決めず、明るさ・鮮やかさ・使う面積を、写真や書体と合わせて確認します。文字と背景の見分けやすさを確保し、必須や注意は色だけでなく言葉でも伝えます。' },
 ];
 const messageParagraphs = [
   '打ち合わせ資料をお送りします。前回のご意見を反映しました。',
@@ -36,14 +44,14 @@ const messageParagraphs = [
 <article class="website-demo" data-website-demo aria-labelledby="sample-title">
   <div class="reading-experiment" aria-label="日常にも使えるデザインの考え方">
     <p class="reading-experiment__first">伝える内容は同じ。<br />読みやすさは、変えられる。</p>
-    <p class="reading-experiment__second">余白と並べ方に、読む人への気づかいを。</p>
-    <p class="reading-experiment__last">メール、お知らせ、ちょっとした資料にも。<br />3つの比較から、今日から使える工夫をご紹介します。</p>
+    <p class="reading-experiment__second">余白・並べ方・色に、読む人への気づかいを。</p>
+    <p class="reading-experiment__last">メール、お知らせ、ちょっとした資料にも。<br />4つの比較から、今日から使える工夫をご紹介します。</p>
   </div>
   <div class="design-essay__intro">
-    <p>伝えたいことは書いてあるのに、なぜか読みにくい。そんなとき、弊社では言葉を増やす前に、余白や文章のまとまりを見直します。</p>
-    <p>ここでは、同じ内容を違う並べ方で比べる3つのクイズを用意しました。選んだあとに、読みやすさが変わる理由と、普段の連絡や資料にも使えるコツをお話しします。</p>
+    <p>伝えたいことは書いてあるのに、なぜか読みにくい。そんなとき、弊社では言葉を増やす前に、余白や文章のまとまり、色の使い方を見直します。</p>
+    <p>ここでは、同じ内容を、並べ方や配色を変えて比べる4つのクイズを用意しました。選んだあとに、読みやすさが変わる理由と、普段の連絡や資料にも使えるコツをお話しします。</p>
     <p class="design-essay__note">例文の日時や会場は説明用のものです。実際の開催案内ではありません。回答の保存・送信は行いません。</p>
-    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 余白でまとめる</a><a href="#quiz-spacing">2. 段落で区切る</a><a href="#quiz-action">3. 情報を見つけやすくする</a></nav>
+    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 余白でまとめる</a><a href="#quiz-spacing">2. 段落で区切る</a><a href="#quiz-action">3. 情報を見つけやすくする</a><a href="#quiz-color">4. 色の役割を決める</a></nav>
   </div>
   {questions.map((question, questionIndex) => <section class="design-question" id={`quiz-${question.id}`} data-design-question aria-labelledby={`question-${question.id}`}>
     <header class="design-question__heading"><span aria-hidden="true">{questionIndex + 1}</span><h3 id={`question-${question.id}`}>{question.title}</h3></header>
@@ -55,6 +63,12 @@ const messageParagraphs = [
           {question.id === 'hierarchy' && <div class="everyday-spacing"><p class="everyday-spacing__label">受付時間</p><p>13:30〜14:00</p><p class="everyday-spacing__label">会場</p><p>2階 ミーティングルーム</p></div>}
           {question.id === 'spacing' && <div class="everyday-message">{option === 'A' ? messageParagraphs.map(paragraph => <p>{paragraph}</p>) : <p>{messageParagraphs.join('')}</p>}</div>}
           {question.id === 'action' && <div class="everyday-invitation">{option === 'A' ? <p>日時は12月8日 14:00〜15:00、会場は2階 ミーティングルームです。返信締切は12月5日です。</p> : <dl><div><dt>日時</dt><dd>12月8日 14:00〜15:00</dd></div><div><dt>会場</dt><dd>2階 ミーティングルーム</dd></div><div><dt>返信締切</dt><dd>12月5日</dd></div></dl>}</div>}
+          {question.id === 'color' && <div class="everyday-color" aria-label={`${option}の配色例。申し込み表示は操作できない見本です。`}>
+            <p class="everyday-color__title">小さな事業の<br />ウェブ相談会</p>
+            <p class="everyday-color__description">サイトの更新や集客の悩みを、<br />一緒に整理します。</p>
+            <p class="everyday-color__details">オンライン開催<br />30分・予約制</p>
+            <span class="everyday-color__action">相談会に申し込む</span>
+          </div>}
         </div>
         <button type="button" class="design-option__choose" data-design-choice={option} aria-label={`問題${questionIndex + 1}：${option}を選ぶ`} aria-pressed="false" aria-controls={`answer-${question.id}`} disabled>{option}を選ぶ</button>
       </div>)}
@@ -62,17 +76,18 @@ const messageParagraphs = [
     <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
     <details class="design-answer" id={`answer-${question.id}`}>
       <summary>設計の考え方を読む</summary>
-      <div class="design-answer__body"><p class="design-answer__choice">この例では、弊社では{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>日常で使うなら</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>弊社が制作で確認すること</h5><p>{question.verify}</p></div></div>
+      <div class="design-answer__body"><p class="design-answer__choice">この例では、弊社は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>日常で使うなら</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>弊社が制作で確認すること</h5><p>{question.verify}</p></div></div>
     </details>
   </section>)}
   <section class="design-essay__closing" aria-labelledby="design-closing-title">
     <h3 id="design-closing-title">読む人が、<br />探し回らずに済むように。</h3>
-    <p>関係するものは近づける。話題が変わったら区切る。見返す情報には目印をつける。こうした工夫は、ウェブサイトでも一通のメールでも役に立ちます。</p>
-    <p>弊社では、読んだ人が「結局いつ？」「どこを見ればいい？」と迷わずに済むよう、一つひとつの間隔や並び方を整えたいと考えています。</p>
+    <p>関係するものは近づける。話題が変わったら区切る。見返す情報には目印をつける。色には役割を持たせる。こうした工夫は、ウェブサイトでも一通のメールでも役に立ちます。</p>
+    <p>弊社では、読んだ人が「結局いつ？」「どこを見ればいい？」と迷わずに済むよう、一つひとつの間隔や並び方、色の使い方を整えたいと考えています。</p>
     <details class="design-essay__checks"><summary>送る前・公開する前の、小さな見直し</summary><ul>
       <li><strong>余白：</strong>見出しと説明は近くにありますか。別の話題との間には区切りがありますか。</li>
       <li><strong>段落：</strong>一つの段落に、報告・確認・お願いを詰め込んでいませんか。</li>
       <li><strong>目印：</strong>日時や場所など、あとで見返す情報はすぐに見つかりますか。</li>
+      <li><strong>色：</strong>強調する色を使いすぎていませんか。文字は読みやすく、色がなくても意味が伝わりますか。</li>
       <li><strong>スマホ：</strong>手元の画面でも一度読んで、折り返した文章や項目のつながりを確認してみてください。</li>
     </ul></details>
   </section>
@@ -81,6 +96,9 @@ const messageParagraphs = [
     <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html">Adobe：視線誘導を考えるデザインクイズ</a></li>
     <li><a href="https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html">Learn UI Design：作り手の視点で解説するUIデザイン</a></li>
     <li><a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁：タイポグラフィ</a></li>
+    <li><a href="https://design.digital.go.jp/dads/foundations/color/">デジタル庁：色の役割と配色</a></li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">W3C：色だけで情報を伝えない（英語）</a></li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3C：文字と背景のコントラスト（英語）</a></li>
   </ul><p>2026年11月9日 更新</p></details>
 </article>
 <script>import '../scripts/website-demo';</script>
