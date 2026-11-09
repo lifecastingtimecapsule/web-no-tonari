@@ -2,6 +2,8 @@
 
 ## 2026-11-09
 
+- `WebsiteDesignDemo.astro` / `website-demo.css` / `website-demo.ts`: ユーザーの指定により花屋を撤去。文字の優先順位を体験する導入、3問の比較、作り手の一人称による判断理由、実制作の確認点へ変更。選択なし・JavaScriptなしでも解説が読める構成とし、採点ゲームは採用しない。
+- `services.ts` / サービスページ / トップのプレビュー: 記事と入口の説明を揃えるため更新。`DESIGN.md` / `PRODUCT.md` / 設計記録に最新方針を記録。
 - 作業前にorigin/mainの最新11e5898へfast-forwardし、安全チェック・Cloudflare配信・新フッターを保持した。
 - `index.astro` / `global.css` / `site.ts`: 縦のサービス一覧を、ユーザーの既定指示であるPC3件・タブレット2件・スマホ1件の手動横送りへ復元。左右・キーボード・標準スクロール・縮小モーションに対応し、現在の料金短縮表記を維持。
 - `WebsiteDesignDemo.astro` / `website-demo.css` / `website-demo.ts` / `ServiceDemo.astro`: 架空の花屋を写真と情報の優先順位が分かる見本へ変更。番号1〜4、近接解説、余白可視化、文字比較、基本8項目と出典を追加。実測を装わず、予約や送信はしない。

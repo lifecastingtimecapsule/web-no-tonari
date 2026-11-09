@@ -1,88 +1,63 @@
 ---
-// 変更履歴: 2026-11-09 視線誘導・余白・文字組みを実際のページ上で確かめる教材として花屋サンプルを再構成。
-// 役割: 架空の店舗ページと、その配置理由・現在の一次資料に基づく設計の基本を一緒に示す。
-// 変更履歴: 2026-11-09 スマホでは選択箇所の直下に解説と次のポイントへの操作を表示し、画面外の説明との往復を減らす。
+/* 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
+ * 役割: 独自の比較図と一人称の解説で、優先順位・近接・行動の設計を体験する。 */
 import '../styles/website-demo.css';
-const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-const principles = [
-  ['情報の優先順位', '大きな見出しで「何のお店か」を伝え、写真でイメージを補い、条件を読んでから行動へ。全員の目が同じ順に動くわけではありません。'],
-  ['見出しと読み飛ばし', '見出しだけでも内容が分かる言葉を使います。F型・Z型を当てはめることより、必要な情報を拾いやすいまとまりをつくります。'],
-  ['文字サイズと行間', 'この見本の通常表示は本文16px・行間1.75。見出しは画面幅に応じて32〜48pxです。本文と見出しの差をつけ、長文は日本語で1行40字程度までを目安にします。'],
-  ['余白と近接', '見出し・説明・条件をグループ化し、関係する情報は近く、別のまとまりは離します。見本では8・16・24・48pxを基準にし、画面が狭いときは調整します。'],
-  ['色とコントラスト', '写真に文字を重ねず、白地に濃い文字を置きます。通常の文字は4.5:1以上を基準にし、重要度を色だけで区別しないようにします。'],
-  ['行動ボタン', '「詳しく」だけでなく、次にすることが分かる名前を使います。主な行動を一つに絞り、ここでは高さ48px以上のボタンにしています。'],
-  ['スマホと拡大表示', '狭い画面では1列に並べ替えます。文字は画像にせず、拡大や行間・文字間隔の変更をしても、読める・押せる状態を保ちます。'],
-  ['実際の利用者で確かめる', '配置しただけで成果は決まりません。公開後は、目的の情報が見つかるか、ボタンの意味が伝わるかを実際の利用者と確認します。'],
+const questions = [
+  { id: 'hierarchy', title: '最初に、何を伝えますか？', prompt: '「相談は無料」と、ひと目で伝えたい。あなたなら、どちらの文字の組み方にしますか？', choice: 'B', heading: '私なら、最初に届けたい言葉を大きくします。', body: '今回は「まずは気軽に相談できる」と伝えたいので、Bを選びます。すべての文字を同じ強さにすると、読む人に優先順位を決めてもらうことになります。だから私は、最初に知ってほしいことを一つ決め、見出しと補足に差をつけます。', nuance: 'もし「予約が必要」という条件が最優先なら、そこを強くします。大きい文字の場所は、見た目の好みだけでは決めません。', practice: '制作では、見出しだけを拾い読みしても内容が伝わるか、スマホの幅でも意味の切れ目が自然かを確かめます。' },
+  { id: 'spacing', title: '余白にも、意味はある？', prompt: '受付時間と対応方法。それぞれの説明がどこにつながるか、分かりやすいのはどちらでしょう。文字と並び順は同じです。', choice: 'A', heading: '私は、関係のある情報を近づけます。', body: 'この場合はAです。「受付時間」とその説明、「対応方法」とその説明を近くに置き、別のまとまりの間を空けています。余白は、ただ画面をすっきりさせるためのものではありません。「ここまでが一つの話」と伝える役目があります。', nuance: '余白は広ければよいわけでもありません。離しすぎると関係が見えなくなるので、画面の広さや文章量に合わせて調整します。', practice: '制作では、枠線を足す前に情報をまとめ直します。スマホで縦に並んでも、見出しと説明が離れすぎないかを確認します。' },
+  { id: 'action', title: '押した後を、想像できますか？', prompt: '次に開くのは、制作の進め方を説明するページ。初めて訪れた人が行き先を想像しやすい言葉はどちらでしょう。', choice: 'B', heading: '私は、行き先が分かる言葉を選びます。', body: '今回はBを選びます。「詳しく見る」でも操作はできますが、何を詳しく知れるかは周りの文章に頼ります。「制作の流れを見る」なら、押す前から行き先を想像できます。ボタンを目立たせる前に、その一歩を分かりやすくしたいと考えています。', nuance: '周囲の説明で行き先が十分に伝わるなら、短い言葉が合うこともあります。大事なのは、文言と実際に開く内容が一致することです。', practice: '制作では、リンク名だけでも意味が伝わるか、指で押せる大きさか、キーボードでも迷わず操作できるかを確かめます。' },
 ];
 ---
-<div class="website-demo" data-website-demo>
-  <div class="website-demo__tools" aria-label="デザインの体験操作">
-    <p>まずは、ひと目で何が伝わるか眺めてみてください。</p>
-    <div>
-      <button type="button" data-guide-toggle aria-pressed="false" aria-controls="design-guide-panel" disabled>解説を見る</button>
-      <button type="button" data-spacing-toggle aria-pressed="false" disabled>余白を見る</button>
-      <button type="button" data-type-toggle aria-pressed="false" disabled>文字を大きくする</button>
-    </div>
+<article class="website-demo" data-website-demo aria-labelledby="sample-title">
+  <div class="reading-experiment" aria-label="文字の強さで読む順序をつくる見本">
+    <p class="reading-experiment__first">まず、ここに<br />目がいきませんでしたか。</p>
+    <p class="reading-experiment__second">次に、この一文。</p>
+    <p class="reading-experiment__last">そして、この小さな説明へ。<br />文字の大きさと余白で、読む順序のきっかけをつくっています。</p>
   </div>
-
-  <div class="flower-site" aria-label="架空の花屋のウェブサイト見本">
-    <div class="flower-site__brand"><strong>花と、暮らし。</strong><span>架空の花屋のサイト見本</span></div>
-    <div class="flower-site__hero">
-      <div class="flower-site__headline" data-guide-zone="1">
-        <button class="design-marker" type="button" data-guide-step="1" aria-label="1 見出しの解説" aria-pressed="false" aria-controls="design-guide-panel">1</button>
-        <h3>いつもの部屋に、<br />ひと束の季節を。</h3>
-        <p>花のある日を、もっと気軽に。<br />季節の花を束ねて、お待ちしています。</p>
-        <aside class="design-zone-note" aria-label="見出しの解説"><p><strong>まず、ここに目がいきませんでしたか？</strong>見出しを大きくして、何のお店かを先に伝えます。</p><button type="button" data-guide-go="2">次は写真へ</button></aside>
-      </div>
-      <figure class="flower-site__photo" data-guide-zone="2">
-        <button class="design-marker" type="button" data-guide-step="2" aria-label="2 写真の解説" aria-pressed="false" aria-controls="design-guide-panel">2</button>
-        <img src={`${home}images/demos/florist-bouquet.webp`} alt="赤やピンクの花と緑の葉を束ねた、色鮮やかな季節の花束" width="1200" height="900" loading="lazy" decoding="async" />
-        <div class="design-zone-note" role="note" aria-label="写真の解説"><p><strong>写真は、言葉を具体的にするもの。</strong>花の色や質感を伝え、文字を重ねず読みやすさを保ちます。</p><button type="button" data-guide-go="3">次は価格と条件へ</button></div>
-        <figcaption>季節の花束のイメージ。販売商品ではありません。</figcaption>
-      </figure>
-      <div class="flower-site__details" data-guide-zone="3">
-        <button class="design-marker" type="button" data-guide-step="3" aria-label="3 価格と受け取り条件の解説" aria-pressed="false" aria-controls="design-guide-panel">3</button>
-        <p class="flower-site__price">季節の花束 <strong>¥3,300</strong><span>税込・サンプル価格</span></p>
-        <p>店頭受け取り・3日前までのご予約。<br />花の種類や色合いは、季節に合わせてお選びします。</p>
-        <aside class="design-zone-note" aria-label="価格と条件の解説"><p><strong>関係する情報は、近くに。</strong>価格・受け取り・予約期限をまとめると、判断のために探し回らずに済みます。</p><button type="button" data-guide-go="4">次は予約ボタンへ</button></aside>
-      </div>
-      <div class="flower-site__action" data-guide-zone="4">
-        <button class="design-marker" type="button" data-guide-step="4" aria-label="4 行動ボタンの解説" aria-pressed="false" aria-controls="design-guide-panel">4</button>
-        <button type="button" class="flower-site__reserve" data-flower-reserve>花束の受け取りを予約する</button>
-        <p>操作見本です。予約・購入は行われません。</p>
-        <aside class="design-zone-note" aria-label="行動ボタンの解説"><p><strong>何が起こるか、ボタンの言葉で伝える。</strong>条件を読んでから、次の行動を選べる位置にしています。</p><button type="button" data-guide-go="1">最初の見出しへ</button></aside>
-      </div>
-    </div>
+  <div class="design-essay__intro">
+    <p>同じページでも、文字の大きさや情報の置き方で、受け取る印象は変わります。私はデザインするとき、「何を最初に知ってほしいか」から考えます。</p>
+    <p>ここでは、その判断を3つの小さなクイズにしました。自分ならどうするかを選んでから、私の考えを読んでみてください。</p>
+    <p class="design-essay__note">見る順番は人や目的によって変わります。視線を計測したり、回答を送信したりすることはありません。比較図の案内内容は説明用の例です。</p>
+    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 文字の優先順位</a><a href="#quiz-spacing">2. 余白の役割</a><a href="#quiz-action">3. ボタンの言葉</a></nav>
   </div>
-
-  <section class="design-guide" id="design-guide-panel" aria-labelledby="design-guide-title" hidden>
-    <div class="design-guide__copy" role="status" aria-live="polite" aria-atomic="true">
-      <p data-guide-progress>1 / 4</p>
-      <h4 id="design-guide-title" data-guide-title>まず、ここに目がいきませんでしたか？</h4>
-      <p data-guide-body>大きな見出しで、何のお店か・どんな気分になれるかを先に伝えています。目を引く強さに差をつけるのが、情報の優先順位です。</p>
-      <p class="design-guide__value" data-guide-value>通常表示：見出し32〜48px ／ 本文16px</p>
+  {questions.map((question, questionIndex) => <section class="design-question" id={`quiz-${question.id}`} data-design-question aria-labelledby={`question-${question.id}`}>
+    <header class="design-question__heading"><span aria-hidden="true">{questionIndex + 1}</span><h3 id={`question-${question.id}`}>{question.title}</h3></header>
+    <p class="design-question__prompt">{question.prompt}</p>
+    <div class="design-question__options">
+      {['A', 'B'].map(option => <div class="design-option">
+        <div class={`design-option__example design-option__example--${question.id} design-option__example--${option.toLowerCase()}`}>
+          <span class="design-option__letter">{option}</span>
+          {question.id === 'hierarchy' && <div class="type-comparison"><p class="type-comparison__main">相談は無料です。</p><p class="type-comparison__support">気になることから、お聞かせください。</p><p class="type-comparison__condition">オンライン対応・事前予約制</p></div>}
+          {question.id === 'spacing' && <div class="space-comparison"><p class="space-comparison__label">受付時間</p><p>平日 10:00〜17:00</p><p class="space-comparison__label">対応方法</p><p>オンラインでご相談</p></div>}
+          {question.id === 'action' && <div class="action-comparison"><p>ご相談から公開まで、<br />制作の進め方をご案内します。</p><span class="action-comparison__button">{option === 'A' ? '詳しく見る' : '制作の流れを見る'}</span><small>ボタンの文言を比べる見本</small></div>}
+        </div>
+        <button type="button" class="design-option__choose" data-design-choice={option} aria-label={`問題${questionIndex + 1}：${option}を選ぶ`} aria-pressed="false" aria-controls={`answer-${question.id}`} disabled>{option}を選ぶ</button>
+      </div>)}
     </div>
-    <div class="design-guide__navigation"><button type="button" data-guide-prev disabled>前へ</button><button type="button" data-guide-next>次のポイントへ</button></div>
+    <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
+    <details class="design-answer" id={`answer-${question.id}`}>
+      <summary>私の考えを読む</summary>
+      <div class="design-answer__body"><p class="design-answer__choice">この目的なら、私は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>実際につくるときは</h5><p>{question.practice}</p></div></div>
+    </details>
+  </section>)}
+  <section class="design-essay__closing" aria-labelledby="design-closing-title">
+    <h3 id="design-closing-title">見た目の一つひとつに、<br />理由を持たせたい。</h3>
+    <p>文字を大きくする。余白を空ける。ボタンの言葉を変える。小さな選択でも、「誰に、何を伝えたいか」に立ち戻ると、選ぶ理由が見えてきます。</p>
+    <p>私がつくりたいのは、眺めて終わるサイトではなく、必要な情報が見つかり、納得して次の一歩を選べるサイトです。</p>
+    <details class="design-essay__checks"><summary>読みやすさのために、ほかにも確かめること</summary><ul>
+      <li><strong>文字と行間：</strong>この記事の本文は16px以上、行間は1.85を採用。長い文章の幅を抑え、端末や文字の拡大にも対応します。数値はこのページの設計値です。</li>
+      <li><strong>文字と背景：</strong>通常の文字は4.5:1以上のコントラストを基準にします。選択中の状態は色だけでなく、文言でも伝えます。</li>
+      <li><strong>操作と読み順：</strong>キーボードで選べること、拡大しても情報が欠けないこと、見出しの順序が分かることを確認します。</li>
+      <li><strong>公開してから：</strong>設計の意図どおりに伝わるとは限りません。実際の利用者の反応を確かめ、必要に応じて見直すことを大切にします。</li>
+    </ul></details>
   </section>
-  <p class="website-demo__feedback" role="status" aria-live="polite" data-website-feedback>番号は設計した情報の順番です。視線の計測・記録は行いません。</p>
-
-  <details class="design-basics">
-    <summary>このサンプルに入れた、デザインの基本を読む</summary>
-    <dl>{principles.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
-    <p>数値は、この見本で選んだ設計値です。すべての業種や利用者に共通する正解ではありません。WCAGは単一の本文サイズや余白を指定する規格ではなく、読みやすさや操作性を損なわないための基準です。</p>
-  </details>
-  <div class="design-references">
-    <h4>参考にした公開ガイド</h4>
-    <p><time datetime="2026-11-09">2026年11月9日 確認</time>。新しい指針と、基礎となる視線研究を区別して参照しています。</p>
-    <ul>
-      <li><a href="https://design.digital.go.jp/dads/foundations/typography/" target="_blank" rel="noopener noreferrer">デジタル庁：文字サイズ・行間（2026年8月更新／別タブ）</a></li>
-      <li><a href="https://design.digital.go.jp/dads/foundations/typography/accessibility/" target="_blank" rel="noopener noreferrer">デジタル庁：文字の拡大・行の長さ（別タブ）</a></li>
-      <li><a href="https://www.nngroup.com/articles/text-scanning-patterns-eyetracking/" target="_blank" rel="noopener noreferrer">NN/g：読み飛ばし方の視線研究（2019年／別タブ）</a></li>
-      <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener noreferrer">W3C：文字のコントラスト（別タブ）</a></li>
-      <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/text-spacing.html" target="_blank" rel="noopener noreferrer">W3C：文字間隔を変えても情報を失わないこと（別タブ）</a></li>
-      <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener noreferrer">W3C：操作対象の最小サイズと例外（別タブ）</a></li>
-    </ul>
-    <p class="design-references__photo">写真：<a href="https://unsplash.com/photos/a-vibrant-bouquet-of-assorted-colorful-flowers-QH5-_8Dcbq8" target="_blank" rel="noopener noreferrer">Evelien Van Den Brink / Unsplash（別タブ）</a>。架空の店舗・商品を説明するためのイメージです。</p>
-  </div>
-</div>
+  <details class="design-references"><summary>参考にした記事と公開ガイド</summary><p>クイズと解説を組み合わせる構成を参考にしています。比較図・問題・本文は、このサイト向けに作成したものです。</p><ul>
+    <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html">Adobe：余白を考えるデザインクイズ</a></li>
+    <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html">Adobe：視線誘導を考えるデザインクイズ</a></li>
+    <li><a href="https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html">Learn UI Design：作り手の視点で解説するUIデザイン</a></li>
+    <li><a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁：タイポグラフィ</a></li>
+    <li><a href="https://www.nngroup.com/articles/text-scanning-patterns-eyetracking/">NN/g：複数の読み飛ばし方を扱う視線研究（2019年）</a></li>
+    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3C：文字のコントラスト</a></li>
+  </ul><p>2026年11月9日 更新</p></details>
+</article>
 <script>import '../scripts/website-demo';</script>

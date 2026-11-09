@@ -3,13 +3,13 @@
 変更履歴: 2026-11-08 画像付き横並びカラムに掲載するため、当プロジェクトの体験サンプル画面を撮影。
 変更履歴: 2026-11-09 ウェブ制作の新教材を撮影し、軽いWebPのプレビューへ更新。写真素材の出典を追記。
 
-- `websites.webp`: `/services/websites/` の新しい架空の花屋サンプル。番号付き解説を開いた画面を撮影し、幅1000pxのWebPへ圧縮。
+- `websites.webp`: 2026-11-09のクイズ記事に合わせ、文字の優先順位を示す導入を撮影して1000×644のWebPへ更新。花屋の画像を入口に残さないため置換。
 - `websites.png`: 以前の花屋サンプルの保管用画像。現在のトップからは参照しない。
 - `ec.png`: `/services/ec/` の架空の商品選択サンプル。
 - `ai-apps.png`: `/services/ai-apps/` の問い合わせ整理サンプル（事前に用意した出力を表示）。
 - `security.png`: `/services/security/` の架空メール学習サンプル。
 
-画面画像は本プロジェクト内のHTML/CSSをブラウザ表示して取得。顧客の制作実績や運営実態を示す画像ではない。新しいウェブ制作サンプル内の花束写真は、次のライセンス確認済み素材を使用。
+画面画像は本プロジェクト内のHTML/CSSをブラウザ表示して取得。顧客の制作実績や運営実態を示す画像ではない。以前の花束写真は保管のみで、現行記事からは参照しない。過去の出典記録を以下に残す。
 
 - 写真: Evelien Van Den Brink, “A vibrant bouquet of assorted colorful flowers” / Unsplash
 - 作品ページ: https://unsplash.com/photos/a-vibrant-bouquet-of-assorted-colorful-flowers-QH5-_8Dcbq8

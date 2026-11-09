@@ -1,0 +1,28 @@
+# ウェブ制作の体験記事
+
+## 目的・承認範囲
+
+2026-11-09、ユーザーがAdobeのクイズと作り手の考えを語る記事を組み合わせる方向を指定。Can’t Unsee風の採点ゲームは除外。架空花屋を置き換え、他サービス・料金・問い合わせ・安全チェック・トップの横送りは維持する。
+
+## 現行構成
+
+- Readを主目的とする。文字そのものが読む順番を伝える導入。
+- 3問（優先順位・近接と余白・行動文言）。目的を先に提示し、A/Bを比べる。
+- 回答を押すと同じ問題の解説が開く。読み上げで選択を通知し、回答は変更可能。
+- 「この目的なら私は選ぶ」→判断理由→条件が違えばどう変わるか→実際の制作での確認。
+- 正誤スコア、ランキング、計測、永続化、送信なし。ネイティブdetailsでJSなしでも読める。
+- 白#FFFFFF / 墨#141416 / 補助#62626A / 淡面#F5F5F7 / 赤#DF2033・濃赤#BB1829。既存書体。左揃え、比較1000px、本文720px。600px以下は比較図を縦に。
+
+## 参考と独自性
+
+- Adobe余白: https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html
+- Adobe視線: https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html
+- Learn UI Design: https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html
+- Growth.Designの事例にある課題・判断・解説の展開を構成上の参考にした。登録が必要な画面・素材は転用しない。
+- 図、問題、本文は独自制作。実績・個人の経歴・実測した視線を創作しない。
+- デジタル庁・W3C・NN/gの基礎資料は既存の調査記録を参照。特定の読む順序を保証しない。
+- ui-ux-pro-maxのprogressive disclosure検索は一般論の結果が多かったため、その提案をそのまま採用せず、既存デザインとネイティブdetailsを基準とした。
+
+## 変更履歴
+
+- 2026-11-09: 以前の花屋の設計記録を過去案とし、ユーザー指定の体験記事を現行仕様として記録。
