@@ -1,0 +1,60 @@
+/* 変更履歴: 2026-11-09 サービス一覧・料金の専用ページを、既存の白黒赤・書体・余白へ統一。 */
+/* 役割: 内容と価格を左揃えの行で対応させ、狭い画面では読み順を保って縦に並べる。 */
+.catalog-heading { margin: 32px 0 48px; max-width: 900px; }
+.catalog-heading h1 { font-size: clamp(32px,4.3vw,60px); line-height: 1.4; letter-spacing: -.025em; margin: 0 0 24px; text-wrap: balance; }
+.catalog-heading > p { max-width: 43em; font-size: 17px; line-height: 1.9; color: var(--ink-muted); margin: 0; }
+.catalog-page h2 { font-size: clamp(25px,3vw,36px); line-height: 1.5; letter-spacing: -.025em; margin-bottom: 24px; text-wrap: balance; }
+.catalog-page h3 { font-size: 22px; line-height: 1.6; }
+.catalog-page p { line-height: 1.9; }
+.catalog-page .service-row h2 { font-size: 22px; line-height: 1.5; margin: 0; }
+.catalog-page .service-row h2 a { text-decoration: none; }
+.catalog-page .service-row h2 a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.catalog-close { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--mist); }
+.catalog-close > p { max-width: 44em; }
+.catalog-close .button { margin-top: 12px; width: min(100%, 320px); }
+.pricing-page__note { font-size: 14px; color: var(--ink-muted); margin: 24px 0; }
+.pricing-jump { display: flex; gap: 12px 28px; flex-wrap: wrap; padding: 12px 0; border-block: 1px solid var(--mist); margin-top: 32px; }
+.pricing-jump a { padding: 12px 0; font-size: 15px; text-underline-offset: 6px; }
+.pricing-section { padding-top: 56px; scroll-margin-top: 110px; }
+.pricing-section > p { max-width: 48em; color: var(--ink-muted); }
+.price-detail { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.3fr); gap: 64px; padding: 36px 0; border-top: 1px solid var(--mist); scroll-margin-top: 110px; }
+.price-detail h3 { margin: 0 0 12px; }
+.price-detail__amount { font-size: clamp(32px,3.6vw,46px); font-weight: 700; letter-spacing: -.025em; font-variant-numeric: tabular-nums; margin: 0 0 20px; }
+.price-detail__amount span { display: block; font-size: 14px; font-weight: 400; color: var(--ink-muted); letter-spacing: 0; }
+.price-detail header > p:not(.price-detail__amount) { font-size: 15px; color: var(--ink-muted); }
+.price-detail h4 { font-size: 16px; margin: 0 0 12px; }
+.price-detail__scope ul { margin: 0 0 20px; padding-left: 1.3em; line-height: 1.9; }
+.price-detail__scope > p { font-size: 15px; margin: 0 0 24px; color: var(--ink-muted); }
+.price-detail__scope > p:last-child { margin-bottom: 0; }
+.price-options { margin: 28px 0 0; }
+.price-options > div { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,.85fr) minmax(0,1.5fr); gap: 24px; align-items: baseline; padding: 24px 0; border-top: 1px solid var(--mist); }
+.price-options dt { font-size: 17px; font-weight: 700; }
+.price-options dd { margin: 0; }
+.price-options__amount { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.price-options__amount small { display: block; font-size: 13px; font-weight: 400; line-height: 1.8; color: var(--ink-muted); }
+.price-options__description { font-size: 15px; line-height: 1.9; color: var(--ink-muted); }
+.price-examples { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; margin-top: 32px; }
+.price-examples article { padding-top: 24px; border-top: 2px solid var(--ink); }
+.price-examples h3 { font-size: 18px; margin: 0 0 16px; }
+.price-examples article > p:not(.price-detail__amount) { font-size: 14px; color: var(--ink-muted); }
+.pricing-other > div { max-width: 800px; border-top: 1px solid var(--mist); padding: 24px 0; }
+.pricing-other h3 { margin-top: 0; font-size: 20px; }
+.pricing-other p { font-size: 16px; }
+.pricing-questions details { border-bottom: 1px solid var(--mist); max-width: 900px; }
+.pricing-questions summary { padding: 22px 0; font-weight: 700; cursor: pointer; }
+.pricing-questions details p { max-width: 47em; padding-bottom: 16px; }
+.catalog-page :is(a,summary):focus-visible { outline: 3px solid var(--signal-deep); outline-offset: 4px; }
+.catalog-page summary:hover { color: var(--signal-deep); }
+@media(max-width:800px) {
+  .price-detail { grid-template-columns: 1fr; gap: 24px; }
+  .price-examples { grid-template-columns: 1fr; gap: 24px; }
+  .price-options > div { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px 24px; }
+  .price-options__description { grid-column: 1 / -1; }
+}
+@media(max-width:480px) {
+  .catalog-heading { margin-top: 24px; margin-bottom: 32px; }
+  .catalog-heading > p { font-size: 16px; }
+  .pricing-jump { gap: 4px 20px; }
+  .pricing-section { padding-top: 40px; }
+  .price-options > div { grid-template-columns: 1fr; }
+}

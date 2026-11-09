@@ -1,5 +1,13 @@
 # 変更履歴
 
+## 2026-11-09：サービスと料金を専用ページへ
+
+- `SiteHeader.astro` / `SiteFooter.astro`: サービス・料金をページ遷移へ変更し、現在地と一覧への入口を追加。
+- `services/index.astro` / `ServiceCarousel.astro` / `service-carousel.ts` / `site.ts`: 既存の三サービス・横送りを共通化し、一覧ページを追加。
+- `pricing.astro` / `pricing.ts` / `PricingSummary.astro`: 金額を変えず基本範囲、対象外、六オプション、合計例、実費、FAQを追加。
+- `index.astro` / `services/[slug].astro` / `services.ts`: ホームを概要と専用ページへの入口へ整理し、詳細ページの料金・一覧への回遊を追加。
+- `catalog.css` / PRODUCT / DESIGN / 設計記録: 既存の見た目との統一、レスポンシブ、対象範囲と検証を記録。
+
 ## 2026-11-09：フィッシングの正解・不正解を色で区別
 
 - `phishing-experience.css` / `PhishingExperience.astro` / `phishing-experience.ts`: 正解は緑とチェック、危険な操作は赤とバツ、ヒントは黄系と感嘆符。見出しにも判定を明示し、色だけに依存せず結果を分かりやすくする。

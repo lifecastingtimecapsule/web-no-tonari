@@ -1,0 +1,36 @@
+---
+// 変更履歴: 2026-11-09 料金を独立ページにし、対象範囲・オプション・合計例を明示。
+// 役割: 既存の金額と任意契約方針を保ち、依頼前に費用の内訳を判断できるようにする。
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PricingSummary from '../components/PricingSummary.astro';
+import { pricingPlans, pricingOptions, formatPrice } from '../data/pricing';
+import '../styles/catalog.css';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+const examples = [
+  { title: '5ページ＋お知らせを自分で更新', formula: 'ウェブサイト制作＋お知らせ更新機能', amount: pricingPlans[0].amount + pricingOptions[1].amount, unit: '制作費用', note: '保守契約は付けず、制作だけの依頼も可能です。' },
+  { title: '7ページのサイトを制作', formula: 'ウェブサイト制作＋追加ページ2ページ', amount: pricingPlans[0].amount + pricingOptions[0].amount * 2, unit: '制作費用', note: '基本5ページに、採用案内・事例紹介など2ページを追加する例です。' },
+  { title: '保守＋月2回の更新＋レポート', formula: '基本保守＋軽微な更新＋月次レポート', amount: pricingPlans[1].amount + pricingOptions[3].amount + pricingOptions[5].amount, unit: '月額', note: '新しい機能の開発や大幅な改修は含みません。' },
+];
+---
+<SiteLayout title="料金・含まれる内容と追加オプション｜ウェブのとなり" description="ウェブサイト制作110,000円、基本保守月額9,800円、基本セキュリティ確認55,000円。税込固定料金の範囲、オプション、合計金額の例をご案内します。">
+<div class="shell catalog-page pricing-page">
+  <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">料金</span></nav>
+  <header class="catalog-heading"><h1>内容も、金額も。<br />始める前に、はっきりと。</h1><p>掲載金額はすべて税込です。合意した範囲の作業で、後から料金を追加しません。内容を増やすときは、追加費用を先に提示し、了承をいただいてから進めます。</p></header>
+  <PricingSummary />
+  <p class="pricing-page__note">制作は買い切り。納品後の保守契約・更新契約は必須ではありません。ドメインやサーバーなどの外部費用は別途実費です。</p>
+  <nav class="pricing-jump" aria-label="料金ページの目次"><a href="#included">基本料金の範囲</a><a href="#options">追加オプション</a><a href="#examples">合計金額の例</a><a href="#other-costs">個別見積もり・外部費用</a></nav>
+
+  <section class="pricing-section" id="included" aria-labelledby="included-title"><h2 id="included-title">この料金で、ここまで。</h2>
+    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3><p class="price-detail__amount">{formatPrice(plan.amount)}<span>税込・{plan.unit}</span></p><p>{plan.lead}</p><a class="text-link" href={`${home}?service=${encodeURIComponent(plan.service)}#contact`}>この内容を相談する</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>オプション・別途確認する内容</h4><p>{plan.excluded}</p></div></article>)}
+  </section>
+
+  <section class="pricing-section" id="options" aria-labelledby="options-title"><h2 id="options-title">必要なものだけ、追加できます。</h2><p>基本料金に、選んだ項目の金額を加えます。月額のオプションは、基本保守に追加する料金です。</p><dl class="price-options">{pricingOptions.map(option => <div><dt>{option.name}</dt><dd class="price-options__amount">{formatPrice(option.amount)}<small>{option.unit}</small></dd><dd class="price-options__description">{option.description}</dd></div>)}</dl></section>
+
+  <section class="pricing-section" id="examples" aria-labelledby="examples-title"><h2 id="examples-title">合計すると、いくら？</h2><p>組み合わせの例です。制作費用と月額費用を分けて表示しています。</p><div class="price-examples">{examples.map(example => <article><h3>{example.title}</h3><p>{example.formula}</p><p class="price-detail__amount">{formatPrice(example.amount)}<span>税込・{example.unit}</span></p><p>{example.note}</p></article>)}</div><p class="pricing-page__note">上記の合計に、ドメイン・サーバーなどの外部費用は含まれません。</p></section>
+
+  <section class="pricing-section pricing-other" id="other-costs" aria-labelledby="other-title"><h2 id="other-title">別に確認する費用も、先に。</h2><div><h3>AIアプリ開発・追加の機能開発</h3><p>画面数、機能、連携するサービス、扱う情報を確認して個別にお見積もりします。AIアプリ開発はウェブサイト制作の110,000円に含まれません。まず小さな試作の範囲から、内容と金額を決めます。</p><a class="text-link" href={`${home}services/ai-apps/`}>AIアプリ開発でできること</a></div><div><h3>ドメイン・サーバー・有料サービス</h3><p>ドメイン、サーバー、有料APIなどの利用料は外部サービスへの実費です。弊社の手数料は上乗せしません。契約先と料金を事前に確認し、制作費・保守費とは分けてご案内します。</p></div></section>
+
+  <section class="pricing-section pricing-questions" aria-labelledby="pricing-faq"><h2 id="pricing-faq">依頼の前に、確認したいこと。</h2><details><summary>制作後も、毎月の契約が必要ですか？</summary><p>必要ありません。制作のみの依頼が可能です。ご自身で更新しても、他社に依頼しても大丈夫です。サイトを公開し続けるためのドメイン・サーバー代は、各サービスの契約に応じてかかります。</p></details><details><summary>途中でお願いする内容が増えたら？</summary><p>変更する内容と追加費用を、作業の前に確認します。了承のない作業や追加請求は行いません。掲載オプションで対応できるものは、その金額でご案内します。</p></details><details><summary>公開までの日数や修正の回数は？</summary><p>ページ構成、原稿・写真の準備状況、確認の進め方に合わせて、着手前に決めます。金額と一緒に納期・修正範囲・納品内容を確認し、合意した内容で進めます。</p></details></section>
+  <section class="catalog-close"><h2>必要な範囲から、整理しましょう。</h2><p>作りたいものや困っていることを、短くお書きください。選ぶプランがまだ決まっていなくても大丈夫です。</p><a class="button button--human" href={`${home}?service=${encodeURIComponent('料金・依頼内容')}#contact`}>料金について相談する</a><p class="pricing-page__note">受付メールは準備中です。現在は相談内容の入力・コピーまで利用できます。</p></section>
+</div>
+</SiteLayout>
