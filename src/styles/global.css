@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 問い合わせのURL欄を常時表示し、案内・未送信の説明を本文サイズと濃い文字色へ変更。 */
 /* 変更履歴: 2026-11-09 サービス紹介をPC3件・タブレット2件・スマホ1件の手動横送りへ復元。 */
 /* 変更履歴: 2026-11-04 対話線を核にした全体レイアウト、状態、レスポンシブ、縮小モーションを実装。 */
 /* 変更履歴: 2026-11-05 3Dヒーローのキャンバス、DOMラベル、SVGフォールバックの表示状態を追加。 */
@@ -898,13 +899,13 @@ p {
 }
 
 .contact__intro p {
-  color: var(--ink-muted);
+  color: var(--ink);
 }
 .contact__intro h2 { font-size: clamp(1.65rem, 3vw, 2rem); line-height: 1.5; letter-spacing: 0; margin-bottom: 12px; }
 
 .contact__demo-note {
   margin-top: 14px;
-  font-size: 0.82rem;
+  font-size: 1rem;
 }
 
 .contact .contact-form {
@@ -917,9 +918,9 @@ p {
 .contact-form .button { width: auto; min-width: 220px; background: var(--ink); box-shadow: none; border-radius: 6px; transform: none; }
 .contact-form .button:hover { background: #343438; transform: none; }
 .contact-form .field__error:empty { display: none; }
-.contact-form__optional { margin: 4px 0 24px; }
-.contact-form__optional summary { min-height: 44px; display: list-item; padding-block: 10px; font-size: 13px; color: var(--ink-muted); cursor: pointer; }
-.contact-form__optional .field { padding-top: 12px; }
+.contact-form__website { margin-bottom: 24px; }
+.contact-form .field__help { color: var(--ink); font-size: 1rem; line-height: 1.8; }
+.contact-form__website .field__help { margin: 0 0 12px; }
 
 @media (max-width:560px) { .contact .contact__layout { gap:36px; }.contact.section { padding-block:56px; }.services { padding-block:64px; } }
 @media (prefers-reduced-motion:reduce) { .service-row__preview:hover img { transform:none; } }

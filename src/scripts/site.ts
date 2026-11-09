@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-09 任意URLの常時表示に合わせ、不要な折りたたみ開閉処理を除去。検証と引き継ぎは維持。
 // 変更履歴: 2026-11-09 サービス横送りを専用スクリプトへ移し、ホーム専用処理の重複読み込みを防止。
 // 変更履歴: 2026-11-09 手動カルーセルを復元。安全チェック等の最新機能を維持し、サービス演出の対象も現行一覧へ戻す。
 // 変更履歴: 2026-11-08 ナビを共通スクリプトへ移動し、空白相談の検証と動きの設定変更への追従を修正。
@@ -218,8 +219,6 @@ function setupDemoForm(): void {
     const error = form.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
     const message = getError(input);
     input.setAttribute('aria-invalid', String(Boolean(message)));
-    const optionalSection = input.closest('details');
-    if (message && optionalSection) optionalSection.open = true;
     if (error) error.textContent = message;
     return Boolean(message);
   };
@@ -372,8 +371,6 @@ if (requestedSiteUrl && consultationSiteUrl && !consultationSiteUrl.value.trim()
   try {
     const validSiteUrl = new URL(requestedSiteUrl);
     if (['https:', 'http:'].includes(validSiteUrl.protocol)) consultationSiteUrl.value = validSiteUrl.toString();
-    const optionalSection = consultationSiteUrl.closest('details');
-    if (optionalSection) optionalSection.open = true;
   } catch { /* 形式不正のクエリはフォームへ引き継がない。 */ }
 }
 setupMessageAutosize();

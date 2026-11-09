@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-09 任意URLを常時表示し、ホームページがある場合だけ入力する案内へ変更。
 // 変更履歴: 2026-11-09 サービス一覧を共通化し、料金は概要と専用ページへの入口へ整理。
 // 変更履歴: 2026-11-09 ウェブ教材の入口と画像説明を三テーマへ合わせる。EC削除は共通データから反映。
 // 変更履歴: 2026-11-09 ウェブ制作記事の配色追加に合わせて紹介画像の代替テキストを更新。
@@ -206,14 +207,12 @@ const faqs = [
               <p class="field__help" id="message-help">短い文章で大丈夫です。入力に合わせて欄が広がります。</p>
               <p class="field__error" id="message-error" data-error-for="message"></p>
             </div>
-            <details class="contact-form__optional">
-              <summary>サイトのURLを添える（任意）</summary>
-              <div class="field">
-                <label for="site-url">サイトのURL</label>
-                <input id="site-url" name="siteUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-describedby="site-url-error" placeholder="https://example.com…" />
-                <p class="field__error" id="site-url-error" data-error-for="siteUrl"></p>
-              </div>
-            </details>
+            <div class="field contact-form__website">
+              <label for="site-url">ホームページのURL（任意）</label>
+              <p class="field__help" id="site-url-help">現在のホームページがある方は、ご入力ください。ない場合は空欄で大丈夫です。</p>
+              <input id="site-url" name="siteUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" aria-describedby="site-url-help site-url-error" placeholder="https://example.com…" />
+              <p class="field__error" id="site-url-error" data-error-for="siteUrl"></p>
+            </div>
             <button class="button button--human" type="submit" data-submit-button>
               <span data-submit-label>相談内容をコピーする</span>
               <span class="button__spinner" aria-hidden="true"></span>
