@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-09 同じ文字内容を余白・段落・項目整理だけで比較する図へ変更。 */
 /* 変更履歴: 2026-11-09 花屋の見本を、既存の白黒赤を継承する体験記事へ置換。 */
 /* 変更履歴: 2026-11-09 比較表・掲載順序・フォーム分岐の構成図に更新。不要になった初級見本の装飾を削除。 */
 /* 役割: 読む部分の幅を抑え、比較図だけを広くして、問いと判断理由を読み分ける。 */
@@ -26,19 +27,21 @@
 .design-option__example { position: relative; flex: 1; display: flex; align-items: center; padding: 64px 28px 32px; min-height: 300px; border-radius: 12px; background: var(--mist-light); }
 .design-option__letter { position: absolute; top: 18px; left: 24px; font-size: 18px; font-weight: 700; }
 .design-option__example p { margin: 0; font-size: 16px; }
-.decision-example { width: 100%; min-width: 0; }
-.decision-example .decision-example__title { font-weight: 700; font-size: 18px; margin-bottom: 20px; }
-.plan-sequence > div + div { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--input-border); }
-.plan-sequence strong { display: block; margin-bottom: 8px; }
-.decision-table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 16px; font-variant-numeric: tabular-nums; }
-.decision-table caption { font-size: 13px; text-align: left; color: var(--ink-muted); margin-bottom: 12px; }
-.decision-table :is(th, td) { padding: 14px 6px; text-align: left; border-bottom: 1px solid var(--input-border); overflow-wrap: anywhere; }
-.decision-table thead th { border-bottom-color: var(--ink); }
-.decision-sequence { margin: 0; padding-left: 24px; }
-.decision-sequence li { padding: 12px 0 12px 6px; border-bottom: 1px solid var(--mist); line-height: 1.7; }
-.decision-example .decision-example__note { font-size: 13px; color: var(--ink-muted); margin-top: 20px; }
-.decision-fields > p { padding: 12px 0; border-bottom: 1px solid var(--input-border); }
-.decision-fields .decision-fields__branch { margin-left: 20px; }
+.everyday-spacing, .everyday-message, .everyday-invitation { width: 100%; min-width: 0; }
+.everyday-spacing__label { font-weight: 700; }
+.design-option__example--a .everyday-spacing p + p { margin-top: 16px; }
+.design-option__example--b .everyday-spacing p:nth-child(2n) { margin-top: 4px; }
+.design-option__example--b .everyday-spacing p:nth-child(3) { margin-top: 40px; }
+.everyday-message p + p { margin-top: 24px; }
+.design-option__example--spacing { align-items: flex-start; }
+.everyday-invitation dl { margin: 0; }
+.everyday-invitation dl > div { display: grid; grid-template-columns: 5em minmax(0, 1fr); gap: 12px; margin-bottom: 20px; font-size: 16px; line-height: 1.85; }
+.everyday-invitation dl > div:last-child { margin-bottom: 0; }
+.everyday-invitation dt { font-weight: 700; }
+.everyday-invitation dd { margin: 0; }
+@media (max-width: 380px) {
+  .everyday-invitation dl > div { grid-template-columns: 1fr; gap: 4px; }
+}
 .design-option__choose { min-height: 48px; margin-top: 12px; padding: 12px 20px; border: 1px solid var(--input-border); border-radius: 8px; font: inherit; font-weight: 700; background: var(--paper); color: var(--ink); cursor: pointer; transition: background-color 160ms ease, color 160ms ease; }
 .design-option__choose:hover:not(:disabled):not([aria-pressed='true']) { background: var(--mist-light); }
 .design-option__choose[aria-pressed='true'] { background: var(--ink); border-color: var(--ink); color: var(--paper); }

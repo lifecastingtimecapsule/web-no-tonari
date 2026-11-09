@@ -1,43 +1,49 @@
 ---
-/* 変更履歴: 2026-11-09 初歩的な比較を、制約・実装・検証を扱う3つの設計ケースへ深化。
+/* 変更履歴: 2026-11-09 余白・段落・案内の整理を題材に、日常で使える読みやすさのクイズへ調整。
+ * 変更履歴: 2026-11-09 初歩的な比較を、制約・実装・検証を扱う3つの設計ケースへ深化。
  * 変更履歴: 2026-11-09 架空店舗を撤去し、作り手の判断を伝えるクイズ付き記事へ置換。
- * 役割: 独自の比較図と一人称の解説で、情報構造・レスポンシブ・入力設計の判断を伝える。 */
+ * 役割: 独自の比較図と一人称の解説で、余白・段落・必要な情報の見つけやすさを伝える。 */
 import '../styles/website-demo.css';
 const questions = [
-  { id: 'hierarchy', title: '魅力を伝えるか、条件を比べやすくするか。',
-    prompt: '導入候補を絞り込んだ担当者が、2つのプランを比較する場面です。編集者数や承認機能の違いから、自社に合うものを判断してもらいたい。最初に見せる構成をどう選びますか？',
-    choice: 'B', heading: '比較の軸が決まっているなら、私は差分を横に揃えます。',
-    body: 'この段階ではBの比較表を軸にします。Aはプランごとの魅力を一つのまとまりで伝えやすい構成ですが、同じ条件を比べるには、視線を往復させて内容を覚えておく必要があります。Bは「承認機能は必要か」のように、判断軸を固定して違いを追えます。色や文字サイズを調整する前に、読む人が何を比較するのかを定義します。',
-    nuance: 'ただし、初めて訪れた人には項目名の意味が分からないかもしれません。その場合は、用途から選べる短い説明を先に置き、比較表を補助にします。すべての機能を最初から並べると、重要な差分が埋もれるためです。',
-    practice: 'データとして比較する箇所はHTMLのtableを使い、captionと行・列の見出しの関係を定義します。スマホでも列名を失わない構成を選びます。項目が多い場合は表の領域内で横スクロールできるようにし、ページ全体の横はみ出しと混同しません。',
-    verify: '「承認機能が必要なチーム向けのプランを選ぶ」など、具体的な課題で試します。判断までの時間だけでなく、選び間違い・見落とした条件・選択理由を確認します。クリック数が少ないだけでは、比較しやすいとは判断しません。' },
-  { id: 'spacing', title: 'スマホでは、何を先に残しますか？',
-    prompt: '制作会社を比較中の担当者が、移動中に事例を読む想定です。今回の目的は「似た課題を解決できそうか」の判断。PCでは並んでいた概要と画面写真を、スマホでどう再構成しますか？',
-    choice: 'A', heading: 'この目的なら、私は判断に必要な要約を先に置きます。',
-    body: 'Aを選び、対象・課題・対応内容を先にまとめます。単に2列を1列へ変えるだけでは、画面写真が長く続き、判断材料が後ろへ押し出されることがあります。私は「狭い画面に収めること」と「短い時間でも内容を判断できること」を別々に確認します。',
-    nuance: '一方、写真・ファッション・映像など、表現そのものが依頼の決め手になる場合はBの順序が合うこともあります。スクロール量を一律に減らすのではなく、訪問の目的と証拠として必要な素材から順序を決めます。',
-    practice: '意味の通る順序をHTML側に持たせ、CSS GridでPCの並列表示を組みます。CSSのorderだけで見た目を入れ替えた場合は、読み上げやTabキーでの移動と食い違わないかを確認。ブレークポイントは端末名だけで決めず、実際の文章と画像が窮屈になる幅を見て調整します。',
-    verify: '狭い画面、横向き、文字の拡大、長い案件名で確認します。画像には寸法を確保して読込中の位置ずれを抑え、本文・画像・リンクの順序をキーボードと読み上げでも確認します。「スマホで表示できた」を完了条件にしません。' },
-  { id: 'action', title: '入力項目は、少ないほどよいのでしょうか？',
-    prompt: '新規制作とリニューアルを一つの相談窓口で受け付けます。既存URLや移行の有無は後者に必要ですが、新規制作の人には該当しません。入力負担と、受け付けた後の確認作業をどう両立しますか？',
-    choice: 'B', heading: '私は、項目数より「その人に必要か」で分けます。',
-    body: '今回はBを選び、共通項目の後に、選んだ相談種別に関係する短い質問を表示します。むやみに項目を減らすと、受付後の往復が増え、かえって判断に時間がかかることもあります。逆に、初回の相談に不要な予算の内訳や詳細仕様まで求めると、まだ決めていない人を止めてしまいます。',
-    nuance: '条件分岐も増やせばよいわけではありません。補足が一つなら任意欄だけで十分な場合があります。複数の長い質問や大きく違う申込経路が必要なら、関連項目の開閉ではなく、段階を分けたフォームを検討します。',
-    practice: '分岐の表示だけでなく、非表示項目の必須判定・送信対象・選択を戻したときの値を設計します。追加項目の出現を読み上げでも把握できるかを確認し、入力はブラウザ側とサーバー側の両方で検証。送信中・失敗・再試行の状態を定義し、ボタンの無効化だけに頼らず、サーバー側で同じ依頼を重複処理しない方法も検討します。',
-    verify: '完了率だけでなく、入力ミス、分岐ごとの離脱、受付後の追加確認の件数を併せて評価します。計測するなら氏名・メール・相談本文を解析イベントに含めず、必要なイベントと取り扱いを先に決めます。項目を減らせば成果が上がる、とは断定しません。' },
+  { id: 'hierarchy', title: '余白だけで、情報のまとまりは変わる？',
+    prompt: '受付時間と会場を案内する文章です。文字・大きさ・並び順は同じ。見出しと説明のつながりが分かりやすいのは、どちらでしょう？',
+    choice: 'B', heading: '私は、近づける余白と、離す余白を使い分けます。',
+    body: 'Bでは「受付時間」とその説明を近づけ、次の「会場」までは少し広く空けています。Aはすべて同じ間隔なので、どこまでが一つの話かを文字で読み取る必要があります。余白に大小をつけると、内容を読む前にも、まとまりが分かりやすくなります。',
+    nuance: '私が見るのは、余白の広さそのものより、内側と外側の差です。全部を広げるだけでは、関連する情報まで離れてしまいます。',
+    practice: 'メールで「お願い」と「参考情報」を分けるときも同じです。それぞれの中は近く、話題の切れ目に空行を入れる。枠や色を増やす前に、間隔だけで整理してみてください。',
+    verify: '私は、見出しが前の説明より次の説明に近いかを確認します。スマホで折り返したときも、このつながりが保たれるように整えます。' },
+  { id: 'spacing', title: '文章を削らず、読みやすくするには？',
+    prompt: '資料の確認をお願いするメールです。両方とも同じ文章ですが、段落の分け方が違います。「何を確認して、いつまでに返すか」を拾いやすいのはどちらでしょう？',
+    choice: 'A', heading: '私は、一つの段落を、一つの話題にします。',
+    body: 'Aは「資料の共有」「確認してほしいこと」「返信のお願い」を分けています。文字を減らしていなくても、話題の切れ目が見えると、必要な箇所へ戻りやすくなります。読む人が途中で別の作業をしても、どこから読み直せばよいかを探しやすい構成です。',
+    nuance: '一文ごとに大きく空けるのではなく、意味がつながる文は同じ段落にまとめます。「ここで話題が変わったか」を区切りの目安にしています。',
+    practice: '仕事のメールやお知らせを書くとき、まず「報告」「確認」「お願い」に分けてみると整理しやすくなります。伝えたいことを全部短文にする必要はありません。',
+    verify: '私は、文章の途中に空行を入れる前に、何についての段落かを一言で言えるか確かめます。文字の大きさや行間も揃え、段落の区切りが伝わるようにします。' },
+  { id: 'action', title: '必要な情報だけ、すぐ見つかりますか？',
+    prompt: '打ち合わせの案内を見返して、会場だけを確認したい場面です。同じ日時・会場・締切を伝えるなら、どちらが探しやすいでしょう？',
+    choice: 'B', heading: '私は、見返す情報に「探す目印」をつけます。',
+    body: 'Bは日時・会場・返信締切を項目名で区切っています。「どこだっけ」と思った人は、文章を最初から読み直さずに「会場」を探せます。一度通して読む文章と、あとから特定の情報を確認する案内では、読み方が違います。',
+    nuance: '項目名と内容を別々に離すのではなく、同じ行や近い位置に置くのがポイントです。項目名の並ぶ位置を揃えると、目印を縦に追いやすくなります。',
+    practice: 'イベントの案内、集合場所の連絡、商品の説明にも使えます。「日時・場所・持ち物」のように、相手があとから確認しそうなことに名前をつけて並べてみてください。',
+    verify: '私は、必要な情報が文章に埋もれていないか、項目名だけを見て確かめます。スマホで内容が2行になっても、どの項目の説明か分かる並びにします。' },
+];
+const messageParagraphs = [
+  '打ち合わせ資料をお送りします。前回のご意見を反映しました。',
+  '2ページ目の日程と、3ページ目の担当をご確認ください。変更したい箇所があればお知らせください。',
+  '確認結果は木曜日までにご返信ください。修正がない場合も、その旨をお知らせいただけると助かります。',
 ];
 ---
 <article class="website-demo" data-website-demo aria-labelledby="sample-title">
-  <div class="reading-experiment" aria-label="設計の判断と制約を考える記事の導入">
-    <p class="reading-experiment__first">見た目が整っても、<br />判断しやすいとは限らない。</p>
-    <p class="reading-experiment__second">私は、画面の前に「選ぶ条件」を設計します。</p>
-    <p class="reading-experiment__last">情報構造・レスポンシブ・入力体験。<br />意図と制約がぶつかる3つの場面から、設計の判断をひもときます。</p>
+  <div class="reading-experiment" aria-label="日常にも使えるデザインの考え方">
+    <p class="reading-experiment__first">伝える内容は同じ。<br />読みやすさは、変えられる。</p>
+    <p class="reading-experiment__second">余白と並べ方に、読む人への気づかいを。</p>
+    <p class="reading-experiment__last">メール、お知らせ、ちょっとした資料にも。<br />3つの比較から、今日から使える工夫をご紹介します。</p>
   </div>
   <div class="design-essay__intro">
-    <p>見やすい画面をつくるだけでは、使いやすいサイトにはなりません。比較したい人、まず概要を知りたい人、具体的に相談したい人。それぞれに必要な情報と、選ぶための条件が違うからです。</p>
-    <p>以下は、どちらにも採用する理由がある3つの設計ケースです。前提を読んで案を選ぶと、私の判断、別案が合う条件、実装と検証の観点を読めます。</p>
-    <p class="design-essay__note">図と条件は設計を説明するための仮定です。実際のサービス仕様・顧客事例・計測結果ではありません。回答の保存・送信は行いません。</p>
-    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 比較するための情報構造</a><a href="#quiz-spacing">2. レスポンシブの判断</a><a href="#quiz-action">3. 入力と受付の設計</a></nav>
+    <p>伝えたいことは書いてあるのに、なぜか読みにくい。そんなとき、私は言葉を増やす前に、余白や文章のまとまりを見直します。</p>
+    <p>ここでは、同じ内容を違う並べ方で比べる3つのクイズを用意しました。選んだあとに、読みやすさが変わる理由と、普段の連絡や資料にも使えるコツをお話しします。</p>
+    <p class="design-essay__note">例文の日時や会場は説明用のものです。実際の開催案内ではありません。回答の保存・送信は行いません。</p>
+    <nav class="design-essay__contents" aria-label="記事の目次"><a href="#quiz-hierarchy">1. 余白でまとめる</a><a href="#quiz-spacing">2. 段落で区切る</a><a href="#quiz-action">3. 情報を見つけやすくする</a></nav>
   </div>
   {questions.map((question, questionIndex) => <section class="design-question" id={`quiz-${question.id}`} data-design-question aria-labelledby={`question-${question.id}`}>
     <header class="design-question__heading"><span aria-hidden="true">{questionIndex + 1}</span><h3 id={`question-${question.id}`}>{question.title}</h3></header>
@@ -46,12 +52,9 @@ const questions = [
       {['A', 'B'].map(option => <div class="design-option">
         <div class={`design-option__example design-option__example--${question.id} design-option__example--${option.toLowerCase()}`}>
           <span class="design-option__letter">{option}</span>
-          {question.id === 'hierarchy' && <div class="decision-example">
-            <p class="decision-example__title">{option === 'A' ? 'プラン単位で読む' : '条件を横に比較する'}</p>
-            {option === 'A' ? <div class="plan-sequence"><div><strong>ライト</strong><p>編集者1人 / 承認機能なし</p></div><div><strong>チーム</strong><p>編集者5人 / 承認機能あり</p></div></div> : <table class="decision-table"><caption>説明用の2プランの機能比較</caption><thead><tr><th scope="col">条件</th><th scope="col">ライト</th><th scope="col">チーム</th></tr></thead><tbody><tr><th scope="row">編集者</th><td>1人</td><td>5人</td></tr><tr><th scope="row">承認機能</th><td>なし</td><td>あり</td></tr></tbody></table>}
-          </div>}
-          {question.id === 'spacing' && <div class="decision-example"><p class="decision-example__title">{option === 'A' ? '課題との適合を先に判断' : '表現の印象を先に判断'}</p><ol class="decision-sequence">{(option === 'A' ? ['対象・課題・対応の要約', '改善した画面と説明', '詳しい設計プロセス'] : ['完成画面のビジュアル', '画面の細部と演出', '対象・課題・対応の要約']).map(label => <li>{label}</li>)}</ol><p class="decision-example__note">スマホでの掲載順序を比較</p></div>}
-          {question.id === 'action' && <div class="decision-example"><p class="decision-example__title">{option === 'A' ? '全員に同じ項目を表示' : '共通項目＋短い条件分岐'}</p><div class="decision-fields"><p>連絡先・相談内容</p>{option === 'A' ? <><p>既存URL・移行の有無</p><p>未該当なら空欄で進む</p></> : <><p>新規制作 / リニューアル</p><p class="decision-fields__branch">リニューアルを選んだ場合<br /><strong>既存URL・移行の有無</strong></p></>}</div><p class="decision-example__note">入力画面の構成図。送信機能はありません。</p></div>}
+          {question.id === 'hierarchy' && <div class="everyday-spacing"><p class="everyday-spacing__label">受付時間</p><p>13:30〜14:00</p><p class="everyday-spacing__label">会場</p><p>2階 ミーティングルーム</p></div>}
+          {question.id === 'spacing' && <div class="everyday-message">{option === 'A' ? messageParagraphs.map(paragraph => <p>{paragraph}</p>) : <p>{messageParagraphs.join('')}</p>}</div>}
+          {question.id === 'action' && <div class="everyday-invitation">{option === 'A' ? <p>日時は12月8日 14:00〜15:00、会場は2階 ミーティングルームです。返信締切は12月5日です。</p> : <dl><div><dt>日時</dt><dd>12月8日 14:00〜15:00</dd></div><div><dt>会場</dt><dd>2階 ミーティングルーム</dd></div><div><dt>返信締切</dt><dd>12月5日</dd></div></dl>}</div>}
         </div>
         <button type="button" class="design-option__choose" data-design-choice={option} aria-label={`問題${questionIndex + 1}：${option}を選ぶ`} aria-pressed="false" aria-controls={`answer-${question.id}`} disabled>{option}を選ぶ</button>
       </div>)}
@@ -59,31 +62,25 @@ const questions = [
     <p class="design-question__feedback" data-choice-feedback role="status" aria-live="polite"></p>
     <details class="design-answer" id={`answer-${question.id}`}>
       <summary>私の考えを読む</summary>
-      <div class="design-answer__body"><p class="design-answer__choice">この目的なら、私は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>実装で詰めること</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>どう検証するか</h5><p>{question.verify}</p></div></div>
+      <div class="design-answer__body"><p class="design-answer__choice">この例では、私は{question.choice}を選びます。</p><h4>{question.heading}</h4><p>{question.body}</p><p>{question.nuance}</p><div class="design-answer__practice"><h5>日常で使うなら</h5><p>{question.practice}</p></div><div class="design-answer__practice"><h5>私が制作で気をつけること</h5><p>{question.verify}</p></div></div>
     </details>
   </section>)}
   <section class="design-essay__closing" aria-labelledby="design-closing-title">
-    <h3 id="design-closing-title">選んだ理由だけでなく、<br />選ばなかった理由も説明したい。</h3>
-    <p>一覧性を優先すると、個別の魅力が薄くなることがあります。入力を短くすると、受付後の確認が増えることもあります。私は、こうした得るものと失うものを整理してから、構成や実装を選びたいと考えています。</p>
-    <p>設計は仮説です。目的に合う評価方法を決め、実装の制約も説明し、公開後の反応から見直せる状態までを考えます。見た目と、その後の運用がつながっていることを大切にしています。</p>
-    <details class="design-essay__checks"><summary>設計を実装へ渡すときの確認項目</summary><ul>
-      <li><strong>構造と読み順：</strong>見出し階層、表の見出し、フォームのラベル、HTML上の順序とフォーカス順を設計に含めます。</li>
-      <li><strong>可変のコンテンツ：</strong>長い名称、項目数の増減、画像未読込、文字拡大でも、意味のまとまりと操作が保たれるかを確かめます。</li>
-      <li><strong>状態と復帰：</strong>空・処理中・成功・失敗・再試行を定義します。正常な画面一枚だけで実装仕様を終わらせません。</li>
-      <li><strong>検証の前提：</strong>何を改善したいか、どの利用者で確かめるか、どの指標を悪化させたくないかを先に整理します。実績や効果は、未計測のまま数値にしません。</li>
+    <h3 id="design-closing-title">読む人が、<br />探し回らずに済むように。</h3>
+    <p>関係するものは近づける。話題が変わったら区切る。見返す情報には目印をつける。こうした工夫は、ウェブサイトでも一通のメールでも役に立ちます。</p>
+    <p>私は、読んだ人が「結局いつ？」「どこを見ればいい？」と迷わずに済むよう、一つひとつの間隔や並び方を整えたいと考えています。</p>
+    <details class="design-essay__checks"><summary>送る前・公開する前の、小さな見直し</summary><ul>
+      <li><strong>余白：</strong>見出しと説明は近くにありますか。別の話題との間には区切りがありますか。</li>
+      <li><strong>段落：</strong>一つの段落に、報告・確認・お願いを詰め込んでいませんか。</li>
+      <li><strong>目印：</strong>日時や場所など、あとで見返す情報はすぐに見つかりますか。</li>
+      <li><strong>スマホ：</strong>手元の画面でも一度読んで、折り返した文章や項目のつながりを確認してみてください。</li>
     </ul></details>
   </section>
   <details class="design-references"><summary>参考にした記事と公開ガイド</summary><p>クイズと解説を組み合わせる構成を参考にしています。比較図・問題・本文は、このサイト向けに作成したものです。</p><ul>
     <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/margin.html">Adobe：余白を考えるデザインクイズ</a></li>
     <li><a href="https://www.adobe.com/jp/creativecloud/roc/blog/design/quiz-challenge/eye-flow.html">Adobe：視線誘導を考えるデザインクイズ</a></li>
     <li><a href="https://www.learnui.design/blog/7-rules-for-creating-gorgeous-ui-part-1.html">Learn UI Design：作り手の視点で解説するUIデザイン</a></li>
-    <li><a href="https://www.w3.org/WAI/tutorials/tables/">W3C WAI：比較表の見出しとデータの関係</a></li>
-    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html">W3C：意味の通る読み順</a></li>
-    <li><a href="https://www.w3.org/WAI/tutorials/forms/validation/">W3C WAI：入力検証とサーバー側の検証</a></li>
-    <li><a href="https://design-system.service.gov.uk/components/radios/">GOV.UK：選択肢に応じた関連質問の表示</a></li>
     <li><a href="https://design.digital.go.jp/dads/foundations/typography/">デジタル庁：タイポグラフィ</a></li>
-    <li><a href="https://www.nngroup.com/articles/text-scanning-patterns-eyetracking/">NN/g：複数の読み飛ばし方を扱う視線研究（2019年）</a></li>
-    <li><a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html">W3C：文字のコントラスト</a></li>
   </ul><p>2026年11月9日 更新</p></details>
 </article>
 <script>import '../scripts/website-demo';</script>
