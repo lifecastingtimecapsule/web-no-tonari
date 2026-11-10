@@ -16,7 +16,7 @@ const checks = [
 ];
 const notChecked = ['CMS・プラグインの更新状況', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
-<SiteLayout title="かんたん安全チェック｜ウェブのとなり" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、なりすましメール対策など、外から見える安全性を無料で確認できます。">
+<SiteLayout title="かんたん安全チェック｜SITEVEIL" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、なりすましメール対策など、外から見える安全性を無料で確認できます。">
 <div class="shell check-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
   <h1>サイトの安全性を、<br />かんたんチェック。</h1>
@@ -60,6 +60,7 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
   </section>
 </div>
 <script>import '../scripts/safety-check';</script>
+<div class="shell"><p><a href={`${home}security/`}>メールの漏洩調査・詳しいシステム検査も見る</a></p></div>
 </SiteLayout>
 <style is:global>
 /* JSで描画する結果行にも効かせるため、.check-page配下に限定したグローバルスタイルにする。 */
