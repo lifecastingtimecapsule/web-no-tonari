@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 オレンジ主体へ再調整し、青・紫を差し色として追加。黄色の強さを抑える指定を反映。
 // 変更履歴: 2026-11-11 黄色の面積を増やし、赤・オレンジ・緑を小さな差し色へ抑制。
 // 変更履歴: 2026-11-11 ユーザー指定に合わせ、黄色を主役にオレンジと緑を添える配色へ変更。
 // 変更履歴: 2026-11-11 暗い顔料を明るい青・アクア・ピーチへ変更。怖い印象を避けて流れを軽くする。
@@ -35,11 +36,11 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
       float pigment=cloud(folded+vec2(cloud(folded+clock),cloud(folded-clock+8.))*1.8);
       float folds=cloud(folded*3.+warp*7.-clock);
       float veins=pow(max(0.,1.-abs(pigment-.5)*13.),3.);
-      // Yellow remains dominant; only the extremes of the folds receive accent pigments.
-      vec3 ink=mix(vec3(1.,.82,.18),vec3(1.,.95,.43),smoothstep(.27,.65,pigment));
-      ink=mix(ink,vec3(1.,.53,.14),smoothstep(.56,.76,folds)*.40);
-      ink=mix(ink,vec3(.49,.75,.27),(1.-smoothstep(.25,.39,folds))*.38);
-      ink=mix(ink,vec3(.96,.25,.14),smoothstep(.66,.82,folds)*.32);
+      // Warm orange leads; separated blue and violet pockets keep accents clear rather than muddy.
+      vec3 ink=mix(vec3(1.,.43,.14),vec3(1.,.70,.34),smoothstep(.26,.70,pigment));
+      ink=mix(ink,vec3(1.,.85,.40),smoothstep(.57,.76,folds)*.34);
+      ink=mix(ink,vec3(.24,.55,.91),(1.-smoothstep(.31,.42,pigment))*.94);
+      ink=mix(ink,vec3(.60,.37,.83),smoothstep(.58,.72,folds)*(1.-smoothstep(.48,.61,pigment))*.91);
       ink+=vec3(.10,.08,.04)*veins*folds;
       ink*=.92+.12*smoothstep(.23,.8,folds);
       // A naturally present diagonal ribbon makes the first frame complete, without requiring a gesture.
