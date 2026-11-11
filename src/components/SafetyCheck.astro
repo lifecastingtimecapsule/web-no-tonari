@@ -1,16 +1,20 @@
 ---
 // 変更履歴: 2026-11-11 安全チェック横にあった端末ビジュアルを復元し、入力と横並びにする。
+// 変更履歴: 2026-11-11 元の見出し・説明・丸いURL欄・赤いボタンと左右比率を復元。横のビジュアルと画像崩れ対策は維持。
 // 役割: URL入力と以前の画面イメージを一つにまとめ、スマホでも画像を消さず表示する。
 ---
 <section class="safety-entry shell" id="after-hero" aria-labelledby="safety-entry-title">
- <div class="safety-entry__copy">
-  <h2 id="safety-entry-title">いまのサイトを、<br />確かめる。</h2>
-  <form data-safety-check-form novalidate>
-   <label for="safety-check-url" class="safety-entry__label">サイトのURL</label>
-   <div class="safety-entry__input"><input id="safety-check-url" name="safetyCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" aria-describedby="safety-check-note safety-check-status" required /><button type="submit">安全チェック <span aria-hidden="true">↗</span></button></div>
-   <p id="safety-check-note">無料・登録不要</p><p id="safety-check-status" role="status" data-safety-check-status></p>
-  </form>
- </div>
+  <div class="restore-copy">
+    <h2 class="restore-title" id="safety-entry-title"><span>ウェブの心配を、</span><span><em>仕事から</em>なくす。</span></h2>
+    <p class="restore-lead">更新、リニューアル、AIアプリ、安全性の確認まで。<br />小さなチームで、いま必要なことから整理します。</p>
+    <form class="restore-consult" data-safety-check-form novalidate>
+      <label class="restore-check-label" for="safety-check-url">安全性を確認したいサイトのURL</label>
+      <input class="restore-consult-prompt" id="safety-check-url" name="safetyCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="yourbusiness.com" aria-describedby="safety-check-note safety-check-status" required />
+      <button class="restore-consult-action" type="submit">安全チェック <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
+    </form>
+    <p class="restore-note" id="safety-check-note">無料・登録不要。公開されている情報だけで、通信の暗号化やなりすましメール対策を確認します。<a href="#contact">先に相談する</a></p>
+    <p class="restore-check-status" id="safety-check-status" role="status" aria-live="polite" data-safety-check-status></p>
+  </div>
   <div class="check-visual" aria-hidden="true">
     <div class="check-browser-card" aria-hidden="true" data-hero-browser>
       <div class="check-browser-bar"><span></span><span></span><span></span><p>サイト確認のイメージ</p></div>
@@ -33,8 +37,23 @@
   </div>
 </section>
 <style>
-.safety-entry{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;padding-top:120px;padding-bottom:80px;scroll-margin-top:calc(-1 * (var(--header-height) + 24px))}
-.safety-entry__copy{min-width:0}.safety-entry h2{font-size:clamp(30px,3.6vw,54px);line-height:1.3;letter-spacing:-.04em;margin:0 0 32px}.safety-entry__label{display:block;font-size:13px;margin-bottom:10px}.safety-entry__input{display:flex;gap:8px;padding:8px;background:#edf5f7}.safety-entry input{width:0;min-width:0;flex:1;border:0;background:transparent;padding:12px;font:inherit;font-size:16px;color:var(--ink)}.safety-entry button{border:0;padding:14px 20px;background:var(--ink);color:white;font:inherit;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer}.safety-entry button span{margin-left:16px}.safety-entry form p{font-size:12px;line-height:1.8;color:var(--ink-muted);margin:12px 0 0}#safety-check-status{min-height:1.8em}.safety-entry :is(input,button):focus-visible{outline:3px solid #4489a5;outline-offset:4px}
+.safety-entry{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:42px;align-items:center;padding-top:120px;padding-bottom:80px;scroll-margin-top:calc(-1 * (var(--header-height) + 24px))}
+  .restore-copy { min-width:0; position: relative; z-index: 2; padding-bottom: 14px; }
+  .restore-title { margin: 0 0 27px; font-size: clamp(2.75rem, 5.15vw, 5rem); font-weight: 900; line-height: 1.16; letter-spacing: -.04em; }
+  .restore-title span { display: block; white-space: nowrap; }
+  .restore-title em { color: var(--signal); font-style: normal; }
+  .restore-lead { margin-bottom: 32px; color: var(--ink-muted); font-size: 17px; line-height: 1.9; }
+  .restore-consult { display: flex; width: min(100%, 535px); min-height: 62px; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 8px 7px 22px; border: 1px solid var(--input-border); border-radius: 999px; background: var(--white); color: var(--ink); box-shadow: 0 7px 20px rgb(20 20 22 / 3%); transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .restore-consult:focus-within, .restore-consult:hover { border-color: var(--signal); box-shadow: 0 10px 28px rgb(223 32 51 / 10%); }
+  .restore-check-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .restore-consult-prompt { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font: inherit; font-size: 14px; }
+  .restore-consult-prompt::placeholder { color: var(--placeholder); opacity: 1; }
+  .restore-consult-action { display: inline-flex; min-height: 46px; align-items: center; gap: 13px; border: 0; padding: 0 20px; border-radius: 999px; background: var(--signal); color: white; font: inherit; font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background-color 180ms ease, transform 180ms ease; }
+  .restore-consult:hover .restore-consult-action { background: var(--signal-deep); transform: translateX(2px); }
+  .restore-consult svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+  .restore-note { max-width: 535px; margin: 15px 0 0 7px; color: var(--ink-muted); font-size: 13px; line-height: 1.8; }
+  .restore-note a { display: inline-block; padding-block: 12px; margin-block: -12px; margin-left: 8px; color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
+  .restore-check-status { min-height: 1.5em; margin: 5px 0 0 7px; color: var(--signal-deep); font-size: 12px; font-weight: 500; }
   .check-visual { position: relative; min-width: 0; height: 460px; }
   .check-visual::before { content: ''; position: absolute; inset: 38px 20px 36px 40px; background: #cce9ec; border-radius: 48% 48% 28% 48%; transform: rotate(-8deg); }
   .check-browser-card { position: absolute; z-index: 1; top: 17px; right: 4%; width: 82%; overflow: hidden; border: 1px solid #d5d5db; border-radius: 14px; background: #f7f7f8; box-shadow: 0 22px 48px rgb(20 20 22 / 13%); transform: rotate(3deg); }
@@ -60,6 +79,10 @@
   .check-health-dot { width: 9px; height: 9px; border-radius: 50%; background: #19b969; }
 
 @media(max-width:1100px) and (min-width:801px){.safety-entry{gap:32px}.check-visual{height:400px}.check-browser-content{padding:26px}.check-browser-content h2{font-size:24px}.check-health-card{font-size:10px;right:0}}
-@media(max-width:800px){.safety-entry{grid-template-columns:1fr;gap:36px;padding-top:110px;padding-bottom:64px}.safety-entry h2{font-size:32px;margin-bottom:24px}.check-visual{width:min(520px,100%);height:410px;justify-self:center}.check-browser-content{padding:28px}.check-browser-content h2{font-size:26px}.check-health-card{right:0}}
-@media(max-width:480px){.check-visual{height:330px}.check-browser-card{width:84%;top:16px}.check-browser-content{padding:22px}.check-browser-content h2{font-size:22px;margin-bottom:18px}.check-browser-choice{min-height:30px;font-size:9px;padding-inline:4px}.check-mobile-card{min-width:116px;width:37%;padding:16px 12px;bottom:4px;border-radius:20px}.check-mobile-card strong{font-size:17px}.check-mobile-card>p{font-size:7px;margin-bottom:12px}.check-mobile-card ul{font-size:8px;margin-top:10px}.check-health-card{min-height:34px;font-size:8px;padding-inline:10px}.safety-entry__input{padding:6px}.safety-entry button{padding-inline:14px}.safety-entry button span{margin-left:8px}}
+@media(max-width:800px){.safety-entry{grid-template-columns:minmax(0,1fr);gap:36px;padding-top:110px;padding-bottom:64px}.check-visual{width:min(520px,100%);height:410px;justify-self:center}.check-browser-content{padding:28px}.check-browser-content h2{font-size:26px}.check-health-card{right:0}}
+@media(max-width:480px){.check-visual{height:330px}.check-browser-card{width:84%;top:16px}.check-browser-content{padding:22px}.check-browser-content h2{font-size:22px;margin-bottom:18px}.check-browser-choice{min-height:30px;font-size:9px;padding-inline:4px}.check-mobile-card{min-width:116px;width:37%;padding:16px 12px;bottom:4px;border-radius:20px}.check-mobile-card strong{font-size:17px}.check-mobile-card>p{font-size:7px;margin-bottom:12px}.check-mobile-card ul{font-size:8px;margin-top:10px}.check-health-card{min-height:34px;font-size:8px;padding-inline:10px}}
+@media(max-width:1100px) and (min-width:801px){.restore-title{font-size:4.9vw}.restore-lead{font-size:15px}}
+@media(max-width:800px){.restore-title{font-size:clamp(2.4rem,7.1vw,4rem)}.restore-lead{font-size:16px}}
+@media(max-width:480px){.restore-title{margin-bottom:21px;font-size:clamp(1.95rem,9.1vw,2.85rem);line-height:1.18}.restore-lead{margin-bottom:24px;font-size:14px;line-height:1.85}.restore-consult{min-height:57px;padding-left:16px}.restore-consult-prompt{font-size:16px}.restore-consult-action{min-height:42px;gap:8px;padding:0 14px;font-size:11px}.restore-consult-action svg{width:15px}.restore-note,.restore-check-status{margin-left:2px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){.restore-consult,.restore-consult-action{transition:none}.restore-consult:hover .restore-consult-action{transform:none}}
 </style>

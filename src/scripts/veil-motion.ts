@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 ユーザー指定に合わせ、黄色を主役にオレンジと緑を添える配色へ変更。
 // 変更履歴: 2026-11-11 暗い顔料を明るい青・アクア・ピーチへ変更。怖い印象を避けて流れを軽くする。
 // 変更履歴: 2026-11-11 ヒーロー通過時だけヘッダーに正式ロゴを表示する監視を追加。
 // 変更履歴: 2026-11-11 説明カード切替を撤去。非同期の操作待ちを作らない、独自の流動インク描画へ変更。
@@ -33,9 +34,10 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
       float pigment=cloud(folded+vec2(cloud(folded+clock),cloud(folded-clock+8.))*1.8);
       float folds=cloud(folded*3.+warp*7.-clock);
       float veins=pow(max(0.,1.-abs(pigment-.5)*13.),3.);
-      // Bright blue, peach and aqua keep the flowing material light rather than smoky or ominous.
-      vec3 ink=mix(vec3(.33,.71,.94),vec3(.64,.87,.87),smoothstep(.27,.65,pigment));
-      ink=mix(ink,vec3(1.,.72,.63),smoothstep(.46,.79,folds)*.8);
+      // Yellow is the main pigment; orange and green add warmth and an optimistic accent.
+      vec3 ink=mix(vec3(1.,.82,.18),vec3(1.,.95,.43),smoothstep(.27,.65,pigment));
+      ink=mix(ink,vec3(1.,.53,.14),smoothstep(.50,.79,folds)*.75);
+      ink=mix(ink,vec3(.49,.75,.27),(1.-smoothstep(.32,.52,folds))*.75);
       ink+=vec3(.10,.08,.04)*veins*folds;
       ink*=.92+.12*smoothstep(.23,.8,folds);
       // A naturally present diagonal ribbon makes the first frame complete, without requiring a gesture.
