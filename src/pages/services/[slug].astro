@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
 // 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
@@ -18,7 +19,7 @@ const {service}=Astro.props;
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],security:['maintenance','security'],'ai-apps':[]};
 ---
-<SiteLayout title={`${service.name}・内容と料金｜SITEVEIL`} description={service.description}>
+<SiteLayout title={service.searchTitle} description={service.description} breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:`${home}services/`},{name:service.name,path:`${home}services/${service.slug}/`}]}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
 <section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]} showContact={false}/>}</div>
 <aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>

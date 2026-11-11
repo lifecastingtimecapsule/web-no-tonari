@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-10 新ブランドのWeb制作・保守・検査を3つの相談入口にまとめる。
 // 変更履歴: 2026-11-11 問い合わせフォームの直接送信に合わせて案内を更新。
@@ -16,7 +17,7 @@ const postalPlan=pricingPlans.find(plan=>plan.id==='email-breach-check')!;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const consultation=(service:string)=>`${home}?service=${encodeURIComponent(service)}#contact`;
 ---
-<SiteLayout title="Web制作・運用・セキュリティ｜SITEVEIL" description="設計から、防御まで。Web制作・運用保守・漏洩調査・システムの検査を、必要な範囲から整理します。">
+<SiteLayout title="サイト・メールの安全確認｜無料チェックと調査｜SITEVEIL" description="サイトの簡易安全チェックとメールの漏えい履歴はオンライン無料。基本セキュリティ確認・保守・詳しいシステム検査の対象と料金をご案内します。">
 <div class="shell siteveil-guide"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><span>安全性の確認・調査</span></nav>
 <header><h1>サイト・メールの<br />安全確認</h1><p class="lead">自分で使える無料チェックと、依頼して調べる有料サービスをご案内します。</p></header>
 <section aria-labelledby="choose-title"><h2 id="choose-title">調べたいものから選ぶ</h2>

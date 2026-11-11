@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-09 ナビのサービスをスクロールからページ遷移へ変えるため一覧ページを追加。
 // 変更履歴: 2026-11-11 写真付きの縦横一覧へ統一し、横送りと重複導線を撤去。
@@ -10,7 +11,7 @@ import ServiceOverview from '../../components/ServiceOverview.astro';
 import '../../styles/catalog.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
-<SiteLayout title="サービス一覧｜SITEVEIL" description="ウェブサイト制作、SEO対策、業務システム開発、保守・セキュリティ。できることと体験サンプルから、必要なサービスを選べます。">
+<SiteLayout title="サービス一覧｜SITEVEIL" breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:`${home}services/`}]} description="ウェブサイト制作、SEO対策、業務システム開発、保守・セキュリティ。依頼できる作業・税込料金・対象範囲を確認し、そのままお問い合わせいただけます。">
   <div class="shell catalog-page">
     <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">サービス</span></nav>
     <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>ウェブ制作、SEO対策、業務システム開発、保守・セキュリティ。</p></header>

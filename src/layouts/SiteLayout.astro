@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-08 ページごとに複製されていたhead・ロゴ・ヘッダー・フッターを共通レイアウトへ集約。
 // 変更履歴: 2026-11-11 全ページに明るい共通トーン・文字・余白を適用。
 // 変更履歴: 2026-11-11 公開済み会社情報による構造化データと共有画像を追加。試作の正規先をホームへ統一。
@@ -7,15 +8,17 @@ import '../styles/global.css';
 import '../styles/atmosphere.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-interface Props { title: string; description: string; homePage?: boolean; noindex?: boolean; }
-const { title, description, homePage = false, noindex = false } = Astro.props;
+interface Props { title: string; description: string; homePage?: boolean; noindex?: boolean; breadcrumbs?: {name:string;path:string}[]; }
+const { title, description, homePage = false, noindex = false, breadcrumbs = [] } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const canonical = new URL(noindex && homePage ? home : Astro.url.pathname, Astro.site ?? 'https://site-veil.com').toString();
 const organizationRoot = new URL(home, Astro.site ?? 'https://site-veil.com').href;
 const organizationSchema = {'@context':'https://schema.org','@graph':[
   {'@type':'Organization','@id':`${organizationRoot}#organization`,name:'SITEVEIL',legalName:'株式会社ライフキャスティングジャパン',url:organizationRoot,email:'info@site-veil.com',logo:new URL(`${home}brand/siteveil-horizontal-black.svg`,organizationRoot).href,address:{'@type':'PostalAddress',addressRegion:'愛知県',addressLocality:'大府市',addressCountry:'JP'}},
   {'@type':'WebSite','@id':`${organizationRoot}#website`,url:organizationRoot,name:'SITEVEIL',inLanguage:'ja',publisher:{'@id':`${organizationRoot}#organization`}},
-  {'@type':'WebPage',url:canonical,name:title,description,inLanguage:'ja',isPartOf:{'@id':`${organizationRoot}#website`}}
+  {'@type':'WebPage',url:canonical,name:title,description,inLanguage:'ja',isPartOf:{'@id':`${organizationRoot}#website`}},
+  // 役割: 画面に表示するパンくずと同じ階層だけを検索エンジンへ伝える。
+  ...(breadcrumbs.length>1?[{'@type':'BreadcrumbList',itemListElement:breadcrumbs.map((breadcrumb,index)=>({'@type':'ListItem',position:index+1,name:breadcrumb.name,item:new URL(breadcrumb.path,organizationRoot).href}))}]:[])
 ]};
 ---
 <!doctype html>
