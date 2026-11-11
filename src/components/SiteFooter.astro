@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-09 サービス・料金をページ内スクロールから専用ページへの遷移へ変更。
 // 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
 // 変更履歴: 2026-11-08 右寄せの1行構成を、ブランド・相談導線・3列のサイトマップ・運営表記の構成へ再設計。全ページで同じ余白から始まるよう統一。
+// 変更履歴: 2026-11-11 明るい共通フッターへ変更し、黒ロゴと重複しない問い合わせ導線を使用。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
 import Brand from './Brand.astro';
@@ -17,9 +18,9 @@ const groups: [string, [string, string][]][] = [
 <footer class="site-footer">
   <div class="shell site-footer__top">
     <div class="site-footer__brand">
-      <Brand footer />
+      <Brand homeSection />
       <p>技術が大きくなる時代に、小さく近くいる。</p><p><a href="mailto:info@site-veil.com">info@site-veil.com</a></p>
-      <a class="site-footer__cta" href={`${home}#contact`}>相談する <span aria-hidden="true">→</span></a>
+
     </div>
     <nav class="site-footer__nav" aria-label="フッターナビゲーション">
       {groups.map(([heading, links]) => (

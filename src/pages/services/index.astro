@@ -1,16 +1,17 @@
 ---
 // 変更履歴: 2026-11-09 ナビのサービスをスクロールからページ遷移へ変えるため一覧ページを追加。
+// 変更履歴: 2026-11-11 写真付きの縦横一覧へ統一し、横送りと重複導線を撤去。
 // 役割: 既存の三サービスの画像・横送り・詳細への入口を同じブランドで提供する。
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import ServiceCarousel from '../../components/ServiceCarousel.astro';
+import ServiceOverview from '../../components/ServiceOverview.astro';
 import '../../styles/catalog.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 <SiteLayout title="サービス一覧｜SITEVEIL" description="ウェブサイト制作、AIアプリ開発、保守・セキュリティ。できることと体験サンプルから、必要なサービスを選べます。">
   <div class="shell catalog-page">
     <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">サービス</span></nav>
-    <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>必要なものだけを、必要な順序で。<br />できることと体験サンプルから、サービスの内容をご覧いただけます。</p></header>
-    <ServiceCarousel headingTag="h2" />
-    <section class="catalog-close"><h2>内容と費用を、合わせて確認。</h2><p>基本料金に含まれること、追加できることを料金ページでご案内しています。</p><a class="button button--human" href={`${home}pricing/`}>料金を見る</a></section>
+    <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>必要なものを、必要な順序で。</p></header>
+    <ServiceOverview headingTag="h2" />
+    <section class="catalog-close"><h2>料金も、明快に。</h2><a class="button button--human" href={`${home}pricing/`}>料金を見る</a></section>
   </div>
 </SiteLayout>

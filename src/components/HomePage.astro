@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 画像付き安全チェックを復元し、説明の重複と料金の重複ボタンを整理。
 // 変更履歴: 2026-11-11 トップと試作を共通化。送信フォームと背景になじむナビへ更新。
 // 変更履歴: 2026-11-11 ヒーロー通過に合わせて左上ロゴを表示する指定を反映。
 // 変更履歴: 2026-11-11 インクヒーローへ作り直し、試作内のヘッダーを平らな構成に変更。説明より視覚を優先する指示を反映。
@@ -20,6 +21,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import VeilHero from '../components/VeilHero.astro';
+import SafetyCheck from './SafetyCheck.astro';
 // 変更履歴: 2026-11-08 4サービスへの詳細・体験導線を追加し、ECを含む提供領域を統一。
 // 変更履歴: 2026-11-08 サービスをサンプル画面・短い説明付きの横並びカラムへ変更し、完成像を比較しやすくする。
 // 変更履歴: 2026-11-08 スクロール連動の赤い大見出しを追加し、相談欄を本文＋任意URLとコピー操作へ簡略化。
@@ -46,13 +48,13 @@ const faqs = [
 
 <SiteLayout title={preview ? "SITEVEIL｜モーション試作" : "SITEVEIL｜ウェブと、その先。"} description="ウェブ保守、ホームページのリニューアル、AI活用、セキュリティ確認を、小さなチームならではの距離感で支援するSITEVEIL。" homePage noindex={preview}>
       <VeilHero />
+      <SafetyCheck />
 
       <section class="declaration section section--paper" aria-labelledby="declaration-title">
         <div class="shell declaration__grid">
-          <h2 id="declaration-title">速く答えることより、<br />近くで考えること。</h2>
+          <h2 id="declaration-title">小さく、<br />近く。</h2>
           <div class="declaration__body">
-            <p>AIやウェブがどれだけ便利になっても、会社ごとに悩みも、必要な答えも違います。</p>
-            <p>小さなチームだからこそ、話を途中で手放さない。一つひとつの仕事を知り、その会社に合う方法を一緒に考えます。</p>
+            <p>小さなチームで、制作から運用まで。<br />あなたの仕事に合うかたちを、一緒に考えます。</p>
           </div>
         </div>
       </section>
@@ -61,7 +63,7 @@ const faqs = [
         <div class="shell">
           <div class="section-heading section-heading--wide">
             <h2 id="services-title">つくる、守る、育てるを、<br />ひとつの相談先で。</h2>
-            <p>必要なものだけを、必要な順序で。大きな仕組みを売ることから始めません。</p>
+
           </div>
 
           <ServiceOverview />
@@ -71,13 +73,13 @@ const faqs = [
       <section class="pricing section section--paper" id="pricing" aria-labelledby="pricing-title">
         <div class="shell">
           <div class="pricing__heading">
-            <h2 id="pricing-title">料金は、先に決める。<br />後から増やさない。</h2>
-            <p>必要なものだけを選べる固定料金です。表に書いた範囲なら、追加請求はありません。</p>
+            <h2 id="pricing-title">料金は、先に。</h2>
+            <p>必要な範囲から。すべて税込です。</p>
           </div>
 
           <PricingSummary />
           <p class="pricing__external">表示はすべて税込。保守契約は任意です。対象範囲、追加オプション、外部費用は料金ページにまとめています。</p>
-          <a class="pricing__cta" href={`${serviceBase}/pricing/`}>料金と含まれる内容を見る <span aria-hidden="true">→</span></a>
+
         </div>
       </section>
 
@@ -85,10 +87,9 @@ const faqs = [
         <div class="security__line" aria-hidden="true"></div>
         <div class="shell security__layout">
           <div>
-            <h2 id="security-title">AI時代の便利さと、<br />新しいリスクに備える。</h2>
-            <p>AIを悪用した偽メールやなりすまし、古いホームページの脆弱性。怖がらせるのではなく、確認できる項目と優先順位へ変えます。</p>
-            <p class="security__diagnostic"><strong>必要な場合は、有料のセキュリティ診断へ。</strong><span>サイトの構成、更新状況、権限、バックアップなどを確認し、対応範囲と費用を先にご案内します。</span></p>
-            <a class="security__check-link" href={`${serviceBase}/check/`}>まずは無料のかんたん安全チェック <span aria-hidden="true">→</span></a>
+            <h2 id="security-title">便利さにも、<br />安心を。</h2>
+            <p>公開情報の確認から、詳しい調査まで。</p>
+            <a class="security__check-link" href={`${serviceBase}/security/`}>安全性の確認・調査 <span aria-hidden="true">↗</span></a>
           </div>
           <ul class="security__checks">
             <li><span aria-hidden="true"></span>CMS・プラグインの更新状況</li>
@@ -102,8 +103,8 @@ const faqs = [
       <section class="faq section section--paper" id="faq" aria-labelledby="faq-title">
         <div class="shell faq__layout">
           <div class="section-heading">
-            <h2 id="faq-title">相談の前によくあること。</h2>
-            <p>相談の前によくいただく質問です。ここにないことも、お気軽にお問い合わせください。</p>
+            <h2 id="faq-title">よくある質問</h2>
+
           </div>
           <div class="faq-list">
             {faqs.map(([question, answer]) => (
@@ -120,7 +121,7 @@ const faqs = [
         <div class="shell contact__layout">
           <div class="contact__intro">
             <h2 id="contact-title">お問い合わせ</h2>
-            <p>ご相談・ご質問をお書きください。</p>
+
 
           </div>
 

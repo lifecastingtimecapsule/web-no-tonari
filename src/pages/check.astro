@@ -1,5 +1,6 @@
 ---
 // 変更履歴: 2026-11-08 SEO確認を廃止し、公開情報だけで確認する「かんたん安全チェック」ページを追加。
+// 変更履歴: 2026-11-11 導入を短くし、確認項目を開閉式へ整理。結果や診断範囲は維持。
 // 役割: 確認範囲を先に示し、結果を3段階で表示して、有料の基本セキュリティ確認と相談へつなぐ。
 import SiteLayout from '../layouts/SiteLayout.astro';
 import '../styles/services.css';
@@ -20,7 +21,7 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
 <div class="shell check-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
   <h1>サイトの安全性を、<br />かんたんチェック。</h1>
-  <p class="check-lead">URLを入れるだけで、外から見える安全性を確認できます。<br />点数ではなく、「問題なし」「確認をおすすめ」「要対応」の3段階でお伝えします。</p>
+  <p class="check-lead">URLから、公開されている情報を確認します。</p>
 
   <form class="check-form" data-check-form data-api={checkApi} novalidate>
     <label for="check-url">確認したいサイトのURL</label>
@@ -40,10 +41,10 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
     <p class="check-result__time" data-check-time></p>
   </section>
 
-  <section class="check-scope" aria-labelledby="check-scope-title">
-    <h2 id="check-scope-title">このチェックで確認すること</h2>
+  <details class="check-scope">
+    <summary id="check-scope-title">確認する項目</summary>
     <dl>{checks.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
-  </section>
+  </details>
 
   <section class="check-next" aria-labelledby="check-next-title">
     <div>
