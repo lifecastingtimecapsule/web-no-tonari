@@ -25,3 +25,11 @@
 
 ## 検証
 66件の自動テスト、Astro検証、Worker型検証、静的ビルドを実施。公開用アドレス test@example.com を使って稼働確認する。実機スマートフォン・Safariは未検証。
+
+## 公開後の確認
+変更履歴: 2026-11-11 公開環境の検証結果を追記。
+- コミット191abda、GitHub Actions 42968004764で公開成功。
+- 公開テスト用アドレス test@example.com をブラウザから照会。API HTTP 200、両照会元完了、統合後300件を表示。顧客情報は使用していない。応答約2.7秒。
+- 320px・390pxで横はみ出しなし、1280pxでも表示確認。右上メニューの開閉を確認。
+- ページHTTP 200、API GET 405、API Cache-Control no-store/private。
+- Workersでredirect:errorが非対応と判明しmanualに修正。3xxは成功にせず、転送先を追従しない。
