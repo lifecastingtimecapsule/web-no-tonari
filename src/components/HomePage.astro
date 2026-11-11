@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 大ロゴ消失時の切り替えに合わせ、ヘッダーロゴのフェードを撤去。
 // 変更履歴: 2026-11-11 ロゴはスクロール開始で表示し、ヒーローを抜けるまでの待ちを撤去。
 // 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
@@ -135,7 +136,7 @@ const faqs = [
 
 <!-- 試作の役割: アンカー移動も待たせず、素早い往復操作をそのまま反映する。 -->
 <style is:global>html:has([data-veil-stage]) { scroll-behavior: auto; }
-html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:transparent; top:0; width:100%; min-height:76px; padding:16px 4%; }html:has([data-brand-observed]) .site-header .brand { opacity:0; visibility:hidden; transition:opacity 80ms ease; }
+html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:transparent; top:0; width:100%; min-height:76px; padding:16px 4%; }html:has([data-brand-observed]) .site-header .brand { opacity:0; visibility:hidden; transition:none; }
 html:has([data-brand-visible]) .site-header .brand { opacity:1; visibility:visible; }
 @media(prefers-reduced-motion:reduce){html:has([data-veil-stage]) .site-header .brand { transition:none; }}
 </style>
