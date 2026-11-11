@@ -115,3 +115,62 @@ body .site-footer__bottom{padding-top:16px;border-top:1px solid #e6e9e7;gap:4px 
 body .site-footer small{font-size:11px;line-height:1.7}
 @media(max-width:900px){body .site-footer__top{grid-template-columns:1fr;gap:20px}body .site-footer__nav{grid-template-columns:1.7fr .8fr 1fr}}
 @media(max-width:600px){body .site-footer{padding-top:24px}body .site-footer__nav{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}body .site-footer__nav>div:first-child{grid-column:1/-1}body .site-footer__nav a{min-height:40px}body .site-footer__bottom{flex-direction:column}}
+
+/* 変更履歴: 2026-11-11 サイト全体の縦余白を統一。本文は行間を維持し、見出し・章・フッターリンク間の余剰だけを削減。 */
+/* 役割: ページごとの表示密度を合わせ、スマホでも読み順とタップ領域を保つ。ヒーローと画像の構図は維持。 */
+body .section{padding-block:56px}
+body .section-heading{margin-bottom:32px}
+body.page-inner #main{padding-top:108px;padding-bottom:32px}
+body.page-inner #main :is(.catalog-heading,.service-intro){padding-block:16px 32px;margin-block:0}
+body.page-inner #main :is(.catalog-heading h1,.service-intro h1,.company h1,.philosophy h1,.check-page h1){margin-bottom:20px;letter-spacing:-.03em}
+body.page-inner #main :is(.page-breadcrumb,.philosophy__breadcrumb,.company>nav,.check-breadcrumb){margin-bottom:24px}
+body.page-inner #main .service-intro{gap:40px}
+body.page-inner #main :is(.service-sample,.service-notes){padding-block:32px}
+body.page-inner #main .service-more{margin-block:24px;padding-block:16px}
+body.page-inner #main :is(.service-close,.catalog-close){padding:24px;margin-top:32px}
+body.page-inner #main .pricing-section{padding-top:32px}
+body.page-inner #main .price-detail{padding-block:24px;gap:32px}
+body.page-inner #main .price-options>div{padding-block:16px}
+body.page-inner #main .pricing-questions summary{padding-block:16px}
+body.page-inner #main .company__intro{margin-bottom:24px}
+body.page-inner #main .company dl>div{padding:16px;gap:16px}
+body.page-inner #main .philosophy__mission{padding:24px}
+body.page-inner #main .philosophy__mission h2{margin-bottom:20px}
+body.page-inner #main .philosophy__principles{margin-top:32px}
+body.page-inner #main .philosophy__principles>h2{margin-bottom:20px}
+body.page-inner #main .philosophy__principles article{padding-block:20px}
+body.page-inner #main .siteveil-guide{padding-bottom:0}
+body.page-inner #main .siteveil-guide header{padding-block:16px 32px}
+body.page-inner #main .siteveil-guide article{padding:24px;gap:24px;margin-bottom:16px}
+body.page-inner #main .siteveil-guide h2{margin-bottom:20px}
+body.page-inner #main .siteveil-guide .links{gap:12px}
+body.page-inner #main .siteveil-guide .closing{padding-top:24px}
+body.page-inner #main .check-page header{margin-bottom:24px}
+body.page-inner #main :is(.check-result,.check-next){margin-top:32px}
+body.page-inner #main .check-next{padding:24px;gap:24px}
+body.page-inner #main .service-learning{margin-top:32px}
+body.page-inner #main .learning-reading{margin-top:40px}
+body .site-footer__nav ul{line-height:1.5}
+body .site-footer__nav li{margin:0;padding:0}
+body .site-footer__nav a{min-height:28px;line-height:1.5;padding-block:3px}
+body .site-footer__heading{margin-bottom:6px}
+@media(max-width:800px){
+  body .section{padding-block:40px}
+  body .section-heading{margin-bottom:24px}
+  body.page-inner #main{padding-top:96px}
+  body.page-inner #main :is(.catalog-heading,.service-intro){padding-block:12px 24px}
+  body.page-inner #main .service-intro{gap:24px}
+  body.page-inner #main :is(.service-sample,.service-notes){padding-block:24px}
+  body.page-inner #main .price-detail{gap:20px}
+  body.page-inner #main .siteveil-guide header{padding-block:12px 24px}
+  body.page-inner #main .siteveil-guide article{padding:20px;gap:16px}
+  body.page-inner #main :is(.service-close,.catalog-close,.philosophy__mission){padding:20px}
+  body.page-inner #main .company dl>div{gap:8px}
+}
+@media(max-width:600px){
+  body .site-footer__nav{row-gap:16px}
+  body .site-footer__nav a{min-height:32px}
+  body .site-footer__top{gap:16px;padding-bottom:20px}
+}
+
+body.page-inner #main .siteveil-guide h1{font-size:clamp(32px,4.5vw,52px);margin-block:0 20px;letter-spacing:-.03em}
