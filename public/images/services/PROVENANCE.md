@@ -34,3 +34,6 @@
 - 作品：https://unsplash.com/photos/wooden-standing-desk-in-home-office-tdnYk4qOGhc
 - 取得元：https://images.unsplash.com/photo-1623177623442-979c1e42c255?auto=format&fit=crop&w=1200&q=80&fm=webp
 - ライセンス：https://unsplash.com/license （2026-11-09確認）。本文にも作者・作品・ライセンスを掲載。
+
+## seo.svg（2026-11-11）
+SEO対策カード用の独自制作SVG。検索結果の構造を示す説明図であり、実際の検索結果・顧客実績・順位を表すものではない。第三者画像不使用。

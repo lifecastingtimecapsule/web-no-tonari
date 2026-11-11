@@ -1,0 +1,16 @@
+<!-- 変更履歴: 2026-11-11 SEOカード用に検索結果の構造を表す独自SVGを作成。実績・順位の数値は使わない。 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 675">
+<rect width="900" height="675" fill="#edf5f7"/>
+<rect x="70" y="65" width="760" height="545" rx="14" fill="#fff"/>
+<path d="M70 115H830" stroke="#e4e8e8"/><g fill="#d4dada"><circle cx="98" cy="90" r="5"/><circle cx="118" cy="90" r="5"/><circle cx="138" cy="90" r="5"/></g>
+<text x="115" y="177" fill="#17191d" font-size="34" font-weight="700" font-family="sans-serif">検索の入口を、整える。</text>
+<rect x="112" y="205" width="675" height="60" rx="30" fill="#f6f7f5" stroke="#e2e6e4"/>
+<circle cx="143" cy="233" r="9" fill="none" stroke="#65716c" stroke-width="2"/><path d="m150 240 7 7" stroke="#65716c" stroke-width="2"/>
+<text x="180" y="243" fill="#65716c" font-size="20" font-family="sans-serif">探している人に、届くサイトへ</text>
+<circle cx="133" cy="316" r="15" fill="#e8f1eb"/><path d="m126 316 5 5 9-10" fill="none" stroke="#4e8c66" stroke-width="2"/>
+<text x="165" y="322" fill="#67706b" font-family="sans-serif" font-size="17">yourbusiness.com</text>
+<text x="113" y="369" fill="#253f68" font-family="sans-serif" font-size="29" font-weight="700">伝わるタイトルと、必要な情報。</text>
+<text x="113" y="409" fill="#67706b" font-family="sans-serif" font-size="19">ページの構造・見出し・説明文を見直す。</text>
+<path d="M113 441H690M113 461H595" stroke="#e5e8e5" stroke-width="8" stroke-linecap="round"/>
+<g font-family="sans-serif" font-size="19" text-anchor="middle" fill="#42564a"><rect x="113" y="507" width="180" height="48" rx="24" fill="#eef4ef"/><text x="203" y="537">サイト構造</text><rect x="310" y="507" width="180" height="48" rx="24" fill="#eef4ef"/><text x="400" y="537">コンテンツ</text><rect x="507" y="507" width="180" height="48" rx="24" fill="#eef4ef"/><text x="597" y="537">基本設定</text></g>
+</svg>
