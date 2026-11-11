@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
 // 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
@@ -11,9 +12,10 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import '../../styles/services.css';
 import {servicePages} from '../../data/services';
 import {businessPricing} from '../../data/business-pricing';
-import {pricingPlans,formatPrice} from '../../data/pricing';
+import {pricingPlans,securityInvestigationPlans,formatPrice} from '../../data/pricing';
 import BusinessPricing from '../../components/BusinessPricing.astro';
 import InlinePricing from '../../components/InlinePricing.astro';
+import SecurityInvestigationPlans from '../../components/SecurityInvestigationPlans.astro';
 export function getStaticPaths(){return servicePages.map(service=>({params:{slug:service.slug},props:{service}}));}
 const {service}=Astro.props;
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
@@ -24,11 +26,13 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 <section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]} showContact={false}/>}</div>
 <aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
 {service.slug==='ai-apps'&&<BusinessPricing showContact={false}/>}
+{service.slug==='security'&&<SecurityInvestigationPlans showContact={false}/>}
 <section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。専門的な資料の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
-{service.slug==='security'&&<p>メールの漏えい確認や、システムの詳しい検査は別のサービスです。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
+{service.slug==='security'&&<p>サイト・メールの無料チェックは、こちらからご利用いただけます。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
 
 <section class="service-inquiry" aria-label="このサービスへのお問い合わせ">
 {service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
+{service.slug==='security'&&securityInvestigationPlans.map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
 </section>
 </div>
 </SiteLayout>

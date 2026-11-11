@@ -1,0 +1,27 @@
+---
+// 変更履歴: 2026-11-11 詳細検査・侵入テストの価格、範囲、郵送報告書を共通化。
+// 役割: 検査の違いと上限・報告内容を常時表示し、説明後の問い合わせへつなぐ。
+import {securityInvestigationPlans,formatPrice} from '../data/pricing';
+interface Props {showContact?:boolean;}
+const {showContact=true}=Astro.props;
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
+---
+<section class="investigation-plans" aria-labelledby="investigation-title" id="system-investigation">
+<h2 id="investigation-title">システムを、さらに詳しく調べる。</h2>
+<p>基本チェックとは別のプランです。料金は税込・1回の目安。総合検査には詳細検査を含みます。</p>
+{securityInvestigationPlans.map(plan=><article class="investigation-plan" id={plan.id}>
+<h3>{plan.name}</h3><p class="investigation-plan__amount"><strong>{formatPrice(plan.amount)}〜</strong><span>税込・報告書の国内送料込み</span></p>
+<p>{plan.summary}</p><p class="investigation-plan__scope"><b>この料金の範囲：</b>{plan.scope}</p>
+<ul>{plan.included.map(item=><li>{item}</li>)}</ul>
+<p class="investigation-plan__scope"><b>別料金・対象外：</b>{plan.excluded}</p>
+{showContact&&<a class="text-link" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>}
+</article>)}
+<div class="investigation-report"><h3>何を、どう調べたか。書面でお届けします。</h3>
+<p>基本チェック・詳細検査・総合検査とも、調査対象、実施日、確認項目、使った調査方法、確認できた結果・根拠、未確認の範囲を紙の報告書にまとめ、国内へ郵送します。問題が見つかった場合は、影響と対応の優先順位も記載します。</p>
+<p>ご依頼前に、対象・提供資料・許可された操作・検査環境・停止条件・納期・正式な費用を書面で合意します。大規模なコードや複雑な連携は別見積もり。全ての弱点の発見や安全性を保証するものではありません。</p>
+<p>報告書・調査データは発送後30日で削除します。期間内の再発行はご相談ください。再発行で保管期限は延長せず、期限後の再調査・再発行は別途有料です。</p>
+<h3>小規模な事業でも、依頼しやすい価格に。</h3><p>AIと自動化を調査の補助に使い、対象を小規模な1システムに絞って費用を抑えます。調査結果を確認し、実施した範囲と限界を報告書に残します。</p></div>
+</section>
+<style>
+.investigation-plans{padding:24px 0;scroll-margin-top:100px}.investigation-plans>h2{font-size:clamp(24px,3vw,32px);line-height:1.5}.investigation-plan{border-top:1px solid #dedfdf;padding:24px 0}.investigation-plan h3,.investigation-report h3{font-size:21px;line-height:1.5;margin:0 0 12px}.investigation-plan p,.investigation-report p{font-size:16px;line-height:1.85;max-width:75ch}.investigation-plan__amount strong{display:block;font-size:28px;line-height:1.4;font-variant-numeric:tabular-nums}.investigation-plan__amount span{font-size:14px}.investigation-plan .investigation-plan__scope{font-size:14px;line-height:1.75}.investigation-plan ul{padding-left:22px;font-size:15px;line-height:1.8}.investigation-plan a{min-height:44px;display:inline-flex;align-items:center;font-size:14px}.investigation-report{border-top:1px solid #dedfdf;padding-top:24px}.investigation-report p{font-size:14px}.investigation-report h3:not(:first-child){margin-top:24px}
+</style>

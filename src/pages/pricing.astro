@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
 // 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
 // 変更履歴: 2026-11-11 各料金メニューの問い合わせを対象範囲の説明後へ移動。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
@@ -14,6 +15,7 @@
 // 変更履歴: 2026-11-11 業務システムの開発メニューと初期・月額の目安を追加。
 // 役割: 既存の金額と任意契約方針を保ち、依頼前に費用の内訳を判断できるようにする。
 import SiteLayout from '../layouts/SiteLayout.astro';
+import SecurityInvestigationPlans from '../components/SecurityInvestigationPlans.astro';
 import BusinessPricing from '../components/BusinessPricing.astro';
 import PricingSummary from '../components/PricingSummary.astro';
 import { pricingPlans, pricingOptions, formatPrice } from '../data/pricing';
@@ -37,6 +39,7 @@ const examples = [
     {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{plan.id === 'email-breach-check' ? '無料' : formatPrice(plan.amount)}<span>{plan.id === 'email-breach-check' ? 'オンラインの詳細結果' : `税込・${plan.unit}`}</span></p>{plan.id === 'email-breach-check' && <p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み）</p>}<p>{plan.lead}</p></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>別料金・対象外</h4><p>{plan.excluded}</p><a class="text-link" href={plan.id === 'email-breach-check' ? `${home}email-check/` : `${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.id === 'email-breach-check' ? '無料でメールを確認する' : `${plan.name}について問い合わせる`}</a></div></article>)}
   </section>
 
+  <SecurityInvestigationPlans/>
   <BusinessPricing/>
   <section class="pricing-section" id="options" aria-labelledby="options-title"><h2 id="options-title">必要なものだけ、追加できます。</h2><p>基本料金に、選んだ項目の金額を加えます。月額のオプションは、基本保守に追加する料金です。</p><dl class="price-options">{pricingOptions.map(option => <div><dt>{option.name}</dt><dd class="price-options__amount">{formatPrice(option.amount)}<small>{option.unit}</small></dd><dd class="price-options__description">{option.description}</dd></div>)}</dl></section>
 
