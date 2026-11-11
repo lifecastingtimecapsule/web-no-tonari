@@ -1,5 +1,6 @@
 ---
 // 変更履歴: 2026-11-11 サービス配下の6リンクと会社・理念・料金・FAQ・相談を共通ナビに整理。
+// 変更履歴: 2026-11-11 メール漏えいチェックの実照会ページをサービス配下に追加。
 // 役割: PCのサービスドロップダウンとスマホ右下の縦型メニューを共通のリンクで提供する。
 import Brand from './Brand.astro';
 import {servicePages} from '../data/services';
@@ -13,6 +14,7 @@ const currentPath = Astro.url.pathname;
     <details class="nav-services"><summary>サービス<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></summary><div class="nav-services__links">
       <a href={`${home}services/`} aria-current={currentPath === `${home}services/` ? 'page' : undefined}>サービス一覧</a>
       {servicePages.map(service=><a href={`${home}services/${service.slug}/`} aria-current={currentPath === `${home}services/${service.slug}/` ? 'page' : undefined}>{service.name}</a>)}
+      <a href={`${home}email-check/`}>無料メール漏えいチェック</a>
       <a href={`${home}check/`}>かんたん安全チェック</a>
     </div></details>
     <a href={`${home}company/`} aria-current={currentPath.endsWith('/company/') ? 'page' : undefined}>会社概要</a>

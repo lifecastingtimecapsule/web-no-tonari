@@ -16,3 +16,8 @@ docs/superpowers/
 public/images/yayoi-*.jpg
 public/images/yayoi-*.webp
 public/images/ASSETS.md
+
+# 2026-11-11: ローカルのWorker状態と秘密値をコミットしない。
+.wrangler/
+.dev.vars
+.dev.vars.*

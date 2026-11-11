@@ -4,6 +4,7 @@
 // 変更履歴: 2026-11-08 右寄せの1行構成を、ブランド・相談導線・3列のサイトマップ・運営表記の構成へ再設計。全ページで同じ余白から始まるよう統一。
 // 変更履歴: 2026-11-11 明るい共通フッターへ変更し、黒ロゴと重複しない問い合わせ導線を使用。
 // 変更履歴: 2026-11-11 末尾の安全確認リンクを削除し、メールを問い合わせ欄へ移動。
+// 変更履歴: 2026-11-11 無料メール照会への入口を追加。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
 import Brand from './Brand.astro';
@@ -11,7 +12,7 @@ import { servicePages } from '../data/services';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
-  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['かんたん安全チェック', `${home}check/`]]],
+  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
   ['ご案内', [['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
   ['お問い合わせ', [['相談を送る', `${home}#contact`], ['info@site-veil.com', 'mailto:info@site-veil.com']]],
 ];

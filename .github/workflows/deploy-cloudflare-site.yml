@@ -1,3 +1,4 @@
+# 変更履歴: 2026-11-11 HIBPキーを暗号化SecretからWorkerへ渡し、メール照会を公開。型検証とテストをデプロイ前に実施。
 # 変更履歴: 2026-11-11 独自ドメインを正規URLへ設定。
 # 変更履歴: 2026-11-08 サイト本体をCloudflare Workers（静的アセット）へ公開するワークフローを追加。
 # 必要な設定: Secretsの CLOUDFLARE_API_TOKEN・CLOUDFLARE_ACCOUNT_ID（安全チェックと共通）。
@@ -26,6 +27,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm test
+      - run: npx tsc -p deploy/site/tsconfig.json
       - run: npm run build
         env:
           SITE_URL: https://site-veil.com
@@ -38,3 +41,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: deploy/site
+          secrets: |
+            HIBP_API_KEY
+        env:
+          HIBP_API_KEY: ${{ secrets.HIBP_API_KEY }}

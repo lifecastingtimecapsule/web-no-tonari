@@ -1,8 +1,11 @@
+// 変更履歴: 2026-11-11 保存しない無料メール照会APIと、件数だけを管理するBudgetを追加。
 // 変更履歴: 2026-11-08 workers.devでは「常にHTTPSを使用」が使えないため、http://の訪問をhttps://へ転送する入口を追加。
 // 役割: http://のリクエストだけを301で転送し、それ以外は静的アセット（_headersのヘッダー付き）をそのまま返す。
 // 変更履歴: 2026-11-11 同一サイトの問い合わせ送信を静的アセットより前に処理。
 import {handleContact,type ContactEnv} from './contact';
-interface Env extends ContactEnv { ASSETS: { fetch(request: Request): Promise<Response> } }
+import {handleBreach,type BreachEnv} from './breach';
+export {BreachBudget} from './breach-budget';
+interface Env extends ContactEnv,BreachEnv { ASSETS: { fetch(request: Request): Promise<Response> } }
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -17,6 +20,7 @@ export default {
       url.protocol = 'https:';
       return Response.redirect(url.toString(), 301);
     }
+    if (url.pathname === '/api/breach-check') return handleBreach(request,env);
     if (url.pathname === '/api/contact') return handleContact(request, env);
     return env.ASSETS.fetch(request);
   },

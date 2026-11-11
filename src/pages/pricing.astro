@@ -3,6 +3,7 @@
 // 変更履歴: 2026-11-09 AI画像の準備方針と専門診断の公開価格例を追加。自社料金との誤認を防ぐ。
 // 変更履歴: 2026-11-09 料金を独立ページにし、対象範囲・オプション・合計例を明示。
 // 変更履歴: 2026-11-11 改定した税込価格を紹介文・メタ情報へ反映。
+// 変更履歴: 2026-11-11 オンライン無料チェックを公開し、実照会へのリンクを追加。郵送は準備中を維持。
 // 役割: 既存の金額と任意契約方針を保ち、依頼前に費用の内訳を判断できるようにする。
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PricingSummary from '../components/PricingSummary.astro';
@@ -15,7 +16,7 @@ const examples = [
   { title: '保守＋月2回の更新＋レポート', formula: '基本保守＋軽微な更新＋月次レポート', amount: pricingPlans[1].amount + pricingOptions[3].amount + pricingOptions[5].amount, unit: '月額', note: '新しい機能の開発や大幅な改修は含みません。' },
 ];
 ---
-<SiteLayout title="料金・含まれる内容と追加オプション｜SITEVEIL" description="ウェブサイト制作99,000円、基本保守月額7,700円、基本セキュリティ確認49,500円、メールアドレスの漏えい履歴はオンライン詳細無料、郵送報告書3,300円（ともに準備中）。SEO現状診断29,700円。税込固定料金の範囲、オプション、合計金額の例をご案内します。">
+<SiteLayout title="料金・含まれる内容と追加オプション｜SITEVEIL" description="ウェブサイト制作99,000円、基本保守月額7,700円、基本セキュリティ確認49,500円、メールアドレスの漏えい履歴はオンライン詳細無料、郵送報告書3,300円（郵送は準備中）。SEO現状診断29,700円。税込固定料金の範囲、オプション、合計金額の例をご案内します。">
 <div class="shell catalog-page pricing-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">料金</span></nav>
   <header class="catalog-heading"><h1>内容も、金額も。<br />始める前に、はっきりと。</h1><p>掲載金額はすべて税込です。合意した範囲の作業で、後から料金を追加しません。内容を増やすときは、追加費用を先に提示し、了承をいただいてから進めます。</p></header>
@@ -24,7 +25,7 @@ const examples = [
   <nav class="pricing-jump" aria-label="料金ページの目次"><a href="#included">基本料金の範囲</a><a href="#options">追加オプション</a><a href="#examples">合計金額の例</a><a href="#other-costs">個別見積もり・外部費用</a></nav>
 
   <section class="pricing-section" id="included" aria-labelledby="included-title"><h2 id="included-title">この料金で、ここまで。</h2>
-    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{plan.id === 'email-breach-check' ? '無料' : formatPrice(plan.amount)}<span>{plan.id === 'email-breach-check' ? 'オンラインの詳細結果・準備中' : `税込・${plan.unit}`}</span></p>{plan.id === 'email-breach-check' && <p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み）</p>}<p>{plan.lead}</p><a class="text-link" href={`${home}?service=${encodeURIComponent(plan.service)}#contact`}>この内容を相談する</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>オプション・別途確認する内容</h4><p>{plan.excluded}</p></div></article>)}
+    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{plan.id === 'email-breach-check' ? '無料' : formatPrice(plan.amount)}<span>{plan.id === 'email-breach-check' ? 'オンラインの詳細結果' : `税込・${plan.unit}`}</span></p>{plan.id === 'email-breach-check' && <p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み）</p>}<p>{plan.lead}</p><a class="text-link" href={plan.id === 'email-breach-check' ? `${home}email-check/` : `${home}?service=${encodeURIComponent(plan.service)}#contact`}>{plan.id === 'email-breach-check' ? '無料でメールを確認する' : 'この内容を相談する'}</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>オプション・別途確認する内容</h4><p>{plan.excluded}</p></div></article>)}
   </section>
 
   <section class="pricing-section" id="options" aria-labelledby="options-title"><h2 id="options-title">必要なものだけ、追加できます。</h2><p>基本料金に、選んだ項目の金額を加えます。月額のオプションは、基本保守に追加する料金です。</p><dl class="price-options">{pricingOptions.map(option => <div><dt>{option.name}</dt><dd class="price-options__amount">{formatPrice(option.amount)}<small>{option.unit}</small></dd><dd class="price-options__description">{option.description}</dd></div>)}</dl></section>

@@ -1,5 +1,12 @@
+// 変更履歴: 2026-11-11 Workers専用の型を分離し、ブラウザのDOM型との競合を防ぐ。
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "deploy/site"
+  ]
 }

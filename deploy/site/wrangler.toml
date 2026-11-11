@@ -27,3 +27,21 @@ custom_domain = true
 name = "CONTACT_RATE_LIMITER"
 namespace_id = "876511"
 simple = { limit = 3, period = 60 }
+
+# 変更履歴: 2026-11-11 公開メール照会の乱用を制限。個人別の照会結果は保存しない。
+[[ratelimits]]
+name = "BREACH_RATE_LIMITER"
+namespace_id = "876512"
+simple = { limit = 3, period = 60 }
+
+[[durable_objects.bindings]]
+name = "BREACH_BUDGET"
+class_name = "BreachBudget"
+
+[[migrations]]
+tag = "breach-budget-v1"
+new_sqlite_classes = ["BreachBudget"]
+
+# 個人情報を含み得る上流URL・本文のトレース／ログを有効化しない。
+[observability]
+enabled = false
