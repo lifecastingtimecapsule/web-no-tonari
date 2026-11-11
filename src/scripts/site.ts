@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 コピー式の送信処理を削除。Resendへの直接送信はcontact-form.tsへ集約。
 // 変更履歴: 2026-11-09 任意URLの常時表示に合わせ、不要な折りたたみ開閉処理を除去。検証と引き継ぎは維持。
 // 変更履歴: 2026-11-09 サービス横送りを専用スクリプトへ移し、ホーム専用処理の重複読み込みを防止。
@@ -42,7 +43,7 @@ const concerns: Concern[] = [
   },
   {
     id: 'ai',
-    service: 'AI活用・アプリ提案',
+    service: '業務システムの開発',
     title: 'AIを入れることではなく、仕事が少し楽になることから。',
     body: '文章作成、問い合わせ整理、情報検索など、現場で繰り返している作業を確認し、小さく試せる方法を提案します。',
   },
@@ -294,7 +295,7 @@ const requestedService = new URLSearchParams(window.location.search).get('servic
 const consultationMessage = document.querySelector<HTMLTextAreaElement>('#message');
 if (requestedService && consultationMessage && !consultationMessage.value.trim()) {
   const requestedNote = new URLSearchParams(window.location.search).get('note')?.slice(0, 500);
-  consultationMessage.value = `${requestedService.slice(0, 100)}について相談したいです。\n${requestedNote ? `${requestedNote}\n` : ''}現在の状況：\n希望すること：`;
+  consultationMessage.value = `${requestedService.slice(0, 100).replace(/^AIアプリ開発$/, '業務システム開発')}について問い合わせたいです。\n${requestedNote ? `${requestedNote}\n` : ''}困っていること：`;
 }
 const requestedSiteUrl = new URLSearchParams(window.location.search).get('siteUrl');
 const consultationSiteUrl = document.querySelector<HTMLInputElement>('#site-url');

@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 経営者向けに料金・作業・対象外を常時表示。教材は補足ページへ分離。
 // 役割: 顧客が依頼内容と費用を判断し、そのまま相談できるサービス案内。
 import SiteLayout from '../../layouts/SiteLayout.astro';
@@ -9,15 +10,14 @@ export function getStaticPaths(){return servicePages.map(service=>({params:{slug
 const {service}=Astro.props;
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],security:['maintenance','security'],'ai-apps':[]};
-const examplesTitles:Record<string,string>={websites:'デザインの考え方を体験する',security:'不審な連絡を見分ける練習','ai-apps':'見積もり依頼を整理する見本'};
 ---
 <SiteLayout title={`${service.name}・内容と料金｜SITEVEIL`} description={service.description}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
-<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>個別見積もり</strong><p>制作費と月々の運用費を、着手前にご提示します。</p><p>問い合わせの振り分け、書類の下書き、社内資料探しなど、必要な仕事からご相談ください。返信の送信や重要な判断は人が確認する設計にします。</p></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]}/>}<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>このサービスを相談する</a></div>
+<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>個別見積もり</strong><p>制作費と月々の運用費を、着手前にご提示します。</p><p>必要な機能、利用する人数、今使っているソフトを伺ってお見積もりします。AIを使うかどうかも、仕事に合わせてご提案します。</p></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]}/>}<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>このサービスについて問い合わせる</a></div>
 <aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
-<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。仕様書の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
+<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。専門的な資料の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
 {service.slug==='security'&&<p>メールの漏えい確認や、システムの詳しい検査は別のサービスです。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
-{service.slug!=='seo'&&<section class="service-reference" id="sample"><h2>詳しく知りたい方へ</h2><a href={`${home}services/${service.slug}/examples/`}>{examplesTitles[service.slug]}</a>{service.slug==='security'&&<p><a href={`${home}services/security/php/`}>WordPressの動作環境が古いと、何が起きる？</a></p>}</section>}
+
 </div>
 </SiteLayout>
 <style>

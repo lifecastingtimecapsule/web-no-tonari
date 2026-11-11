@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680" role="img" aria-labelledby="title desc">
+<!-- 変更履歴: 2026-11-11 旧問い合わせ教材の画像から、業務システムの用途が分かる受注管理の架空画面へ変更。 -->
+<title id="title">顧客と受注をまとめて管理する画面イメージ</title><desc id="desc">架空の受注3件について、取引先、依頼内容、状況を一覧で確認する例。実績や稼働中のシステムではありません。</desc>
+<rect width="900" height="680" fill="#f4f5f4"/><rect x="30" y="36" width="840" height="608" rx="8" fill="#fff"/>
+<g font-family="'Noto Sans JP',sans-serif" fill="#16191d"><text x="66" y="96" font-size="26" font-weight="700">顧客・受注管理</text><text x="834" y="94" font-size="15" text-anchor="end" fill="#62626a">画面イメージ・架空データ</text>
+<path d="M66 126H834" stroke="#ddd"/><text x="66" y="181" font-size="20" font-weight="700">対応が必要な仕事を、一覧で。</text><text x="66" y="220" font-size="16" fill="#62626a">顧客情報と依頼内容を、何度も入力しなくていい仕組みに。</text>
+<rect x="66" y="256" width="768" height="50" fill="#f4f5f4"/><g font-size="17" font-weight="700"><text x="84" y="288">取引先</text><text x="290" y="288">依頼内容</text><text x="678" y="288">状況</text></g>
+<g font-size="18"><text x="84" y="353">A商店</text><text x="290" y="353">商品の追加注文</text><text x="678" y="353" fill="#bb1829">見積もり中</text><text x="84" y="429">B事務所</text><text x="290" y="429">定期点検の依頼</text><text x="678" y="429">日程確認中</text><text x="84" y="505">C工房</text><text x="290" y="505">部品の発注</text><text x="678" y="505">対応中</text></g>
+<path d="M66 382H834M66 458H834M66 534H834" stroke="#e5e7e5"/><text x="66" y="588" font-size="16" fill="#62626a">必要な項目・機能は、仕事の進め方に合わせて設計します。</text></g></svg>

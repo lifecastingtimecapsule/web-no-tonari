@@ -5,10 +5,13 @@
 // 変更履歴: 2026-11-11 PCは4列、スマホは既存1列を維持。小さなカードでも見出しが収まる寸法へ調整。
 // 変更履歴: 2026-11-11 スマホを左右ボタンとスワイプで送る横並びへ変更。PC4列は維持。
 // 変更履歴: 2026-11-11 スクロールバーを隠し、矢印を画像の左右端・中央へ重ねる。スワイプは維持。
+// 変更履歴: 2026-11-11 業務システムの紹介画像を、顧客・受注管理の架空画面へ統一。
 // 役割: 4サービスをその場で比較できる一覧。スマホでも隠れた項目を作らない。
 import {servicePages} from '../data/services';
 interface Props { headingTag?: 'h2'|'h3'; }
 const {headingTag:CardHeading='h3'}=Astro.props;
+// 役割: 教材ではなく、依頼できる仕事のイメージをサービスごとに表示する。
+const serviceImages:Record<string,string>={websites:'website-service.svg',seo:'seo.svg','ai-apps':'business-systems.svg',security:'site-maintenance.svg'};
 const serviceBase=import.meta.env.BASE_URL.replace(/\/$/,'');
 ---
 <div class="service-carousel" data-service-carousel>
@@ -18,7 +21,7 @@ const serviceBase=import.meta.env.BASE_URL.replace(/\/$/,'');
   </div>
 <div class="service-overview" data-card-track>
   {servicePages.map(service=><a class="service-overview__item" href={`${serviceBase}/services/${service.slug}/`}>
-    <div class="service-overview__media"><img src={`${serviceBase}/images/services/${service.slug}.${service.slug==='websites'?'webp':service.slug==='seo'?'svg':'png'}`} alt="" width="900" height="680" loading="lazy" /></div>
+    <div class="service-overview__media"><img src={`${serviceBase}/images/services/${serviceImages[service.slug]}`} alt="" width="900" height="680" loading="lazy" /></div>
     <CardHeading>{service.name}<span aria-hidden="true">↗</span></CardHeading>
     <p>{service.preview}</p><p class="service-overview__price">{service.priceShort}</p>
   </a>)}

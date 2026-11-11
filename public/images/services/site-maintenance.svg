@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680" role="img" aria-labelledby="title desc">
+<!-- 変更履歴: 2026-11-11 フィッシング教材から、実際に依頼する管理・安全確認の内容へ変更。 -->
+<title id="title">サイト管理と安全確認のサービス内容</title><desc id="desc">月額の管理と1回ごとの安全確認を説明するイメージ。検出結果ではありません。</desc>
+<rect width="900" height="680" fill="#f4f5f4"/><rect x="30" y="36" width="840" height="608" rx="8" fill="white"/>
+<g font-family="'Noto Sans JP',sans-serif" fill="#16191d"><text x="66" y="96" font-size="25" font-weight="700">サイト管理・安全確認</text><text x="834" y="94" text-anchor="end" font-size="15" fill="#62626a">サービス内容のイメージ</text><path d="M66 126H834" stroke="#ddd"/>
+<text x="66" y="196" font-size="29" font-weight="700">公開した後の管理も、</text><text x="66" y="240" font-size="29" font-weight="700">今の安全性の確認も。</text>
+<g font-size="19"><text x="66" y="317" font-weight="700">月額の管理</text><text x="66" y="354" font-size="17" fill="#62626a">データの控え・ソフトの更新状態・管理の相談</text><path d="M66 382H834" stroke="#ddd"/>
+<text x="66" y="431" font-weight="700">1回ごとの安全確認</text><text x="66" y="468" font-size="17" fill="#62626a">管理者設定・問い合わせ・通信・データ保存</text><path d="M66 496H834" stroke="#ddd"/>
+<text x="66" y="553" fill="#bb1829">見つかった問題と、先に直すものをご報告。</text><text x="66" y="603" font-size="15" fill="#62626a">更新作業や修正は、内容と費用を別途ご案内します。</text></g></g></svg>

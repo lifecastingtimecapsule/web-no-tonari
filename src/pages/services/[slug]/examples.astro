@@ -1,5 +1,6 @@
 ---
 // 変更履歴: 2026-11-11 教材と操作見本をサービスの依頼ページから分離し、任意で読める補足へ移動。
+// 変更履歴: 2026-11-11 教材を営業導線から外し、検索結果にもサービス案内として出さない。旧URLは維持。
 // 役割: 料金・依頼判断を妨げず、制作や業務アプリの画面を詳しく確かめる人へ既存の体験を提供。
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import ServiceDemo from '../../../components/ServiceDemo.astro';
@@ -10,7 +11,7 @@ const {service}=Astro.props;
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const examplesTitles:Record<string,string>={websites:'デザインの考え方を体験する',security:'不審な連絡を見分ける練習','ai-apps':'見積もり依頼を整理する見本'};
 ---
-<SiteLayout title={`${examplesTitles[service.slug]}｜SITEVEIL`} description="サービスを詳しく知りたい方への補足です。架空の情報を使った表示・操作の見本で、申し込みや外部送信は行いません。">
+<SiteLayout title={`${examplesTitles[service.slug]}｜SITEVEIL`} description="架空の情報を使った表示・操作の見本です。申し込みや外部送信は行いません。" noindex>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={`${home}services/${service.slug}/`}>{service.name}へ戻る</a></nav><header class="catalog-heading"><h1>{examplesTitles[service.slug]}</h1><p>サービス選びの補足です。見本内の申し込み・送信は行われません。</p></header><ServiceDemo slug={service.slug}/><p><a href={`${home}services/${service.slug}/`}>サービス内容・料金に戻る</a></p></div>
 <script>import '../../../scripts/service-demos';</script>
 </SiteLayout>

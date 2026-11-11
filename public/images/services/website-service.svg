@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680" role="img" aria-labelledby="title desc">
+<!-- 変更履歴: 2026-11-11 教材の画面から、依頼できるホームページ構成のイメージへ変更。 -->
+<title id="title">会社のホームページ制作のイメージ</title><desc id="desc">会社案内、サービス、問い合わせを伝えるページ構成の例。実際の制作実績ではありません。</desc>
+<rect width="900" height="680" fill="#f4f5f4"/><rect x="30" y="36" width="840" height="608" rx="8" fill="white"/>
+<g font-family="'Noto Sans JP',sans-serif" fill="#16191d"><text x="66" y="96" font-size="25" font-weight="700">会社のホームページ</text><text x="834" y="94" text-anchor="end" font-size="15" fill="#62626a">ページ構成のイメージ</text><path d="M66 126H834" stroke="#ddd"/>
+<text x="66" y="210" font-size="34" font-weight="700">何をしている会社か、</text><text x="66" y="260" font-size="34" font-weight="700">初めての人にも伝わる。</text>
+<text x="66" y="315" font-size="18" fill="#62626a">サービス・会社案内・お問い合わせを、迷わない順番に。</text>
+<rect x="66" y="365" width="768" height="86" fill="#f4f5f4"/><text x="90" y="402" font-size="19" font-weight="700">サービス紹介</text><text x="90" y="432" font-size="16" fill="#62626a">できることと料金を、同じ場所で。</text>
+<text x="66" y="501" font-size="18" font-weight="700">会社案内</text><text x="478" y="501" font-size="18" font-weight="700">お問い合わせ</text><path d="M66 523H422M478 523H834" stroke="#ddd"/><text x="66" y="554" font-size="16" fill="#62626a">事業内容・会社の情報</text><text x="478" y="554" font-size="16" fill="#bb1829">必要な人が、そのまま相談へ。</text><text x="66" y="610" font-size="15" fill="#62626a">スマホ対応・問い合わせフォーム・公開まで。</text></g></svg>
