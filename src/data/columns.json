@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "slug": "worse-query-ios-container-isolation",
+    "title": "あなたのiPhone、いま入っているアプリは大丈夫？",
+    "summary": "広告を見て入れた、そのアプリ。配布元を確かめたことはありますか？ ほかのアプリの情報に触れられる弱点と、いま確認したいことを短く解説します。",
+    "category": "security",
+    "body": "取り上げる報道：2026年11月10日／このコラムの作成・情報確認：2026年11月11日\n\n「無料だから」「広告でよく見るから」。そんな理由で入れたアプリ、そのまま使っていませんか？\n\n海外メディアThe Hacker NewsとDecryptは、iPhoneの基本ソフトに関わる問題「worse_query」を報じています。悪意あるアプリがこの弱点を悪用すると、ほかのアプリが保存した情報を読んだり、書き換えたりできる可能性があります。\n\n## 何が起こる可能性がある？\n\n保存方法によっては、個人情報を見られたり、盗まれたログイン用の情報でアカウントを勝手に使われたりするおそれがあります。暗号資産を管理するアプリでは、資産を動かすための秘密の情報が読まれることもリスクになります。\n\nただし、すべてのアプリやiPhoneで同じことが起きるわけではありません。影響は、iOSのバージョン、悪いアプリが動く条件、情報の守り方によって変わります。\n\n## 仕組みを、少しだけ\n\niPhoneは「サンドボックス」という仕組みで、アプリが触れられるファイルの範囲を制限しています。今回は、その制限を越えて、別のアプリの保存領域へアクセスできるという問題です。\n\niPhone全体を自由に操作する「ジェイルブレイク」とは別の話です。また、暗号化されたファイルを読めても、中の秘密まで取り出せるとは限りません。\n\n## いま入っているアプリを、見直してみましょう\n\n- 誰が配っているか分からないアプリを、SNSや広告の案内から入れていませんか？\n- よく分からないまま、警告を無視したり、設定変更を許可したりしていませんか？\n\n思い当たるものがあれば、利用をいったん止め、自分で調べた公式窓口や、会社の管理担当者に確認しましょう。広告や相手の説明だけで、安全だと決めないことが大切です。\n\nOSとアプリは公式の方法で更新してください。ただし、確認した資料では今回の問題が修正済みとは確認できておらず、「更新すれば必ず解決する」とは言い切れません。\n\nこの記事は公開資料をもとにした解説です。特定の端末で情報が盗まれたことを確認した記事ではありません。\n\n## 参照元\n\nThe Hacker News（2026年11月10日掲載）\nhttps://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html\n\nDecrypt（2026年11月10日掲載）\nhttps://decrypt.co/382928/binance-warns-of-apple-ios-flaw-that-could-expose-iphone-users-private-keys\n\nApple：iOS 27.2.1のセキュリティ修正一覧（2026年11月9日公開）\nhttps://support.apple.com/en-us/149715\n\n研究者による公開説明（技術上の一次資料）\nhttps://github.com/forcequitOS/worse_query",
+    "sources": [
+      {
+        "title": "The Hacker News（2026-11-10掲載）",
+        "url": "https://thehackernews.com/2026/11/binance-warns-of-ios-sandbox-escape.html"
+      },
+      {
+        "title": "Decrypt（2026-11-10掲載）",
+        "url": "https://decrypt.co/382928/binance-warns-of-apple-ios-flaw-that-could-expose-iphone-users-private-keys"
+      },
+      {
+        "title": "研究者の公開README",
+        "url": "https://github.com/forcequitOS/worse_query"
+      },
+      {
+        "title": "Apple：iOS 27.2.1修正一覧（2026-11-09公開）",
+        "url": "https://support.apple.com/en-us/149715"
+      },
+      {
+        "title": "Apple Platform Security",
+        "url": "https://help.apple.com/pdf/security/en_US/apple-platform-security-guide.pdf"
+      },
+      {
+        "title": "Apple：詐欺や不審な案内を避ける",
+        "url": "https://support.apple.com/en-us/102568"
+      }
+    ],
+    "publishedAt": "2026-11-11T12:51:45.727Z",
+    "updatedAt": "2026-11-11T12:32:41.475Z"
+  }
+]

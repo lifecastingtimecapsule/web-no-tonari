@@ -1,7 +1,8 @@
 // 変更履歴: 2026-11-11 デスクトップから、必要な時だけ管理サーバーを起動してログインを開く。
+// 変更履歴: 2026-11-11 ビルド点検で未使用の読み取りimportを除去。動作変更なし。
 // 役割: 外部公開・パスワード保存・自動ログインを追加せず、Macの起動操作を一つにする。
 import {spawn} from 'node:child_process';
-import {open,mkdir,readFile,writeFile,stat} from 'node:fs/promises';
+import {open,mkdir,writeFile,stat} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
 const root=fileURLToPath(new URL('../../',import.meta.url));

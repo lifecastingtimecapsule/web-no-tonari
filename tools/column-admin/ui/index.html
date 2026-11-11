@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- 変更履歴: 2026-11-11 参照リンクの掲載方法を明記。 -->
 <!-- 変更履歴: 2026-11-11 非公開ローカル記事編集画面を追加。公開用反映とサイト配信を区別。 -->
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>コラム管理 | SITEVEIL</title><link rel="stylesheet" href="/admin.css"><script type="module" src="/admin.js"></script></head>
 <body><header><strong>SITEVEIL</strong><span>このMac専用・コラム管理</span><button id="logout" type="button" hidden>ログアウト</button></header>
@@ -13,7 +14,7 @@
 <label for="category">分類</label><select id="category"><option value="security">セキュリティ</option><option value="system">業務システム</option></select>
 <label for="summary">一覧に表示する短い説明</label><textarea id="summary" rows="2" maxlength="220" required></textarea>
 <label for="body">本文</label><p class="hint">見出しは「## 見出し」、箇条書きは「- 項目」。空行で段落を分けます。HTMLは文章として表示されます。</p><textarea id="body" rows="16" maxlength="30000" required></textarea>
-<label for="sources">確認用リンク（任意・6件まで）</label><p class="hint">1行に「資料名 | https://…」。内容の確認用に保存します。公開ページには表示しません。</p><textarea id="sources" rows="3" maxlength="6600"></textarea>
+<label for="sources">確認用リンク（任意・6件まで）</label><p class="hint">1行に「資料名 | https://…」。登録したURLを本文にも書くと、公開ページで参照元へのリンクとして表示します。</p><textarea id="sources" rows="3" maxlength="6600"></textarea>
 <div class="actions"><button id="save" type="submit">下書きを保存</button><button id="preview-button" class="secondary" type="button">表示を確認</button></div>
 <div class="actions public-actions"><button id="stage" class="secondary" type="button" disabled>公開用に確定</button><button id="unstage" class="secondary" type="button" disabled>公開用から取り下げ</button></div><p class="hint">確定・取り下げ後も、実サイトに反映するには配信が必要です。取り下げても下書きは残ります。</p></form>
 <section id="preview" class="preview" hidden aria-label="記事の表示見本"><h2 id="preview-title"></h2><p id="preview-summary"></p><div id="preview-body"></div></section></section>
