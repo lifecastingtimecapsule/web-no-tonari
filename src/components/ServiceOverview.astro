@@ -3,17 +3,78 @@
 // 変更履歴: 2026-11-11 高さ680pxの固定を解除し、同じ比率の枠で画像全体を表示。
 // 変更履歴: 2026-11-11 SEOカードを追加し、PCは2列で4サービスをそろえる。
 // 変更履歴: 2026-11-11 PCは4列、スマホは既存1列を維持。小さなカードでも見出しが収まる寸法へ調整。
+// 変更履歴: 2026-11-11 スマホを左右ボタンとスワイプで送る横並びへ変更。PC4列は維持。
 // 役割: 4サービスをその場で比較できる一覧。スマホでも隠れた項目を作らない。
 import {servicePages} from '../data/services';
 interface Props { headingTag?: 'h2'|'h3'; }
 const {headingTag:CardHeading='h3'}=Astro.props;
 const serviceBase=import.meta.env.BASE_URL.replace(/\/$/,'');
 ---
-<div class="service-overview">
+<div class="service-carousel" data-service-carousel>
+  <div class="service-carousel__controls" aria-label="サービスの切り替え">
+    <button type="button" data-card-previous aria-label="前のサービスへ" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" /></svg></button>
+    <button type="button" data-card-next aria-label="次のサービスへ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" /></svg></button>
+  </div>
+<div class="service-overview" data-card-track>
   {servicePages.map(service=><a class="service-overview__item" href={`${serviceBase}/services/${service.slug}/`}>
     <div class="service-overview__media"><img src={`${serviceBase}/images/services/${service.slug}.${service.slug==='websites'?'webp':service.slug==='seo'?'svg':'png'}`} alt="" width="900" height="680" loading="lazy" /></div>
     <CardHeading>{service.name}<span aria-hidden="true">↗</span></CardHeading>
     <p>{service.preview}</p><p class="service-overview__price">{service.priceShort}</p>
   </a>)}
 </div>
-<style>.service-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:40px}.service-overview__item{display:block;min-width:0;color:var(--ink);text-decoration:none}.service-overview__media{aspect-ratio:4/3;overflow:hidden;background:#edf5f7;display:grid;place-items:center}.service-overview img{display:block;width:100%;height:100%;min-height:0;object-fit:contain}.service-overview :is(h2,h3){display:flex;justify-content:space-between;gap:8px;font-size:clamp(17px,1.5vw,21px);margin:20px 0 14px}.service-overview p{font-size:14px;line-height:1.9}.service-overview__price{font-weight:700}.service-overview__item:hover :is(h2,h3){color:var(--signal-deep)}.service-overview__item:focus-visible{outline:3px solid var(--signal);outline-offset:8px}@media(max-width:800px){.service-overview{grid-template-columns:1fr;gap:48px}.service-overview__media{max-width:600px;width:100%}}</style>
+</div>
+<style>.service-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:40px}.service-overview__item{display:block;min-width:0;color:var(--ink);text-decoration:none}.service-overview__media{aspect-ratio:4/3;overflow:hidden;background:#edf5f7;display:grid;place-items:center}.service-overview img{display:block;width:100%;height:100%;min-height:0;object-fit:contain}.service-overview :is(h2,h3){display:flex;justify-content:space-between;gap:8px;font-size:clamp(17px,1.5vw,21px);margin:20px 0 14px}.service-overview p{font-size:14px;line-height:1.9}.service-overview__price{font-weight:700}.service-overview__item:hover :is(h2,h3){color:var(--signal-deep)}.service-overview__item:focus-visible{outline:3px solid var(--signal);outline-offset:8px}.service-carousel__controls{display:none}
+@media(max-width:800px){
+.service-carousel{min-width:0;margin-top:28px}
+.service-carousel[data-carousel-ready] .service-carousel__controls{display:flex;justify-content:flex-end;gap:10px;margin-bottom:16px}
+.service-carousel__controls button{display:grid;place-items:center;width:46px;height:46px;border:1px solid #c9cecb;border-radius:50%;background:#fff;color:var(--ink);cursor:pointer;touch-action:manipulation}
+.service-carousel__controls button:disabled{opacity:.3;cursor:default}
+.service-carousel__controls button:not(:disabled):hover{border-color:var(--ink);background:#f5f6f5}
+.service-carousel__controls button:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+.service-carousel__controls svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.service-overview{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:8px;padding:8px;margin:0 -8px;scrollbar-width:thin;scrollbar-color:#b6bdb8 transparent}
+.service-overview__item{flex:0 0 88%;scroll-snap-align:start}
+.service-overview__media{width:100%}
+.service-overview :is(h2,h3){font-size:21px}
+}</style>
+
+<script>
+/** スマホの横送りを補助する。連打は移動先を更新し、スワイプ後は現在位置へ同期する。 */
+document.querySelectorAll<HTMLElement>('[data-service-carousel]').forEach(carousel => {
+  const track = carousel.querySelector<HTMLElement>('[data-card-track]');
+  const previousButton = carousel.querySelector<HTMLButtonElement>('[data-card-previous]');
+  const nextButton = carousel.querySelector<HTMLButtonElement>('[data-card-next]');
+  if (!track || !previousButton || !nextButton) return;
+  const cards = Array.from(track.querySelectorAll<HTMLElement>('.service-overview__item'));
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let destinationIndex: number | null = null;
+  let settleTimer = 0;
+  /** カード間隔の実寸から現在位置を求め、画面サイズ変更にも追従する。 */
+  const currentIndex = (): number => {
+    const spacing = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
+    return Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / Math.max(1, spacing))));
+  };
+  const syncControls = (): void => {
+    const index = destinationIndex ?? currentIndex();
+    previousButton.disabled = index === 0;
+    nextButton.disabled = index === cards.length - 1;
+  };
+  const moveCards = (direction: number): void => {
+    destinationIndex = Math.max(0, Math.min(cards.length - 1, (destinationIndex ?? currentIndex()) + direction));
+    const spacing = cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
+    track.scrollTo({left:destinationIndex * spacing, behavior:reducedMotion.matches ? 'instant' : 'smooth'});
+    syncControls();
+  };
+  previousButton.addEventListener('click', () => moveCards(-1));
+  nextButton.addEventListener('click', () => moveCards(1));
+  track.addEventListener('pointerdown', () => { destinationIndex = null; }, {passive:true});
+  track.addEventListener('scroll', () => {
+    window.clearTimeout(settleTimer);
+    settleTimer = window.setTimeout(() => { destinationIndex = null; syncControls(); }, 150);
+    syncControls();
+  }, {passive:true});
+  new ResizeObserver(() => { destinationIndex = null; syncControls(); }).observe(track);
+  carousel.setAttribute('data-carousel-ready', '');
+  syncControls();
+});
+</script>
