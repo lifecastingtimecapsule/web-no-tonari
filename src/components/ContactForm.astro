@@ -1,0 +1,16 @@
+---
+// 変更履歴: 2026-11-11 コピー・メーラー起動を撤去し、入力と一つの送信ボタンに整理。
+// 役割: 問い合わせを自社窓口へ送り、失敗時には入力を残して再試行できるようにする。
+---
+<form class="contact-form" data-direct-contact novalidate>
+  <div class="field"><label for="contact-name">お名前</label><input id="contact-name" name="name" autocomplete="name" maxlength="100" required /></div>
+  <div class="field"><label for="contact-company">会社名 <span>任意</span></label><input id="contact-company" name="company" autocomplete="organization" maxlength="200" /></div>
+  <div class="field"><label for="contact-email">メールアドレス</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+  <div class="field"><label for="message">お問い合わせ内容</label><textarea id="message" name="message" rows="4" maxlength="5000" required></textarea></div>
+  <div class="contact-trap" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" tabindex="-1" autocomplete="off" /></div>
+  <p class="contact-use">入力内容はお問い合わせへの返信に利用します。パスワードなどの秘密情報は記入しないでください。</p>
+  <button class="button button--human" type="submit" data-contact-send>送信する <span aria-hidden="true">↗</span></button>
+  <p class="form-status" role="status" tabindex="-1" data-contact-result></p>
+</form>
+<script>import '../scripts/contact-form';</script>
+<style>.contact-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.contact-use{font-size:12px;line-height:1.8;color:var(--ink-muted)}label span{font-weight:400;font-size:12px;margin-left:8px}.form-status{min-height:1.8em}[data-contact-send]{border-radius:0}[data-contact-send] span{margin-left:36px}</style>

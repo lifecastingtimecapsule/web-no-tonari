@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-11 共通ナビの枠・影・丸い問い合わせボタンを廃止し、本文になじむ一枚のヘッダーに統一。 */
 /* 変更履歴: 2026-11-09 四料金を2列に揃え、受付準備状況を濃い文字で表示。 */
 /* 変更履歴: 2026-11-09 問い合わせのURL欄を常時表示し、案内・未送信の説明を本文サイズと濃い文字色へ変更。 */
 /* 変更履歴: 2026-11-09 サービス紹介をPC3件・タブレット2件・スマホ1件の手動横送りへ復元。 */
@@ -182,19 +183,19 @@ p {
 .site-header {
   position: fixed;
   z-index: 100;
-  top: 16px;
+  top: 0;
   left: 50%;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  width: var(--shell);
+  width: 100%;
   min-height: 68px;
-  padding: 8px 12px 8px 24px;
-  border: 1px solid var(--mist);
-  border-radius: 999px;
+  padding: 16px 4%;
+  border: 0;
+  border-radius: 0;
   background: var(--white);
   color: var(--ink);
-  box-shadow: 0 8px 24px rgb(20 20 22 / 5%);
+  box-shadow: none;
   transform: translateX(-50%);
 }
 
@@ -241,18 +242,14 @@ p {
 }
 
 .site-nav .nav-contact {
-  min-height: 46px;
-  padding-inline: 20px;
-  border-radius: 999px;
-  background: var(--signal);
-  color: var(--white);
-  font-weight: 700;
+  min-height:44px;
+  padding:10px 0;
+  border-radius:0;
+  background:transparent;
+  color:var(--ink);
+  font-weight:700;
 }
-
-.site-nav .nav-contact:hover {
-  background: var(--signal-deep);
-  color: var(--white);
-}
+.site-nav .nav-contact:hover {background:transparent;color:var(--ink);text-decoration:underline;text-underline-offset:6px;}
 
 .menu-button {
   display: none;

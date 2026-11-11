@@ -1,6 +1,7 @@
 ---
 // 変更履歴: 2026-11-11 説明カード中心の試作を撤回。巨大な文字と流動的なインクのヒーローへ更新。
 // 変更履歴: 2026-11-11 英語コピーを削除し、ヒーローもVの切れ目がある正式な文字ロゴに統一。
+// 変更履歴: 2026-11-11 明るいインクと黒い正式ロゴに変更。行き先をヒーロー直下にそろえ、重複する相談ボタンを撤去。
 // 役割: 最小限の言葉と触覚的な表現でSITEVEILの印象をつくり、通常のサービス・相談導線へつなぐ。
 const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
@@ -10,14 +11,13 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   <div class="ink-hero__intro">
     <h1 id="hero-title">ウェブと、その先。</h1>
   </div>
-  <img class="ink-hero__word" src={`${brandBase}brand/siteveil-wordmark-white.svg`} width="424" height="72" alt="" aria-hidden="true" />
+  <img class="ink-hero__word" src={`${brandBase}brand/siteveil-wordmark-black.svg`} width="424" height="72" alt="" aria-hidden="true" />
   <div class="ink-hero__bottom">
-    <a class="ink-hero__discover" href="#services">つくる。守る。育てる。<span aria-hidden="true">↘</span></a>
-    <a class="ink-hero__contact" href="#contact">話してみる <span aria-hidden="true">↗</span></a>
+    <a class="ink-hero__discover" href="#after-hero">つくる。守る。育てる。<span aria-hidden="true">↘</span></a>
   </div>
   <button class="ink-hero__pause" type="button" aria-label="動きを止める" aria-pressed="false" data-veil-motion hidden><span aria-hidden="true">Ⅱ</span></button>
 </section>
-<div class="shell ink-check">
+<div class="shell ink-check" id="after-hero">
   <form data-safety-check-form novalidate>
     <label for="safety-check-url">いまのサイトを、確かめる。</label>
     <div class="ink-check__input"><input id="safety-check-url" name="safetyCheckUrl" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" aria-describedby="safety-check-note safety-check-status" required /><button type="submit">安全チェック <span aria-hidden="true">↗</span></button></div>
@@ -31,18 +31,18 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   .ink-hero__canvas,.ink-hero__fallback{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1}
   .ink-hero__fallback{background:#f5f5f2;object-fit:cover}
   .ink-hero__canvas{opacity:0}.ink-hero[data-ink-ready] .ink-hero__canvas{opacity:1}
-  .ink-hero__intro{color:#fff;mix-blend-mode:difference;position:absolute;left:4%;right:4%;top:22%;display:flex;justify-content:space-between;align-items:start;gap:24px}
+  .ink-hero__intro{color:#16191d;position:absolute;left:4%;right:4%;top:22%;display:flex;justify-content:space-between;align-items:start;gap:24px}
   .ink-hero__intro h1{font-size:clamp(22px,2.7vw,44px);line-height:1.2;font-weight:700;letter-spacing:-.045em;margin:0}
   .ink-hero__intro p{font-size:14px;line-height:1.5;margin:0;font-weight:500}
-  .ink-hero__word{position:absolute;left:3%;top:50%;translate:0 -50%;width:94%;height:auto;mix-blend-mode:difference;pointer-events:none;user-select:none}
+  .ink-hero__word{position:absolute;left:3%;top:50%;translate:0 -50%;width:94%;height:auto;pointer-events:none;user-select:none}
   .ink-hero__bottom{position:absolute;left:4%;right:4%;bottom:8%;display:flex;justify-content:space-between;align-items:center;gap:24px}
   .ink-hero__bottom a{display:flex;align-items:center;justify-content:space-between;gap:36px;padding:14px 0;font-size:15px;color:#16191d;text-decoration:none;font-weight:700;position:relative}
   .ink-hero__contact{background:#16191d!important;color:#fff!important;padding:17px 24px!important;border-radius:0}
-  .ink-hero__discover{color:#fff!important;mix-blend-mode:difference}
+  .ink-hero__discover{color:#16191d!important}
   .ink-hero__bottom span{font-size:23px;line-height:1}.ink-hero__pause{position:absolute;right:4%;bottom:2%;min-width:44px;min-height:44px;border:0;background:transparent;color:#16191d;font-size:17px;cursor:pointer}
-  .ink-hero__pause{color:#fff;mix-blend-mode:difference}
-  .ink-check{padding-top:48px;padding-bottom:24px}.ink-check form{max-width:650px;margin-left:auto}.ink-check label{display:block;font-size:18px;font-weight:700;margin-bottom:16px}.ink-check__input{display:flex;background:#f2f2f0;padding:8px;gap:8px}.ink-check input{min-width:0;width:0;flex:1;background:transparent;border:0;padding:12px;font:inherit;font-size:16px;color:#16191d}.ink-check button{border:0;padding:12px 20px;font:inherit;font-size:13px;font-weight:700;color:white;background:var(--signal);white-space:nowrap;cursor:pointer}.ink-check button span{margin-left:16px}.ink-check p{font-size:12px;margin:10px 0 0;min-height:1.6em;color:#555}
+  .ink-hero__pause{color:#16191d}
+  .ink-check{scroll-margin-top:calc(-1 * (var(--header-height) + 24px));padding-top:calc(var(--header-height) + 40px);padding-bottom:24px}.ink-check form{max-width:650px;margin-left:auto}.ink-check label{display:block;font-size:18px;font-weight:700;margin-bottom:16px}.ink-check__input{display:flex;background:#f2f2f0;padding:8px;gap:8px}.ink-check input{min-width:0;width:0;flex:1;background:transparent;border:0;padding:12px;font:inherit;font-size:16px;color:#16191d}.ink-check button{border:0;padding:12px 20px;font:inherit;font-size:13px;font-weight:700;color:white;background:var(--signal);white-space:nowrap;cursor:pointer}.ink-check button span{margin-left:16px}.ink-check p{font-size:12px;margin:10px 0 0;min-height:1.6em;color:#555}
   a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #e22336;outline-offset:5px}button:active,.ink-hero__contact:active{translate:0 1px}
-  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:12%;align-items:start;flex-direction:column;gap:18px}.ink-hero__bottom a{font-size:14px}.ink-hero__pause{bottom:4%}.ink-check{padding-top:32px}.ink-check label{font-size:17px}.ink-check button{padding-inline:14px}}
+  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:12%;align-items:start;flex-direction:column;gap:18px}.ink-hero__bottom a{font-size:14px}.ink-hero__pause{bottom:4%}.ink-check{padding-top:calc(var(--header-height) + 24px)}.ink-check label{font-size:17px}.ink-check button{padding-inline:14px}}
   @media(prefers-reduced-motion:reduce){.ink-hero__pause{display:none}}
 </style>

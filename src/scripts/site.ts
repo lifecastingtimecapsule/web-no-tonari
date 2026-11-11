@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 コピー式の送信処理を削除。Resendへの直接送信はcontact-form.tsへ集約。
 // 変更履歴: 2026-11-09 任意URLの常時表示に合わせ、不要な折りたたみ開閉処理を除去。検証と引き継ぎは維持。
 // 変更履歴: 2026-11-09 サービス横送りを専用スクリプトへ移し、ホーム専用処理の重複読み込みを防止。
 // 変更履歴: 2026-11-09 手動カルーセルを復元。安全チェック等の最新機能を維持し、サービス演出の対象も現行一覧へ戻す。
@@ -201,78 +202,6 @@ function setupMotion(): void {
   });
 }
 
-/** 必須の依頼者情報・相談文と任意URLを検証し、外部へ送らず入力内容をコピーする。 */
-function setupDemoForm(): void {
-  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
-  const status = document.querySelector<HTMLElement>('[data-form-status]');
-  const submitButton = document.querySelector<HTMLButtonElement>('[data-submit-button]');
-  const submitLabel = document.querySelector<HTMLElement>('[data-submit-label]');
-  if (!form || !status || !submitButton || !submitLabel) return;
-
-  const getError = (input: HTMLInputElement | HTMLTextAreaElement): string => {
-    if (input.validity.valueMissing || (input.required && !input.value.trim())) return `${input.labels?.[0]?.childNodes[0]?.textContent?.trim() ?? 'この項目'}を入力してください。`;
-    if (input.validity.typeMismatch) return input.type === 'url' ? 'サイトのURL形式を確認してください。' : 'メールアドレスの形式を確認してください。';
-    return '';
-  };
-
-  const showFieldError = (input: HTMLInputElement | HTMLTextAreaElement): boolean => {
-    const error = form.querySelector<HTMLElement>(`[data-error-for="${input.name}"]`);
-    const message = getError(input);
-    input.setAttribute('aria-invalid', String(Boolean(message)));
-    if (error) error.textContent = message;
-    return Boolean(message);
-  };
-
-  form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required], [type="url"]').forEach((input) => {
-    input.addEventListener('blur', () => showFieldError(input));
-    input.addEventListener('input', () => {
-      if (input.getAttribute('aria-invalid') === 'true') showFieldError(input);
-    });
-  });
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const requiredInputs = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required], [type="url"]')];
-    const invalidInputs = requiredInputs.filter(showFieldError);
-    const firstInvalid = invalidInputs[0];
-
-    if (firstInvalid) {
-      status.textContent = '入力内容を確認してください。修正が必要な最初の項目へ移動しました。';
-      status.dataset.state = 'error';
-      firstInvalid.focus();
-      return;
-    }
-
-    submitButton.disabled = true;
-    submitButton.dataset.loading = 'true';
-    submitLabel.textContent = 'コピーしています…';
-    status.textContent = '';
-
-    try {
-      const companyName = form.querySelector<HTMLInputElement>('#company-name')!.value.trim();
-      const contactName = form.querySelector<HTMLInputElement>('#contact-name')!.value.trim();
-      const contactEmail = form.querySelector<HTMLInputElement>('#contact-email')!.value.trim();
-      const message = form.querySelector<HTMLTextAreaElement>('#message')!.value.trim();
-      const siteUrl = form.querySelector<HTMLInputElement>('#site-url')!.value.trim();
-      const consultationText = `会社名・屋号\n${companyName}\n\n担当者名\n${contactName}\n\nメールアドレス\n${contactEmail}\n\n相談したいこと\n${message}${siteUrl ? `\n\nサイトのURL\n${siteUrl}` : ''}`;
-      // 2026-11-11: Prepare a draft link; visitors send from their own mail application.
-      const composeLink = form.querySelector<HTMLAnchorElement>('[data-compose-mail]');
-      if (composeLink) composeLink.href = 'mailto:info@site-veil.com?subject=' + encodeURIComponent('SITEVEILへのお問い合わせ') + '&body=' + encodeURIComponent(consultationText);
-      await navigator.clipboard.writeText(consultationText);
-      status.dataset.state = 'success';
-      status.textContent = '相談内容をコピーしました。「メールアプリで開く」から送信してください。まだ送信はされていません。';
-    } catch {
-      status.dataset.state = 'error';
-      status.textContent = '自動でコピーできませんでした。入力欄の文章を選択してコピーしてください。内容はそのまま残っています。';
-    } finally {
-      submitButton.disabled = false;
-      submitButton.dataset.loading = 'false';
-      submitLabel.textContent = '相談内容をコピーする';
-      status.focus();
-    }
-  });
-}
-
 /** 相談文を内容に合う高さへ伸縮し、URLからの引継ぎや画面幅の変化にも対応する。 */
 function setupMessageAutosize(): void {
   const messageField = document.querySelector<HTMLTextAreaElement>('#message');
@@ -345,7 +274,6 @@ function setupSafetyCheck(): void {
 
 setupConcernTool();
 setupMotion();
-setupDemoForm();
 setupSafetyCheck();
 
 

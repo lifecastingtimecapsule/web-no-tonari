@@ -1,19 +1,19 @@
 ---
 // 変更履歴: 2026-11-09 サービス・料金をページ内スクロールから専用ページへの遷移へ変更。
 // 変更履歴: 2026-11-08 トップの固定ナビを全ページへ展開し、ロゴ・相談入口・位置を統一。
+// 変更履歴: 2026-11-11 ナビを4項目へ整理し、ロゴはトップのヒーロー直下へリンク。
 // 役割: グローバルナビと現在地をすべてのページで同じ構成に保つ。
 import Brand from './Brand.astro';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const currentPath = Astro.url.pathname;
 ---
 <header class="site-header" data-header>
-  <Brand />
+  <Brand homeSection />
   <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-button><span class="menu-button__label">メニュー</span><span class="menu-button__lines" aria-hidden="true"></span></button>
   <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション" data-nav>
     <a href={`${home}services/`} aria-current={currentPath === `${home}services/` ? 'page' : currentPath.includes('/services/') ? 'location' : undefined}>サービス</a>
     <a href={`${home}pricing/`} aria-current={currentPath === `${home}pricing/` ? 'page' : undefined}>料金</a>
     <a href={`${home}company/`} aria-current={currentPath.endsWith('/company/') ? 'page' : undefined}>会社概要</a>
-    <a href={`${home}philosophy/`} aria-current={currentPath.endsWith('/philosophy/') ? 'page' : undefined}>企業理念</a>
     <a class="nav-contact" href={`${home}#contact`}>お問い合わせ</a>
   </nav>
 </header>

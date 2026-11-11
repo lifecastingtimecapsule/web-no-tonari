@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 暗い顔料を明るい青・アクア・ピーチへ変更。怖い印象を避けて流れを軽くする。
 // 変更履歴: 2026-11-11 ヒーロー通過時だけヘッダーに正式ロゴを表示する監視を追加。
 // 変更履歴: 2026-11-11 説明カード切替を撤去。非同期の操作待ちを作らない、独自の流動インク描画へ変更。
 
@@ -26,17 +27,17 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
       vec2 uv=gl_FragCoord.xy/resolution;
       float aspect=resolution.x/resolution.y;
       vec2 point=vec2(uv.x*aspect,uv.y);
-      float clock=time*.07;
+      float clock=time*.045;
       vec2 warp=vec2(cloud(point*3.+vec2(clock,-clock)),cloud(point*3.+vec2(4.8,-clock)));
-      vec2 folded=point*5.+warp*3.;
-      float pigment=cloud(folded+vec2(cloud(folded+clock),cloud(folded-clock+8.))*3.);
+      vec2 folded=point*4.+warp*1.8;
+      float pigment=cloud(folded+vec2(cloud(folded+clock),cloud(folded-clock+8.))*1.8);
       float folds=cloud(folded*3.+warp*7.-clock);
       float veins=pow(max(0.,1.-abs(pigment-.5)*13.),3.);
-      vec3 crimson=vec3(.86,.025,.13), scarlet=vec3(1.,.20,.09), plum=vec3(.15,.015,.15);
-      vec3 ink=mix(plum,crimson,smoothstep(.27,.65,pigment));
-      ink=mix(ink,scarlet,smoothstep(.52,.8,folds)*.8);
-      ink+=vec3(.35,.18,.16)*veins*folds;
-      ink*=.6+.65*smoothstep(.23,.8,folds);
+      // Bright blue, peach and aqua keep the flowing material light rather than smoky or ominous.
+      vec3 ink=mix(vec3(.33,.71,.94),vec3(.64,.87,.87),smoothstep(.27,.65,pigment));
+      ink=mix(ink,vec3(1.,.72,.63),smoothstep(.46,.79,folds)*.8);
+      ink+=vec3(.10,.08,.04)*veins*folds;
+      ink*=.92+.12*smoothstep(.23,.8,folds);
       // A naturally present diagonal ribbon makes the first frame complete, without requiring a gesture.
       float center=.78-.56*uv.x+.10*sin(uv.x*7.+warp.x*3.);
       float ribbon=1.-smoothstep(.10,.24,abs(uv.y-center)+(warp.y-.5)*.14);
@@ -102,9 +103,12 @@ function setupHeroBrand(): void {
   if (!heroSection) return;
   heroSection.setAttribute('data-brand-observed', '');
   const syncHeroBrand = (): void => {
-    heroSection.toggleAttribute('data-hero-passed', heroSection.getBoundingClientRect().bottom <= 0);
+    heroSection.toggleAttribute('data-hero-passed', heroSection.getBoundingClientRect().bottom <= 1);
   };
-  new IntersectionObserver(syncHeroBrand, {threshold:0}).observe(heroSection);
+  new IntersectionObserver(syncHeroBrand, {threshold:[0,.001]}).observe(heroSection);
+  window.addEventListener('scroll',syncHeroBrand,{passive:true});
+  window.addEventListener('pageshow',syncHeroBrand);
+  window.addEventListener('resize',syncHeroBrand,{passive:true});
   syncHeroBrand();
 }
 setupHeroBrand();

@@ -39,3 +39,6 @@ GitHub Pages は `main` ブランチへの更新を自動公開します。
 
 ## 独自ドメインと問い合わせメール（2026-11-11）
 変更履歴：ユーザーがsite-veil.comを取得したため、Cloudflare版の正規ドメインとして接続。問い合わせ先はinfo@site-veil.com、ライフキャスティングの既存Gmailへ受信転送する。フォームは相談文の作成・コピーとメールアプリへの引き継ぎで、直接送信APIではない。詳細はdocs/design/2026-11-11-site-veil-domain-email.md。
+
+## 2026-11-11 問い合わせとトップの更新
+変更履歴：ナビとヒーローを正式トップへ統一。ロゴから/#after-heroへ戻る。問い合わせはResend経由の直接送信に変更し、従来のコピー案内を廃止。RESEND_API_KEYはCloudflareのWorker Secretにのみ登録。送信元contact@site-veil.com、送信先info@site-veil.com（siteveiljapna@gmail.comへ転送）。詳細はdocs/design/2026-11-11-simple-site-contact.md。

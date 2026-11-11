@@ -21,3 +21,9 @@ custom_domain = true
 [[routes]]
 pattern = "www.site-veil.com"
 custom_domain = true
+
+# 変更履歴: 2026-11-11 問い合わせの連続送信を拠点ごとに制限。RESEND_API_KEYはWorkerのSecretで設定する。
+[[ratelimits]]
+name = "CONTACT_RATE_LIMITER"
+namespace_id = "876511"
+simple = { limit = 3, period = 60 }

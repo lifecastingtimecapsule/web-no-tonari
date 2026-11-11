@@ -1,11 +1,12 @@
 ---
 // 変更履歴: 2026-11-10 ユーザー指定の新ブランドSITEVEILと独自の文字ロゴへ統一。
+// 変更履歴: 2026-11-11 ヘッダーロゴからヒーロー直下へ戻る指定を追加。
 // 役割: ヘッダー・フッターで同じアウトラインの文字ロゴとホーム導線を使う。
-interface Props { footer?: boolean; }
-const { footer = false } = Astro.props;
+interface Props { footer?: boolean; homeSection?: boolean; }
+const { footer = false, homeSection = false } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
-<a class:list={['brand', { 'brand--footer': footer }]} href={home} aria-label="SITEVEIL ホームへ">
+<a class:list={['brand', { 'brand--footer': footer }]} href={`${home}${homeSection ? '#after-hero' : ''}`} aria-label="SITEVEIL ホームへ">
 <img class="brand__wordmark" src={`${home}brand/siteveil-wordmark-${footer ? 'white' : 'black'}.svg`} alt="SITEVEIL" width="212" height="36" />
 </a>
 <style>.brand__wordmark{display:block;width:180px;height:auto} @media(max-width:640px){.brand__wordmark{width:150px}}</style>

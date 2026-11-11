@@ -1,0 +1,142 @@
+---
+// 変更履歴: 2026-11-11 トップと試作を共通化。送信フォームと背景になじむナビへ更新。
+// 変更履歴: 2026-11-11 ヒーロー通過に合わせて左上ロゴを表示する指定を反映。
+// 変更履歴: 2026-11-11 インクヒーローへ作り直し、試作内のヘッダーを平らな構成に変更。説明より視覚を優先する指示を反映。
+// 変更履歴: 2026-11-11 操作待ちのないVeil演出を比較できる独立した試作ページを追加。本番採用は試作確認後。
+// 変更履歴: 2026-11-11 問い合わせ先とメール作成への導線を追加。
+// 変更履歴: 2026-11-09 任意URLを常時表示し、ホームページがある場合だけ入力する案内へ変更。
+// 変更履歴: 2026-11-09 サービス一覧を共通化し、料金は概要と専用ページへの入口へ整理。
+// 変更履歴: 2026-11-09 ウェブ教材の入口と画像説明を三テーマへ合わせる。EC削除は共通データから反映。
+// 変更履歴: 2026-11-09 ウェブ制作記事の配色追加に合わせて紹介画像の代替テキストを更新。
+// 変更履歴: 2026-11-04 承認済みのブランドストーリーと全ページ構成を初回実装。
+// 変更履歴: 2026-11-09 ウェブ制作のプレビューをクイズ記事へ揃え、実績や架空店舗と混同しない表記へ変更。
+// 変更履歴: 2026-11-09 日常で使えるデザイン記事への調整に合わせ、画像の代替文を更新。
+// 変更履歴: 2026-11-05 ヒーローに装飾3Dキャンバスと既存SVGフォールバックの受け口を追加。
+// 変更履歴: 2026-11-05 シネマティック・テック案の単一3Dコア、短いコピー、非対称構成へヒーローを再設計。
+// 変更履歴: 2026-11-08 白黒赤ヒーローと社内制作事例へ置換し、実画面を主役にする。
+// 変更履歴: 2026-11-08 YAYOI SAIGA事例を外し、HiXFiを参考にしたサービス起点の導線へ再整理。
+// 変更履歴: 2026-11-08 全ページ共通のSiteLayoutへhead・ヘッダー・フッターを集約。
+// 変更履歴: 2026-11-08 依頼者の会社名・担当者名・メール欄を追加し、相談欄を入力に合わせて伸びる2行の初期表示へ変更。
+import SiteLayout from '../layouts/SiteLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import VeilHero from '../components/VeilHero.astro';
+// 変更履歴: 2026-11-08 4サービスへの詳細・体験導線を追加し、ECを含む提供領域を統一。
+// 変更履歴: 2026-11-08 サービスをサンプル画面・短い説明付きの横並びカラムへ変更し、完成像を比較しやすくする。
+// 変更履歴: 2026-11-08 スクロール連動の赤い大見出しを追加し、相談欄を本文＋任意URLとコピー操作へ簡略化。
+// 変更履歴: 2026-11-08 再指示により問い合わせ前の動く文字帯を撤去し、一般的な問い合わせ見出しへ変更。
+// 変更履歴: 2026-11-08 サービスを3件ずつ見せる手動横送りへ変更。全4件を左右ボタン・スワイプで閲覧できる。
+// 変更履歴: 2026-11-08 独立した企業理念ページへのリンクをフッターへ追加。
+// 変更履歴: 2026-11-08 確認済み運営会社と会社概要への導線をフッターに追加。
+// 変更履歴: 2026-11-08 サービスの横スクロールを撤去し、対象者・できること・料金をトップで説明する一覧へ変更。安全チェックへの導線とFAQの「準備中」表現を整理。
+// 変更履歴: 2026-11-09 縦の一覧を、3/2/1件表示で左右に送る承認済みのサービス紹介へ復元。
+import ServiceOverview from './ServiceOverview.astro';
+import PricingSummary from '../components/PricingSummary.astro';
+interface Props { preview?: boolean; }
+const {preview = false} = Astro.props;
+const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const faqs = [
+  ['相談内容がまとまっていなくても大丈夫ですか？', 'はい。何を頼めばよいか分からない段階から、困っていることと優先順位を一緒に整理します。'],
+  ['小さな修正だけでも相談できますか？', '現在のサイトや運用状況を確認したうえで、対応できる範囲をご案内します。大きなリニューアルを前提にはしません。'],
+  ['AIを導入すれば、すぐに業務を自動化できますか？', '業務内容や扱う情報によって異なります。まず小さな作業で試し、安全性と効果を確認してから範囲を広げます。'],
+  ['セキュリティ診断では何を確認しますか？', '無料の「かんたん安全チェック」では、通信の暗号化やなりすましメール対策など外から見える項目を確認します。有料の基本セキュリティ確認（¥55,000）では、CMSの更新状況、権限、パスワード運用、バックアップ、フォームまで確認し、対象と項目は作業前に合意します。'],
+  ['料金や対応地域は決まっていますか？', 'ウェブサイト制作、保守、基本セキュリティ確認の固定料金は掲載しています。対象外の作業は、必ず開始前に金額と内容をご案内します。対応地域やオンラインでの進め方は、ご相談内容に合わせてお伝えします。'],
+];
+---
+
+<SiteLayout title={preview ? "SITEVEIL｜モーション試作" : "SITEVEIL｜ウェブと、その先。"} description="ウェブ保守、ホームページのリニューアル、AI活用、セキュリティ確認を、小さなチームならではの距離感で支援するSITEVEIL。" homePage noindex={preview}>
+      <VeilHero />
+
+      <section class="declaration section section--paper" aria-labelledby="declaration-title">
+        <div class="shell declaration__grid">
+          <h2 id="declaration-title">速く答えることより、<br />近くで考えること。</h2>
+          <div class="declaration__body">
+            <p>AIやウェブがどれだけ便利になっても、会社ごとに悩みも、必要な答えも違います。</p>
+            <p>小さなチームだからこそ、話を途中で手放さない。一つひとつの仕事を知り、その会社に合う方法を一緒に考えます。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="services section section--mist" id="services" aria-labelledby="services-title">
+        <div class="shell">
+          <div class="section-heading section-heading--wide">
+            <h2 id="services-title">つくる、守る、育てるを、<br />ひとつの相談先で。</h2>
+            <p>必要なものだけを、必要な順序で。大きな仕組みを売ることから始めません。</p>
+          </div>
+
+          <ServiceOverview />
+        </div>
+      </section>
+
+      <section class="pricing section section--paper" id="pricing" aria-labelledby="pricing-title">
+        <div class="shell">
+          <div class="pricing__heading">
+            <h2 id="pricing-title">料金は、先に決める。<br />後から増やさない。</h2>
+            <p>必要なものだけを選べる固定料金です。表に書いた範囲なら、追加請求はありません。</p>
+          </div>
+
+          <PricingSummary />
+          <p class="pricing__external">表示はすべて税込。保守契約は任意です。対象範囲、追加オプション、外部費用は料金ページにまとめています。</p>
+          <a class="pricing__cta" href={`${serviceBase}/pricing/`}>料金と含まれる内容を見る <span aria-hidden="true">→</span></a>
+        </div>
+      </section>
+
+      <section class="security section" aria-labelledby="security-title" data-security-motion>
+        <div class="security__line" aria-hidden="true"></div>
+        <div class="shell security__layout">
+          <div>
+            <h2 id="security-title">AI時代の便利さと、<br />新しいリスクに備える。</h2>
+            <p>AIを悪用した偽メールやなりすまし、古いホームページの脆弱性。怖がらせるのではなく、確認できる項目と優先順位へ変えます。</p>
+            <p class="security__diagnostic"><strong>必要な場合は、有料のセキュリティ診断へ。</strong><span>サイトの構成、更新状況、権限、バックアップなどを確認し、対応範囲と費用を先にご案内します。</span></p>
+            <a class="security__check-link" href={`${serviceBase}/check/`}>まずは無料のかんたん安全チェック <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="security__checks">
+            <li><span aria-hidden="true"></span>CMS・プラグインの更新状況</li>
+            <li><span aria-hidden="true"></span>権限・パスワード・バックアップ</li>
+            <li><span aria-hidden="true"></span>問い合わせフォームと通信</li>
+            <li><span aria-hidden="true"></span>AI利用時の情報管理</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="faq section section--paper" id="faq" aria-labelledby="faq-title">
+        <div class="shell faq__layout">
+          <div class="section-heading">
+            <h2 id="faq-title">相談の前によくあること。</h2>
+            <p>相談の前によくいただく質問です。ここにないことも、お気軽にお問い合わせください。</p>
+          </div>
+          <div class="faq-list">
+            {faqs.map(([question, answer]) => (
+              <details>
+                <summary>{question}<span aria-hidden="true"></span></summary>
+                <div class="faq-list__answer"><p>{answer}</p></div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="contact section" id="contact" aria-labelledby="contact-title">
+        <div class="shell contact__layout">
+          <div class="contact__intro">
+            <h2 id="contact-title">お問い合わせ</h2>
+            <p>ご相談・ご質問をお書きください。</p>
+
+          </div>
+
+          <ContactForm />
+        </div>
+      </section>
+    <script>
+      import '../scripts/site';
+    </script>
+</SiteLayout>
+
+<!-- 試作の役割: アンカー移動も待たせず、素早い往復操作をそのまま反映する。 -->
+<style is:global>html:has([data-veil-stage]) { scroll-behavior: auto; }
+html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:transparent; top:0; width:100%; min-height:86px; padding:16px 4%; }html:has([data-brand-observed]) .site-header .brand { opacity:0; visibility:hidden; transition:opacity 180ms ease; }
+html:has([data-hero-passed]) .site-header .brand { opacity:1; visibility:visible; }
+@media(prefers-reduced-motion:reduce){html:has([data-veil-stage]) .site-header .brand { transition:none; }}
+</style>
+
+<style is:global>html:has([data-hero-passed]) .site-header { background:#fff; } html:has([data-veil-stage]) .site-nav { gap:28px; } html:has([data-veil-stage]) .nav-contact { background:transparent; color:var(--ink); padding:10px 0; border-radius:0; } @media(max-width:900px){html:has([data-veil-stage]) .site-nav {gap:0; background:#fff;}}</style>
