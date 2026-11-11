@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 タップ位置への顔料の集合と復帰を追加。小画面の描画量・フレーム数を抑え、毎フレームのレイアウト参照を撤去。
 // 変更履歴: 2026-11-11 青の領域を縮小し、オレンジに重なる赤い顔料を増加。
 // 変更履歴: 2026-11-11 オレンジ主体へ再調整し、青・紫を差し色として追加。黄色の強さを抑える指定を反映。
 // 変更履歴: 2026-11-11 黄色の面積を増やし、赤・オレンジ・緑を小さな差し色へ抑制。
@@ -16,6 +17,7 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
     uniform vec2 resolution;
     uniform float time;
     uniform vec3 strokes[12];
+    uniform vec3 gathering;
     float hash(vec2 point){return fract(sin(dot(point,vec2(127.1,311.7)))*43758.5453);}
     float noise(vec2 point){
       vec2 cell=floor(point),fraction=fract(point);fraction=fraction*fraction*(3.-2.*fraction);
@@ -28,7 +30,9 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
       return total;
     }
     void main(){
-      vec2 uv=gl_FragCoord.xy/resolution;
+      vec2 screenUv=gl_FragCoord.xy/resolution;
+      float gatheringScale=1.-gathering.z*.72;
+      vec2 uv=(screenUv-gathering.xy)/gatheringScale+gathering.xy;
       float aspect=resolution.x/resolution.y;
       vec2 point=vec2(uv.x*aspect,uv.y);
       float clock=time*.045;
@@ -87,16 +91,27 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
   const resolution = graphics.getUniformLocation(program, 'resolution');
   const time = graphics.getUniformLocation(program, 'time');
   const strokes = graphics.getUniformLocation(program, 'strokes[0]');
+  const gathering = graphics.getUniformLocation(program, 'gathering');
+  let renderWidth = 1;
+  let renderHeight = 1;
+  /** サイズ変更時だけ描画解像度を算出し、小画面のGPU負荷を制限する。 */
+  const resizeInk = (): void => {
+    const bounds = canvas.getBoundingClientRect();
+    const compact = bounds.width <= 800;
+    const pixelRatio = Math.min(devicePixelRatio || 1, compact ? 1 : 1.25, Math.sqrt((compact ? 420000 : 900000) / Math.max(1, bounds.width * bounds.height)));
+    renderWidth = Math.max(1, Math.round(bounds.width * pixelRatio));
+    renderHeight = Math.max(1, Math.round(bounds.height * pixelRatio));
+    canvas.width = renderWidth;
+    canvas.height = renderHeight;
+  };
+  new ResizeObserver(resizeInk).observe(canvas);
+  resizeInk();
   return {
     /** ピクセル数を抑えて描画し、端末の高DPIが負荷を無制限に増やさないようにする。 */
-    draw(elapsed: number, trail: Float32Array) {
-      const bounds = canvas.getBoundingClientRect();
-      const pixelRatio = Math.min(devicePixelRatio || 1, 1.25, Math.sqrt(1200000 / (bounds.width * bounds.height)));
-      const width = Math.max(1, Math.round(bounds.width * pixelRatio));
-      const height = Math.max(1, Math.round(bounds.height * pixelRatio));
-      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
-      graphics.viewport(0, 0, width, height);
-      graphics.uniform2f(resolution, width, height);
+    draw(elapsed: number, trail: Float32Array, gatheringPoint: Float32Array) {
+      graphics.viewport(0, 0, renderWidth, renderHeight);
+      graphics.uniform2f(resolution, renderWidth, renderHeight);
+      graphics.uniform3fv(gathering, gatheringPoint);
       graphics.uniform1f(time, elapsed);
       graphics.uniform3fv(strokes, trail);
       graphics.drawArrays(graphics.TRIANGLES, 0, 6);
@@ -125,30 +140,33 @@ function setupVeilPreview(): void {
   const stage = document.querySelector<HTMLElement>('[data-veil-stage]');
   const canvas = stage?.querySelector<HTMLCanvasElement>('[data-ink-canvas]');
   if (!stage || !canvas) return;
-  const motionButton = stage.querySelector<HTMLButtonElement>('[data-veil-motion]');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const renderer = createInkRenderer(canvas);
   if (!renderer) return;
   const trail = new Float32Array(36);
-  let motionPaused = false;
+  const gatheringPoint = new Float32Array([.5, .5, 0]);
+  const compactScreen = matchMedia('(max-width: 800px)');
+  let gatheringStarted = -10;
   let pendingFrame = 0;
   let inView = true;
   let previousFrame = 0;
   let elapsed = 3;
   let strokeIndex = 0;
   let contextLost = false;
-  /** 最大30fps。非表示・停止・縮小モーションでは再予約を行わない。 */
+  /** 小画面は最大24fps、それ以外は最大30fps。非表示・停止・縮小モーションでは再予約を行わない。 */
   const paintVeil = (timestamp: number): void => {
     pendingFrame = 0;
     if (contextLost) return;
     const delta = previousFrame ? Math.min((timestamp - previousFrame) / 1000, .05) : 0;
-    const animate = !motionPaused && !reducedMotion.matches && inView && !document.hidden;
-    if (animate && timestamp - previousFrame < 32) { pendingFrame = requestAnimationFrame(paintVeil); return; }
+    const animate = !reducedMotion.matches && inView && !document.hidden;
+    if (animate && timestamp - previousFrame < (compactScreen.matches ? 41 : 32)) { pendingFrame = requestAnimationFrame(paintVeil); return; }
     previousFrame = timestamp;
     if (animate) elapsed += delta;
     if (animate) for (let stroke=0;stroke<12;stroke++) trail[stroke*3+2] = Math.max(0, trail[stroke*3+2] - delta * .045);
-    renderer.draw(elapsed, trail);
+    const gatheringAge = elapsed - gatheringStarted;
+    gatheringPoint[2] = animate && gatheringAge < 1.35 ? Math.pow(Math.sin(Math.PI * Math.max(0, gatheringAge) / 1.35), 2) : 0;
+    renderer.draw(elapsed, trail, gatheringPoint);
     stage.setAttribute('data-ink-ready', '');
     if (animate) pendingFrame = requestAnimationFrame(paintVeil);
   };
@@ -160,24 +178,28 @@ function setupVeilPreview(): void {
     if (!contextLost) pendingFrame = requestAnimationFrame(paintVeil);
   };
   stage.addEventListener('pointermove', event => {
-    if (motionPaused || reducedMotion.matches || !finePointer.matches || event.pointerType !== 'mouse') return;
+    if (reducedMotion.matches || !finePointer.matches || event.pointerType !== 'mouse') return;
     const bounds = stage.getBoundingClientRect();
     trail[strokeIndex*3] = (event.clientX-bounds.left)/bounds.width;
     trail[strokeIndex*3+1] = 1-(event.clientY-bounds.top)/bounds.height;
     trail[strokeIndex*3+2] = .16;
     strokeIndex = (strokeIndex+1)%12;
   }, {passive:true});
-  motionButton?.addEventListener('click', () => {
-    motionPaused = !motionPaused;
-    motionButton.setAttribute('aria-pressed', String(motionPaused));
-    motionButton.setAttribute('aria-label', motionPaused ? '動きを再開する' : '動きを止める');
-    motionButton.innerHTML = motionPaused ? '<span aria-hidden="true">▷</span>' : '<span aria-hidden="true">Ⅱ</span>';
-    resetVeil();
-  });
+  /** クリック成立時のみ集合するため、タッチスクロールやリンク操作を妨げない。連打は一つの演出を更新する。 */
+  stage.addEventListener('click', event => {
+    if (reducedMotion.matches || !inView || document.hidden || contextLost) return;
+    if (event.target instanceof Element && event.target.closest('a,button,input,select,textarea')) return;
+    const bounds = stage.getBoundingClientRect();
+    gatheringPoint[0] = Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width));
+    gatheringPoint[1] = Math.max(0, Math.min(1, 1 - (event.clientY - bounds.top) / bounds.height));
+    gatheringStarted = elapsed;
+    trail.fill(0);
+  }, {passive:true});
   /** OS設定変更時は軌跡も消し、静止状態を即時反映する。 */
   const syncMotionPreference = (): void => {
     trail.fill(0);
-    if (motionButton) motionButton.hidden = reducedMotion.matches;
+    gatheringStarted = -10;
+    gatheringPoint[2] = 0;
     resetVeil();
   };
   reducedMotion.addEventListener('change', syncMotionPreference);
@@ -188,7 +210,6 @@ function setupVeilPreview(): void {
     contextLost = true;
     cancelAnimationFrame(pendingFrame);
     stage.removeAttribute('data-ink-ready');
-    if (motionButton) motionButton.hidden = true;
   });
   syncMotionPreference();
 }

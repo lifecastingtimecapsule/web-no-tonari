@@ -3,6 +3,7 @@
 // 変更履歴: 2026-11-11 英語コピーを削除し、ヒーローもVの切れ目がある正式な文字ロゴに統一。
 // 変更履歴: 2026-11-11 明るいインクと黒い正式ロゴに変更。行き先をヒーロー直下にそろえ、重複する相談ボタンを撤去。
 // 変更履歴: 2026-11-11 安全チェックを画像付きの独立コンポーネントへ移管し、ヒーローと分離。
+// 変更履歴: 2026-11-11 ユーザー指定により右下の停止ボタンを撤去。OS設定での動作制御は維持。
 // 役割: 最小限の言葉と触覚的な表現でSITEVEILの印象をつくり、通常のサービス・相談導線へつなぐ。
 const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
@@ -16,7 +17,6 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   <div class="ink-hero__bottom">
     <a class="ink-hero__discover" href="#after-hero">つくる。守る。育てる。<span aria-hidden="true">↘</span></a>
   </div>
-  <button class="ink-hero__pause" type="button" aria-label="動きを止める" aria-pressed="false" data-veil-motion hidden><span aria-hidden="true">Ⅱ</span></button>
 </section>
 <script>import '../scripts/veil-motion';</script>
 <style>
@@ -32,10 +32,8 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   .ink-hero__bottom a{display:flex;align-items:center;justify-content:space-between;gap:36px;padding:14px 0;font-size:15px;color:#16191d;text-decoration:none;font-weight:700;position:relative}
   .ink-hero__contact{background:#16191d!important;color:#fff!important;padding:17px 24px!important;border-radius:0}
   .ink-hero__discover{color:#16191d!important}
-  .ink-hero__bottom span{font-size:23px;line-height:1}.ink-hero__pause{position:absolute;right:4%;bottom:2%;min-width:44px;min-height:44px;border:0;background:transparent;color:#16191d;font-size:17px;cursor:pointer}
-  .ink-hero__pause{color:#16191d}
+  .ink-hero__bottom span{font-size:23px;line-height:1}
 
   a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #e22336;outline-offset:5px}button:active,.ink-hero__contact:active{translate:0 1px}
-  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:12%;align-items:start;flex-direction:column;gap:18px}.ink-hero__bottom a{font-size:14px}.ink-hero__pause{bottom:4%}}
-  @media(prefers-reduced-motion:reduce){.ink-hero__pause{display:none}}
+  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:12%;align-items:start;flex-direction:column;gap:18px}.ink-hero__bottom a{font-size:14px}}
 </style>
