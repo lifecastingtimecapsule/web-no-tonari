@@ -4,6 +4,7 @@
 // 変更履歴: 2026-11-11 明るいインクと黒い正式ロゴに変更。行き先をヒーロー直下にそろえ、重複する相談ボタンを撤去。
 // 変更履歴: 2026-11-11 安全チェックを画像付きの独立コンポーネントへ移管し、ヒーローと分離。
 // 変更履歴: 2026-11-11 ユーザー指定により右下の停止ボタンを撤去。OS設定での動作制御は維持。
+// 変更履歴: 2026-11-11 下部コピーを削除し、中央の細線矢印リンクへ統一。タップ領域と読み上げ名は維持。
 // 役割: 最小限の言葉と触覚的な表現でSITEVEILの印象をつくり、通常のサービス・相談導線へつなぐ。
 const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
@@ -15,7 +16,7 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   </div>
   <img class="ink-hero__word" src={`${brandBase}brand/siteveil-wordmark-black.svg`} width="424" height="72" alt="" aria-hidden="true" />
   <div class="ink-hero__bottom">
-    <a class="ink-hero__discover" href="#after-hero">つくる。守る。育てる。<span aria-hidden="true">↘</span></a>
+    <a class="ink-hero__discover" href="#after-hero" aria-label="下のコンテンツへ"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 5v21M7 17l9 9 9-9" /></svg></a>
   </div>
 </section>
 <script>import '../scripts/veil-motion';</script>
@@ -28,12 +29,12 @@ const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
   .ink-hero__intro h1{font-size:clamp(22px,2.7vw,44px);line-height:1.2;font-weight:700;letter-spacing:-.045em;margin:0}
   .ink-hero__intro p{font-size:14px;line-height:1.5;margin:0;font-weight:500}
   .ink-hero__word{position:absolute;left:3%;top:50%;translate:0 -50%;width:94%;height:auto;pointer-events:none;user-select:none}
-  .ink-hero__bottom{position:absolute;left:4%;right:4%;bottom:8%;display:flex;justify-content:space-between;align-items:center;gap:24px}
-  .ink-hero__bottom a{display:flex;align-items:center;justify-content:space-between;gap:36px;padding:14px 0;font-size:15px;color:#16191d;text-decoration:none;font-weight:700;position:relative}
-  .ink-hero__contact{background:#16191d!important;color:#fff!important;padding:17px 24px!important;border-radius:0}
-  .ink-hero__discover{color:#16191d!important}
-  .ink-hero__bottom span{font-size:23px;line-height:1}
-
-  a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #e22336;outline-offset:5px}button:active,.ink-hero__contact:active{translate:0 1px}
-  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:12%;align-items:start;flex-direction:column;gap:18px}.ink-hero__bottom a{font-size:14px}}
+  .ink-hero__bottom{position:absolute;left:0;right:0;bottom:7%;display:flex;justify-content:center;pointer-events:none}
+  .ink-hero__discover{display:grid;place-items:center;width:56px;height:56px;border:1px solid rgb(22 25 29 / .25);border-radius:50%;color:#16191d!important;text-decoration:none;pointer-events:auto;transition:background-color 180ms ease,border-color 180ms ease}
+  .ink-hero__discover svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;transition:transform 180ms ease}
+  @media(hover:hover){.ink-hero__discover:hover{background:rgb(255 255 255 / .55);border-color:#16191d}.ink-hero__discover:hover svg{transform:translateY(3px)}}
+  .ink-hero__discover:active{background:rgb(255 255 255 / .65)}
+  a:focus-visible{outline:3px solid #e22336;outline-offset:5px}
+  @media(prefers-reduced-motion:reduce){.ink-hero__discover,.ink-hero__discover svg{transition:none}}
+  @media(max-width:800px){.ink-hero{min-height:580px;max-height:950px}.ink-hero__intro{top:24%;display:block}.ink-hero__intro h1{font-size:28px}.ink-hero__intro p{font-size:12px;margin-top:12px}.ink-hero__word{top:49%;font-size:23vw}.ink-hero__bottom{bottom:8%}}
 </style>
