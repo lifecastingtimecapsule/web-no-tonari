@@ -19,10 +19,17 @@
 既存のCloudflare受信転送とMXを維持。Resend指定のresend._domainkey TXTと、rsend/sendのCNAME（DNSのみ）を追加し、送信ドメインVerifiedを確認。Cloudflare全体をResendへ委任する権限連携は使っていない。
 
 ## 確認
-送信処理の宛先固定・ヘッダー注入・外部Origin・連投制限・サイズ上限・エラー秘匿・不正JSONなど12件を追加し、合計50テスト成功。最終ビルド・実画面・実配送の結果は確認後に追記する。
+送信処理の宛先固定・ヘッダー注入・外部Origin・連投制限・サイズ上限・エラー秘匿・不正JSONなど12件を追加し、合計50テスト成功。最終ビルドは51ファイルの診断エラー・警告0、13ページ生成成功。
 
 参考：https://resend.com/docs/api-reference/emails/send-email 、 https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/
 
 GitHub Pages版は正規ドメインの問い合わせAPIを使用する。CORSは既知の自社公開元だけを列挙し、ワイルドカードを使わない。
 
 ローカル最終確認：51ファイルの診断エラー・警告0、13ページのビルド成功。スマホ390pxで横はみ出しなし・メニュー開閉・流体描画を確認。ヒーロー直下に移動した際のロゴ判定が境界0pxで遅れる問題を発見し、しきい値と通常スクロール・pageshowの同期を追加。ロゴを繰り返し押してもヒーロー直下（hero bottom=0）へ戻り、ロゴが表示されることを確認。
+
+## 公開・実配送確認
+コミットaa35f13で正式トップと試作を配備。Cloudflare・GitHub Pagesとも成功。https://site-veil.com/ はHTTP200。Worker Secretに登録済みのキーが配備後も機能していることを実送信で確認。
+
+2026-11-11 11時47分（日本時間）、ユーザーが了承した確認メール1通を実際の公開フォームから送信。フォームは「送信しました」と表示、ResendのSending一覧はDelivered。さらにsiteveiljapna@gmail.comのGmail検索で、受信トレイに「SITEVEIL お問い合わせ」と確認用本文が到着していることを確認。受信確認だけを行い、追加の返信・自動返信は送っていない。
+
+既存の「フォームはコピーのみ」という運用は今回の直接送信へ更新された。調査ツールの顧客データ・確定PDF・同意書・30日削除には変更なし。
