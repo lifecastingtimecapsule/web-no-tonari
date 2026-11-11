@@ -1,0 +1,21 @@
+---
+// 変更履歴: 2026-11-11 業務別の作業・制作費・当社運用の月額を同じ行で確認できる料金表を追加。
+// 役割: 顧客が目安と追加条件を操作なしで比較し、その内容を引き継いで問い合わせる。
+import {businessPricing,businessPricingConditions} from '../data/business-pricing';
+import {formatPrice} from '../data/pricing';
+interface Props {id?:string;}
+const {id='business-pricing'}=Astro.props;
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
+---
+<section class="business-pricing" id={id} aria-labelledby={`${id}-title`}>
+<h2 id={`${id}-title`}>業務システムでできること・料金の目安</h2><p>{businessPricingConditions.base}</p>
+<div class="business-pricing__table" role="table" aria-label="業務別の税込制作費と月額費用">
+<div class="business-pricing__head" role="row"><span role="columnheader">つくるもの・含まれる機能</span><span role="columnheader">制作費（初回）</span><span role="columnheader">月々（当社運用）</span></div>
+{businessPricing.map(plan=><div class="business-pricing__row" role="row"><div role="cell"><h3>{plan.name}</h3><ul>{plan.features.map(feature=><li>{feature}</li>)}</ul><p class="business-pricing__scope">{plan.scope}</p><a href={`${home}?service=${encodeURIComponent(`業務システム開発・${plan.name}`)}#contact`}>この内容を問い合わせる</a></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">制作費</span><strong>{formatPrice(plan.initial)}〜</strong></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">月々</span><strong>{plan.monthly?`${formatPrice(plan.monthly)}〜`:'¥0'}</strong><small>{plan.monthly?'当社で運用する場合':'納品型・月額契約不要'}</small></div></div>)}
+</div>
+<div class="business-pricing__conditions"><h3>制作費に含むこと</h3><p>{businessPricingConditions.included}</p><h3>月々の費用に含むこと</h3><p>{businessPricingConditions.monthly}</p><p>{businessPricingConditions.delivery}</p><h3>別料金になること</h3><p>{businessPricingConditions.extras}</p><p>{businessPricingConditions.quote}</p></div>
+</section>
+<style>
+.business-pricing{padding-block:32px;scroll-margin-top:100px}.business-pricing h2{font-size:clamp(24px,3vw,32px);line-height:1.4;margin:0 0 16px}.business-pricing>p{font-size:16px;line-height:1.85;max-width:70ch}.business-pricing__head,.business-pricing__row{display:grid;grid-template-columns:minmax(0,1fr) 180px 180px;gap:24px;border-top:1px solid #dedfdf;padding:24px 0}.business-pricing__head{font-size:14px;font-weight:700;padding-block:12px}.business-pricing h3{margin:0 0 12px;font-size:20px;line-height:1.5}.business-pricing ul{padding-left:20px;margin:0;font-size:15px;line-height:1.8}.business-pricing__scope{font-size:14px;line-height:1.75;color:#465359;margin:12px 0}.business-pricing a{display:inline-flex;align-items:center;min-height:32px;font-size:14px;text-underline-offset:4px}.business-pricing__price strong{font-size:24px;line-height:1.4;font-variant-numeric:tabular-nums;display:block}.business-pricing__price small{display:block;font-size:12px;line-height:1.7;margin-top:6px}.business-pricing__mobile{display:none}.business-pricing__conditions{border-top:1px solid #dedfdf;padding-top:24px}.business-pricing__conditions p{font-size:14px;line-height:1.85;max-width:80ch}.business-pricing__conditions h3{font-size:18px;margin-top:24px}
+@media(max-width:700px){.business-pricing__head{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;padding:0;border:0}.business-pricing__row{grid-template-columns:1fr 1fr;gap:16px}.business-pricing__row>div:first-child{grid-column:1/-1}.business-pricing__mobile{display:block;font-size:13px;margin-bottom:6px}.business-pricing__price strong{font-size:23px}.business-pricing__row{padding-block:24px}}
+</style>
