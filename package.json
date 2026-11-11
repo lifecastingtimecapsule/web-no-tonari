@@ -11,7 +11,8 @@
     "test": "vitest run",
     "columns:admin": "node tools/column-admin/start.mjs",
     "columns:test": "node --test tools/column-admin/checks.mjs",
-    "columns:verify": "node tools/column-admin/verify-build.mjs"
+    "columns:verify": "node tools/column-admin/verify-build.mjs",
+    "columns:desktop": "node tools/column-admin/install-desktop.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
