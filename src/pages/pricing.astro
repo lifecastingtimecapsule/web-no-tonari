@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 顧客が作業内容を判断できる平易な表現へ統一。金額・契約範囲は維持。
 // 変更履歴: 2026-11-11 有料メニューを一律20%値上げし、本文・紹介・メタ情報の料金を統一。無料と対象範囲は維持。
 // 変更履歴: 2026-11-09 漏えい履歴チェックの範囲と受付状況を料金一覧・詳細へ追加。
 // 変更履歴: 2026-11-09 AI画像の準備方針と専門診断の公開価格例を追加。自社料金との誤認を防ぐ。
@@ -22,7 +23,7 @@ const examples = [
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">料金</span></nav>
   <header class="catalog-heading"><h1>内容も、金額も。<br />始める前に、はっきりと。</h1><p>掲載金額はすべて税込です。合意した範囲の作業で、後から料金を追加しません。内容を増やすときは、追加費用を先に提示し、了承をいただいてから進めます。</p></header>
   <PricingSummary />
-  <p class="pricing-page__note">制作は買い切り。納品後の保守契約・更新契約は必須ではありません。ドメインやサーバーなどの外部費用は別途実費です。</p>
+  <p class="pricing-page__note">制作は買い切り。納品後の保守契約・更新契約は必須ではありません。サイトのアドレスや公開場所の契約費（ドメイン・サーバー）は別途実費です。</p>
   <nav class="pricing-jump" aria-label="料金ページの目次"><a href="#included">基本料金の範囲</a><a href="#options">追加オプション</a><a href="#examples">合計金額の例</a><a href="#other-costs">個別見積もり・外部費用</a></nav>
 
   <section class="pricing-section" id="included" aria-labelledby="included-title"><h2 id="included-title">この料金で、ここまで。</h2>

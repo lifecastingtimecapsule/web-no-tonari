@@ -1,5 +1,6 @@
 ---
 // 変更履歴: 2026-11-11 別ページへ移動せず料金・対象・条件を確認できる共通表示を追加。
+// 変更履歴: 2026-11-11 対応内容と対象外を常時表示し、価格判断のための折りたたみを廃止。
 // 役割: 正本の料金データから、説明中のサービスに対応する税込価格と範囲を表示する。
 import {pricingPlans,pricingOptions,formatPrice} from '../data/pricing';
 interface Props {planIds:string[];}
@@ -11,7 +12,7 @@ const visiblePlans=pricingPlans.filter(plan=>planIds.includes(plan.id));
     <p class="inline-pricing__label">{plan.name}</p>
     <strong class="inline-pricing__amount">{formatPrice(plan.amount)}<small>（税込・{plan.unit}）</small></strong>
     <p class="inline-pricing__summary">{plan.summary}</p>
-    <details><summary>含まれる内容・条件</summary><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p>{plan.note}</p><p>別途：{plan.excluded}</p>{['website','maintenance'].includes(plan.id) && <ul aria-label="追加料金（税込）">{(plan.id==='website'?pricingOptions.slice(0,3):pricingOptions.slice(3)).map(option=><li>{option.name}：{formatPrice(option.amount)}（{option.unit}）</li>)}</ul>}</details>
+    <div class="inline-pricing__scope"><p><strong>この料金に含まれること</strong></p><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p class="inline-pricing__excluded"><strong>別料金・対象外</strong><br />{plan.excluded}</p>{['website','maintenance'].includes(plan.id)&&<ul aria-label="追加料金（税込）">{(plan.id==='website'?pricingOptions.slice(0,3):pricingOptions.slice(3)).map(option=><li>{option.name}：{formatPrice(option.amount)}（{option.unit}）</li>)}</ul>}</div>
   </div>)}
 </div>
 <style>

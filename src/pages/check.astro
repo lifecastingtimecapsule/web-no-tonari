@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 顧客が作業内容を判断できる平易な表現へ統一。金額・契約範囲は維持。
 // 変更履歴: 2026-11-11 有料メニューを一律20%値上げし、本文・紹介・メタ情報の料金を統一。無料と対象範囲は維持。
 // 変更履歴: 2026-11-08 SEO確認を廃止し、公開情報だけで確認する「かんたん安全チェック」ページを追加。
 // 変更履歴: 2026-11-11 導入を短くし、確認項目を開閉式へ整理。結果や診断範囲は維持。
@@ -16,11 +17,11 @@ const checks = [
   ['ブラウザ向けの保護設定', '他サイトへの埋め込みや、読み込み元の制限など、主な4つの設定が有効か。'],
   ['ソフトの版の表示', 'CMSやサーバーのバージョンが、外から読み取れる状態になっていないか。'],
   ['暗号化されない読み込み', 'https:// のページの中で、http:// の画像やプログラムを読み込んでいないか。'],
-  ['なりすましメール対策', '会社のドメインを名乗った偽メールを防ぐ設定（SPF・DMARC）があるか。'],
+  ['会社を名乗る偽メールへの対策', '会社のドメインを名乗った偽メールを防ぐ設定（SPF・DMARC）があるか。'],
 ];
-const notChecked = ['CMS・プラグインの更新状況', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
+const notChecked = ['WordPressや追加機能が最新か', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
-<SiteLayout title="かんたん安全チェック｜SITEVEIL" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、なりすましメール対策など、外から見える安全性を無料で確認できます。">
+<SiteLayout title="かんたん安全チェック｜SITEVEIL" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、会社を名乗る偽メールへの対策など、外から見える安全性を無料で確認できます。">
 <div class="shell check-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
   <h1>サイトの安全性を、<br />かんたんチェック。</h1>
@@ -32,7 +33,7 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
       <input id="check-url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" required aria-describedby="check-disclosure check-status" />
       <button class="button button--human" type="submit" data-check-run disabled={!apiAvailable}>チェックする</button>
     </div>
-    <p id="check-disclosure" class="check-form__note">確認するのはトップページ1件と、ドメインの公開DNS情報だけです。侵入や攻撃にあたる操作は行いません。</p>
+    <p id="check-disclosure" class="check-form__note">確認するのはトップページ1件と、サイトのアドレスに関する公開設定（DNS）だけです。侵入や攻撃にあたる操作は行いません。</p>
     <p id="check-status" class="check-form__status" role="status" aria-live="polite" data-check-status>{apiAvailable ? '' : 'チェック機能は公開準備中です。お急ぎの場合は、お問い合わせからご相談ください。'}</p>
   </form>
 
@@ -44,21 +45,21 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
     <p class="check-result__time" data-check-time></p>
   </section>
 
-  <details class="check-scope">
-    <summary id="check-scope-title">確認する項目</summary>
+  <section class="check-scope" aria-labelledby="check-scope-title">
+    <h2 id="check-scope-title">無料で調べること</h2>
     <dl>{checks.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
-  </details>
+  </section>
 
   <section class="check-next" aria-labelledby="check-next-title">
     <div>
-      <h2 id="check-next-title">外から見えるのは、<br />入口だけ。</h2>
+      <h2 id="check-next-title">管理画面の中も<br />調べたい方へ</h2>
       <p>サイトの安全性の多くは、管理画面やサーバーの中で決まります。次の項目は、このチェックでは確認できません。</p>
       <ul>{notChecked.map(item => <li>{item}</li>)}</ul>
     </div>
     <div class="check-next__offer">
       <p class="check-next__label">基本セキュリティ確認</p>
       <p class="check-next__price">¥59,400<small>（税込）</small></p>
-      <p>CMS・権限・更新・バックアップ・フォーム・HTTPSを確認し、すぐ対応することと今後整えることを分けて報告します。</p>
+      <p>サイトの更新状態、管理権限、データの控え、問い合わせ・通信の設定を確認し、すぐ対応することと今後整えることを分けて報告します。</p>
       <a class="button button--human" data-check-consult href={`${home}?service=${encodeURIComponent('安全チェックの結果')}#contact`}>この結果をもとに相談する</a>
     </div>
   </section>

@@ -192,3 +192,20 @@ body.page-inner #main .service-price-quote{margin-block:20px;font-size:14px;line
 body.page-inner #main .service-price-quote strong{font-size:26px;line-height:1.4}
 body.page-inner #main .siteveil-guide .links{align-self:start}
 body.page-home #main :is(.section-heading>p,.declaration__body p,.contact__intro p,.faq-list__answer p){font-size:var(--reading-body);line-height:var(--reading-leading)}
+
+/* 変更履歴: 2026-11-11 FAQの開閉を言葉で示し、三角マークを撤去。必須情報は通常の本文へ。 */
+/* 役割: 読むだけの内容と開閉操作を区別する。ナビのサービスメニューは既存の矢印を維持。 */
+body #main details>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px}
+body #main details>summary::-webkit-details-marker{display:none}
+body #main details>summary::marker{content:''}
+body #main details>summary::after{content:'開く';flex:none;font-size:12px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
+body #main details[open]>summary::after{content:'閉じる'}
+body #main .faq-list summary>span{display:none}
+body #main .inline-pricing__scope{font-size:14px;line-height:1.75}
+body #main .inline-pricing__scope>p{margin-block:12px 8px}
+body #main .inline-pricing__excluded{color:#465359}
+body #main .service-order h2,body #main .service-reference h2{font-size:var(--reading-section);line-height:1.4}
+body #main .service-order li{font-size:16px;line-height:1.8}
+body #main .email-check__scope h2{font-size:22px;line-height:1.4;margin:0 0 12px}
+body #main .guide-conditions h3{font-size:18px;margin:16px 0 8px}
+body .restore-service-link{font-size:15px;line-height:1.7;margin:16px 0}

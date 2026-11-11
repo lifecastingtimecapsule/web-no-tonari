@@ -1,46 +1,26 @@
 ---
-// 変更履歴: 2026-11-09 基本確認の対象外となる専門診断の参考費用へ入口を追加。
-// 変更履歴: 2026-11-09 詳細からサービス一覧と料金ページへ戻れる導線を追加。
-// 変更履歴: 2026-11-09 詳細を三サービスへ整理し、ウェブ教材の入口を三体験へ合わせる。
-// 変更履歴: 2026-11-08 サービスごとの事業説明、操作サンプル、豆知識を独立ページとして追加。
-// 変更履歴: 2026-11-09 安全確認ページは、体験後にサイト側の備えと相談へつなぐ文章へ変更。
-// 変更履歴: 2026-11-11 説明を短くし、詳細を折りたたみに整理。送信済みフォームへ相談する導線を統一。
-// 変更履歴: 2026-11-11 SEO詳細を追加。存在しない体験は表示せず、対応内容へ案内。
-// 変更履歴: 2026-11-11 SEOは短い進め方を常時表示し、内部ノウハウの羅列を避ける。
-// 変更履歴: 2026-11-11 参考資料・他社価格への公開リンクを削除し、サービスの検索タイトルを整理。
-// 変更履歴: 2026-11-11 導入に価格と対象範囲を常時表示し、条件をその場で開けるよう変更。
-// 変更履歴: 2026-11-11 AIページは経営者の判断順に再構成。用途を常時表示し、デモは補足へ移す。
-// 変更履歴: 2026-11-11 AIページの補足を見積依頼から返信案までの見本へ変更。
-// 役割: 共通のブランドとナビを保ち、4領域の提供内容を具体的に説明する。
-// 変更履歴: 2026-11-08 トップと同じ共通レイアウト・ナビ・ロゴを適用。
-// 変更履歴: 2026-11-09 ウェブ制作の体験を記事形式に変更し、タイトルと入口の操作名を内容に合わせた。
+// 変更履歴: 2026-11-11 経営者向けに料金・作業・対象外を常時表示。教材は補足ページへ分離。
+// 役割: 顧客が依頼内容と費用を判断し、そのまま相談できるサービス案内。
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import '../../styles/services.css';
-import { servicePages } from '../../data/services';
+import {servicePages} from '../../data/services';
 import InlinePricing from '../../components/InlinePricing.astro';
-import ServiceDemo from '../../components/ServiceDemo.astro';
-export function getStaticPaths() { return servicePages.map(service => ({ params: { slug: service.slug }, props: { service } })); }
-const { service } = Astro.props;
-const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
-// 変更履歴: 2026-11-09 EC・安全確認の入口を記事に合わせ、重複する旧豆知識を省く。
-// 変更履歴: 2026-11-09 ECの操作名を管理画面へ合わせる。
-const searchTitles: Record<string,string> = {websites:'ホームページ制作・リニューアル',seo:'SEO対策・現状診断','ai-apps':'AIアプリ開発・業務効率化',security:'ホームページ保守・セキュリティ確認'};
+export function getStaticPaths(){return servicePages.map(service=>({params:{slug:service.slug},props:{service}}));}
+const {service}=Astro.props;
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],security:['maintenance','security'],'ai-apps':[]};
-const sampleAction = service.slug === 'security' ? 'フィッシングを見抜いてみる' : service.slug === 'websites' ? '体験で、考え方を知る' : 'サンプルを触ってみる';
+const examplesTitles:Record<string,string>={websites:'デザインの考え方を体験する',security:'不審な連絡を見分ける練習','ai-apps':'見積もり依頼を整理する見本'};
 ---
-<SiteLayout title={`${searchTitles[service.slug] ?? service.name}｜SITEVEIL`} description={service.description}>
-<div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><a href={`${home}services/`}>サービス</a><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></nav>
-<section class="service-intro"><div><h1>{service.title.split('\n').map(line => <span>{line}</span>)}</h1><p>{service.slug === 'seo' ? service.lead : service.preview}</p>{service.slug === 'ai-apps' ? <p class="service-price-quote"><strong>個別見積もり</strong><br />制作費と月々の運用費を、着手前にご提示します。必要な仕事・機能からお見積もりします。</p> : <InlinePricing planIds={servicePlanIds[service.slug]||[]} />}<a class="button button--human" href={service.slug === 'ai-apps' ? `${home}?service=${encodeURIComponent(service.name)}#contact` : service.slug === 'seo' ? '#service-scope' : '#sample'}>{service.slug === 'ai-apps' ? '仕事の悩みを相談する' : service.slug === 'seo' ? '対応内容を見る' : sampleAction}</a></div><aside id="service-scope"><h2>{service.slug === 'ai-apps' ? 'たとえば、こんな仕事に。' : service.slug === 'seo' ? '私たちの進め方' : `${service.name}でできること`}</h2>{service.tasks.map(([title, body]) => ['seo','ai-apps'].includes(service.slug) ? <article class="seo-method"><h3>{title}</h3><p>{body}</p></article> : <details class="service-task"><summary>{title}</summary><p>{body}</p></details>)}</aside></section>
-{service.slug === 'security' && <section class="service-close"><h2>確認したいことから、選ぶ。</h2><p>サイトの状態、メールの漏洩、システムの詳しい検査。必要な範囲を整理できます。</p><a class="button button--human" href={`${home}security/`}>安全性の確認・調査を選ぶ</a></section>}
-{!['seo','ai-apps'].includes(service.slug) && <section class="service-sample" id="sample" aria-labelledby="sample-title"><div class="service-section-heading"><h2 id="sample-title">{service.sampleTitle}</h2><p>{service.sampleIntro}</p></div><ServiceDemo slug={service.slug} /></section>}
-{service.slug === 'ai-apps' && <details class="service-more" id="sample"><summary>見積もり依頼から、返信案まで</summary><p>依頼の読み取りと返信の下書きを、まとめて確認するイメージです。例を選ぶと表示が切り替わります。</p><ServiceDemo slug={service.slug} /></details>}
-{!['security','ai-apps'].includes(service.slug) && <details class="service-more"><summary>制作・活用のヒント</summary><section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'seo' ? '2026-11-11' : service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'seo' ? '2026年11月11日' : service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div></section></details>}
-<section class="service-close"><h2>{service.slug === 'ai-apps' ? 'どの仕事に、時間がかかっていますか。' : service.slug === 'security' ? 'サイトの備えも、一緒に確認しませんか。' : 'この先は、あなたの仕事に合わせて。'}</h2>{service.slug === 'security' && <><p>不審な連絡への注意に加え、サイト側の更新やバックアップも大切です。今の管理状況を確認し、必要な対策と費用を整理します。</p><p><a href={`${home}services/security/php/`}>更新を止めると何が起きる？ 古いPHPのリスクを読む</a></p></>}<p>{service.priceNote}</p><a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>相談する</a></section>
-</div><script>import '../../scripts/service-demos';</script>
+<SiteLayout title={`${service.name}・内容と料金｜SITEVEIL`} description={service.description}>
+<div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
+<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>個別見積もり</strong><p>制作費と月々の運用費を、着手前にご提示します。</p><p>問い合わせの振り分け、書類の下書き、社内資料探しなど、必要な仕事からご相談ください。返信の送信や重要な判断は人が確認する設計にします。</p></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]}/>}<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>このサービスを相談する</a></div>
+<aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
+<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。仕様書の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
+{service.slug==='security'&&<p>メールの漏えい確認や、システムの詳しい検査は別のサービスです。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
+{service.slug!=='seo'&&<section class="service-reference" id="sample"><h2>詳しく知りたい方へ</h2><a href={`${home}services/${service.slug}/examples/`}>{examplesTitles[service.slug]}</a>{service.slug==='security'&&<p><a href={`${home}services/security/php/`}>WordPressの動作環境が古いと、何が起きる？</a></p>}</section>}
+</div>
 </SiteLayout>
-
 <style>
-/* 役割: SEOの方針を三つの短い段落で示し、操作なしで読み進められるようにする。 */
-/* 変更履歴: 2026-11-11 方針と内部手順を分け、細い区切り線で読み順を整理。 */
-.seo-method{padding:20px 0;border-top:1px solid #e4e8e5}.seo-method h3{margin:0 0 10px;font-size:19px}.seo-method p{margin:0;font-size:14px;line-height:1.9;color:#465359}
+/* 役割: 必須の情報は開閉操作なしで読める。補足リンクを依頼内容と区別する。 */
+.seo-method{padding:16px 0;border-top:1px solid #e4e8e5}.seo-method h3{margin:0 0 8px}.seo-method p{margin:0}.service-order{padding-block:24px;border-top:1px solid #e4e8e5}.service-order ol{padding-left:24px;display:grid;gap:16px}.service-order p{margin:6px 0;font-size:16px;line-height:1.85}.service-reference{margin-top:24px;padding-top:24px;border-top:1px solid #e4e8e5}.service-reference h2{font-size:22px}
 </style>
