@@ -4,6 +4,7 @@
 // 変更履歴: 2026-11-09 3つの場面を一問ずつ表示し、PHPリンクはサービス相談の文脈へ移動。
 // 変更履歴: 2026-11-09 次へ進む操作を解説直下へ移し、回答後のボタン重複を解消。
 // 変更履歴: 2026-11-09 PDFプレビューと連携許可画面を追加し、違う判断材料を三問で示す。
+// 変更履歴: 2026-11-11 出典リンクの羅列を削除し、困った場合の対処は維持。
 // 役割: 怪しい箇所の発見とリンクを開く疑似体験を提供。入力・外部接続・回答保存を行わない。
 import '../styles/phishing-experience.css';
 import { phishingScenarios } from '../data/phishing-scenarios';
@@ -51,6 +52,6 @@ import { phishingScenarios } from '../data/phishing-scenarios';
   </div>
 </div>)}
   <noscript><div class="phishing-quiz__fallback"><p>操作体験にはJavaScriptが必要です。3問の答えはこちらから読めます。</p>{phishingScenarios.map((scenario, index) => <details><summary>問題{index + 1}：{scenario.title}</summary><p>{scenario.responses.judge.explanation}</p><p>{scenario.responses.judge.takeaway}</p></details>)}</div></noscript>
-  <div class="phishing-experience__footnote"><p>登録不要・情報の入力なし。番号・URL・青葉商事・アプリ連携画面は教材用の例です。日本郵便・Apple・Google・Microsoftの公式教材ではありません。</p><details><summary>出典と、実際に困ったときの確認先</summary><p><a href="https://www.post.japanpost.jp/notification/notice/fraud-mail.html">日本郵便の注意喚起・公式窓口</a> ／ <a href="https://www.npa.go.jp/bureau/cyber/countermeasures/phishing.html">警察庁のフィッシング対策</a> ／ <a href="https://www.ipa.go.jp/publish/wp-security/t6hhco00000014r1-att/2023_All.pdf">IPA：QRコードを使う手口（PDF・44ページ）</a> ／ <a href="https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/protect-against-consent-phishing">Microsoft：同意フィッシング（英語）</a> ／ <a href="https://support.google.com/accounts/answer/14012355?hl=ja">Google：アプリへのアクセス許可</a></p><p>入力してしまった場合は、公式の窓口からパスワード変更やカード会社への連絡を。不審なアプリを許可した場合は、公式のアカウント設定で連携を取り消し、管理者に連絡してください。SMSの形式だけで偽物と決めつけず、利用したサービスの公式案内を確認します。</p></details></div>
+  <div class="phishing-experience__footnote"><p>登録不要・情報の入力なし。番号・URL・青葉商事・アプリ連携画面は教材用の例です。日本郵便・Apple・Google・Microsoftの公式教材ではありません。</p><p>入力してしまった場合は、公式の窓口からパスワード変更やカード会社への連絡を。不審なアプリを許可した場合は、公式のアカウント設定で連携を取り消し、管理者に連絡してください。SMSの形式だけで偽物と決めつけず、利用したサービスの公式案内を確認します。</p></div>
 </div>
 <script>import '../scripts/phishing-experience';</script>

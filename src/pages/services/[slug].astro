@@ -7,6 +7,7 @@
 // 変更履歴: 2026-11-11 説明を短くし、詳細を折りたたみに整理。送信済みフォームへ相談する導線を統一。
 // 変更履歴: 2026-11-11 SEO詳細を追加。存在しない体験は表示せず、対応内容へ案内。
 // 変更履歴: 2026-11-11 SEOは短い進め方を常時表示し、内部ノウハウの羅列を避ける。
+// 変更履歴: 2026-11-11 参考資料・他社価格への公開リンクを削除し、サービスの検索タイトルを整理。
 // 役割: 共通のブランドとナビを保ち、4領域の提供内容を具体的に説明する。
 // 変更履歴: 2026-11-08 トップと同じ共通レイアウト・ナビ・ロゴを適用。
 // 変更履歴: 2026-11-09 ウェブ制作の体験を記事形式に変更し、タイトルと入口の操作名を内容に合わせた。
@@ -19,15 +20,16 @@ const { service } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 // 変更履歴: 2026-11-09 EC・安全確認の入口を記事に合わせ、重複する旧豆知識を省く。
 // 変更履歴: 2026-11-09 ECの操作名を管理画面へ合わせる。
+const searchTitles: Record<string,string> = {websites:'ホームページ制作・リニューアル',seo:'SEO対策・現状診断','ai-apps':'AIアプリ開発・業務効率化',security:'ホームページ保守・セキュリティ確認'};
 const sampleAction = service.slug === 'security' ? 'フィッシングを見抜いてみる' : service.slug === 'websites' ? '体験で、考え方を知る' : 'サンプルを触ってみる';
 ---
-<SiteLayout title={service.slug === 'seo' ? 'SEO対策｜SITEVEIL' : `${service.name}・${service.slug === 'websites' ? 'デザインの考え方' : '体験サンプル'}｜SITEVEIL`} description={service.description}>
+<SiteLayout title={`${searchTitles[service.slug] ?? service.name}｜SITEVEIL`} description={service.description}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><a href={`${home}services/`}>サービス</a><span aria-hidden="true">/</span><span aria-current="page">{service.name}</span></nav>
 <section class="service-intro"><div><h1>{service.title.split('\n').map(line => <span>{line}</span>)}</h1><p>{service.slug === 'seo' ? service.lead : service.preview}</p><a class="button button--human" href={service.slug === 'seo' ? '#service-scope' : '#sample'}>{service.slug === 'seo' ? '対応内容を見る' : sampleAction}</a></div><aside id="service-scope"><h2>{service.slug === 'seo' ? '私たちの進め方' : `${service.name}でできること`}</h2>{service.tasks.map(([title, body]) => service.slug === 'seo' ? <article class="seo-method"><h3>{title}</h3><p>{body}</p></article> : <details class="service-task"><summary>{title}</summary><p>{body}</p></details>)}</aside></section>
 {service.slug === 'security' && <section class="service-close"><h2>確認したいことから、選ぶ。</h2><p>サイトの状態、メールの漏洩、システムの詳しい検査。必要な範囲を整理できます。</p><a class="button button--human" href={`${home}security/`}>安全性の確認・調査を選ぶ</a></section>}
 {service.slug !== 'seo' && <section class="service-sample" id="sample" aria-labelledby="sample-title"><div class="service-section-heading"><h2 id="sample-title">{service.sampleTitle}</h2><p>{service.sampleIntro}</p></div><ServiceDemo slug={service.slug} /></section>}
-{service.slug !== 'security' && <details class="service-more"><summary>制作・活用のヒント</summary><section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'seo' ? '2026-11-11' : service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'seo' ? '2026年11月11日' : service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div>{service.source && <p class="service-source">参考資料：<a href={service.source} target="_blank" rel="noopener noreferrer">{service.sourceLabel}（別タブ）</a></p>}</section></details>}
-<section class="service-close"><h2>{service.slug === 'security' ? 'サイトの備えも、一緒に確認しませんか。' : 'この先は、あなたの仕事に合わせて。'}</h2>{service.slug === 'security' && <><p>不審な連絡への注意に加え、サイト側の更新やバックアップも大切です。今の管理状況を確認し、必要な対策と費用を整理します。</p><p><a href={`${home}services/security/php/`}>更新を止めると何が起きる？ 古いPHPのリスクを読む</a></p></>}<p class="service-close__price">{service.price}</p><p>{service.priceNote}</p><p><a href={`${home}pricing/`}>料金に含まれる内容・追加オプションを見る</a></p>{service.slug === 'security' && <p><a href={`${home}pricing/#specialist-security`}>脆弱性診断・侵入テストの参考費用を見る</a></p>}<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>相談する</a></section>
+{service.slug !== 'security' && <details class="service-more"><summary>制作・活用のヒント</summary><section class="service-notes" aria-labelledby="notes-title"><div class="service-section-heading"><h2 id="notes-title">知っておくと、<br />頼みやすくなる。</h2><p>相談の前に読める、小さなコラム。<br /><time datetime={service.slug === 'seo' ? '2026-11-11' : service.slug === 'websites' ? '2026-11-09' : '2026-11-08'}>{service.slug === 'seo' ? '2026年11月11日' : service.slug === 'websites' ? '2026年11月9日' : '2026年11月8日'} 更新</time></p></div><div class="service-notes__articles">{service.tips.map(([title, body]) => <article><h3>{title}</h3><p>{body}</p></article>)}</div></section></details>}
+<section class="service-close"><h2>{service.slug === 'security' ? 'サイトの備えも、一緒に確認しませんか。' : 'この先は、あなたの仕事に合わせて。'}</h2>{service.slug === 'security' && <><p>不審な連絡への注意に加え、サイト側の更新やバックアップも大切です。今の管理状況を確認し、必要な対策と費用を整理します。</p><p><a href={`${home}services/security/php/`}>更新を止めると何が起きる？ 古いPHPのリスクを読む</a></p></>}<p class="service-close__price">{service.price}</p><p>{service.priceNote}</p><p><a href={`${home}pricing/`}>料金に含まれる内容・追加オプションを見る</a></p><a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>相談する</a></section>
 </div><script>import '../../scripts/service-demos';</script>
 </SiteLayout>
 

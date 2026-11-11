@@ -80,3 +80,19 @@ body .site-nav a,body .menu-button { touch-action:manipulation; }
   body .site-nav { inset:100% 0 auto; border:0; border-bottom:1px solid #eceeed; border-radius:0; box-shadow:none; padding:8px 18px 20px; }
   body .site-nav .nav-contact { justify-content:flex-start; margin-top:0; }
 }
+
+/* 変更履歴: 2026-11-11 サービス展開と右下縦型メニューを追加。PCの回遊とスマホ片手操作を両立。 */
+.nav-services{position:relative}.nav-services summary{display:flex;align-items:center;gap:6px;min-height:44px;cursor:pointer;list-style:none;font-size:.9rem;color:var(--ink-muted)}
+.nav-services summary::-webkit-details-marker{display:none}.nav-services summary svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.4}
+.nav-services__links{position:absolute;top:100%;left:-20px;min-width:240px;padding:12px 20px;background:#fff;border:1px solid #e6e9e7;border-radius:8px}
+body .nav-services__links a{display:flex;min-height:44px;font-size:14px;white-space:nowrap}.nav-services summary:focus-visible{outline:3px solid var(--signal);outline-offset:4px}
+body .site-footer__nav{grid-template-columns:1.1fr .85fr 1.1fr}body .site-footer__nav a{overflow-wrap:anywhere;max-width:100%}
+@media(min-width:901px){body .site-nav{gap:clamp(14px,1.6vw,24px)!important}}
+@media(max-width:900px){
+body .menu-button{position:fixed;z-index:102;right:max(20px,env(safe-area-inset-right));bottom:calc(20px + env(safe-area-inset-bottom));width:54px;height:54px;justify-content:center;padding:0;border:1px solid #d9dfdb;border-radius:50%;background:#fff;box-shadow:0 3px 16px rgb(0 0 0 / .07)}
+body .menu-button__label{display:none}
+body .site-nav{position:fixed;z-index:101;inset:auto max(20px,env(safe-area-inset-right)) calc(86px + env(safe-area-inset-bottom)) auto;width:min(320px,calc(100vw - 40px));max-height:calc(100dvh - 125px);padding:14px 20px;align-items:stretch;border:1px solid #e4e9e6;border-radius:12px;background:#fff;box-shadow:0 4px 24px rgb(0 0 0 / .06);overscroll-behavior:contain}
+body .site-nav>a,body .nav-services summary{justify-content:flex-start;min-height:46px;font-size:15px}
+.nav-services{border-bottom:1px solid #e8ece9}.nav-services__links{position:static;min-width:0;padding:0 0 8px 12px;border:0;border-radius:0}.nav-services__links a{border:0!important}
+body .site-footer__nav{grid-template-columns:1fr 1fr}body .site-footer__nav>div:first-child{grid-column:1/-1}
+}

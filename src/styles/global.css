@@ -1,3 +1,4 @@
+/* 変更履歴: 2026-11-11 ヘッダーの中央移動transformを撤去し、右下メニューの固定基準を画面にする。 */
 /* 変更履歴: 2026-11-11 共通ナビの枠・影・丸い問い合わせボタンを廃止し、本文になじむ一枚のヘッダーに統一。 */
 /* 変更履歴: 2026-11-09 四料金を2列に揃え、受付準備状況を濃い文字で表示。 */
 /* 変更履歴: 2026-11-09 問い合わせのURL欄を常時表示し、案内・未送信の説明を本文サイズと濃い文字色へ変更。 */
@@ -184,7 +185,7 @@ p {
   position: fixed;
   z-index: 100;
   top: 0;
-  left: 50%;
+  left: 0;
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
@@ -196,7 +197,6 @@ p {
   background: var(--white);
   color: var(--ink);
   box-shadow: none;
-  transform: translateX(-50%);
 }
 
 .brand {

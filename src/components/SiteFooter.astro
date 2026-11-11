@@ -3,6 +3,7 @@
 // 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
 // 変更履歴: 2026-11-08 右寄せの1行構成を、ブランド・相談導線・3列のサイトマップ・運営表記の構成へ再設計。全ページで同じ余白から始まるよう統一。
 // 変更履歴: 2026-11-11 明るい共通フッターへ変更し、黒ロゴと重複しない問い合わせ導線を使用。
+// 変更履歴: 2026-11-11 末尾の安全確認リンクを削除し、メールを問い合わせ欄へ移動。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
 import Brand from './Brand.astro';
@@ -11,15 +12,15 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
   ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['かんたん安全チェック', `${home}check/`]]],
-  ['ご案内', [['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`], ['お問い合わせ', `${home}#contact`]]],
-  ['運営について', [['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`]]],
+  ['ご案内', [['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
+  ['お問い合わせ', [['相談を送る', `${home}#contact`], ['info@site-veil.com', 'mailto:info@site-veil.com']]],
 ];
 ---
 <footer class="site-footer">
   <div class="shell site-footer__top">
     <div class="site-footer__brand">
       <Brand homeSection />
-      <p>技術が大きくなる時代に、小さく近くいる。</p><p><a href="mailto:info@site-veil.com">info@site-veil.com</a></p>
+      <p>技術が大きくなる時代に、小さく近くいる。</p>
 
     </div>
     <nav class="site-footer__nav" aria-label="フッターナビゲーション">
@@ -33,6 +34,6 @@ const groups: [string, [string, string][]][] = [
   </div>
   <div class="shell site-footer__bottom">
     {isCompanyPage ? <span /> : <small>運営：株式会社ライフキャスティングジャパン（愛知県大府市）</small>}
-    <p><a href={`${home}security/`}>安全性の確認・調査</a></p><small>© 2026 SITEVEIL</small>
+    <small>© 2026 SITEVEIL</small>
   </div>
 </footer>
