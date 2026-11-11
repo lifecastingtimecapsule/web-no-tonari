@@ -42,3 +42,15 @@
 .service-close .button { margin:15px 0; }
 .service-close__notice { color:var(--ink-muted); font-size:12px!important; }
 @media(max-width:800px) { .service-tabs { gap:8px 22px; }.service-intro { grid-template-columns:1fr; gap:40px; padding-top:32px; }.service-section-heading { grid-template-columns:1fr; gap:16px; }.service-notes__articles { grid-template-columns:1fr; gap:28px; }.ai-demo__body { grid-template-columns:1fr; gap:26px; }.service-demo { padding:20px; }.service-close { padding:24px; }.service-close .button { white-space:normal; text-align:center; }.service-intro h1 { font-size:clamp(1.9rem,7vw,3rem); } }
+
+/* 変更履歴: 2026-11-11 見積依頼と返信案を読む見本へ調整。スマホの入れ子余白を減らし、本文の読み幅を確保。 */
+.service-demo--ai-apps .ai-demo__body>div{min-width:0}
+.service-demo--ai-apps .ai-demo blockquote{font-size:16px;line-height:1.85;padding:16px;overflow-wrap:anywhere}
+.service-demo--ai-apps .ai-demo__output h3{font-size:19px;line-height:1.5;margin-bottom:20px}
+.service-demo--ai-apps .ai-demo__output p{font-size:15px;line-height:1.8;margin:4px 0 16px}
+.service-demo--ai-apps .ai-demo__output strong{font-size:14px}
+@media(max-width:600px){
+  .service-demo--ai-apps{padding:16px}
+  .service-demo--ai-apps .demo-topline{align-items:flex-start;flex-direction:column;gap:4px;padding-bottom:12px;margin-bottom:16px}
+  .service-demo--ai-apps .ai-demo__output{padding:16px}
+}
