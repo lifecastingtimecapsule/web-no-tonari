@@ -1,0 +1,19 @@
+---
+// 変更履歴: 2026-11-11 エスケープされた本文だけを表示する記事ページを追加。
+// 役割: 見出しと短い段落で解説し、必要な人だけ末尾のサービス案内へ進める。
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import {columns,columnDate,categories,parseBody} from '../../data/columns';
+import '../../styles/columns.css';
+export function getStaticPaths(){return columns.map(article=>({params:{slug:article.slug},props:{article}}));}
+const {article}=Astro.props;
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
+const url=new URL(`${home}columns/${article.slug}/`,Astro.site??'https://site-veil.com').href;
+const schema={'@context':'https://schema.org','@type':'Article',headline:article.title,description:article.summary,datePublished:article.publishedAt,dateModified:article.updatedAt,inLanguage:'ja',mainEntityOfPage:url,author:{'@type':'Organization',name:'SITEVEIL',url:new URL(home,Astro.site??'https://site-veil.com').href}};
+---
+<SiteLayout title={`${article.title}｜SITEVEIL`} description={article.summary} breadcrumbs={[{name:'ホーム',path:home},{name:'コラム',path:`${home}columns/`},{name:article.title,path:`${home}columns/${article.slug}/`}]}>
+<div class="shell column-page"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><a href={`${home}columns/`}>コラム</a><span aria-hidden="true">/</span><span aria-current="page">{article.title}</span></nav>
+<article class="column-content"><header><div class="column-meta"><span>{categories[article.category]}</span><time datetime={article.publishedAt}>{columnDate(article.publishedAt)}</time></div><h1>{article.title}</h1><p class="column-summary">{article.summary}</p></header>
+<div class="column-body">{parseBody(article.body).map(block=>block.type==='heading'?<h2>{block.text}</h2>:block.type==='list'?<ul>{block.items.map(item=><li>{item}</li>)}</ul>:<p>{block.text}</p>)}</div>
+<footer class="column-end"><a href={`${home}services/${article.category==='security'?'security':'ai-apps'}/`}>{article.category==='security'?'検査の内容と料金を見る':'業務システム開発の内容と料金を見る'}</a><a href={`${home}columns/`}>コラム一覧へ</a></footer></article></div>
+<script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\u003c')}/>
+</SiteLayout>

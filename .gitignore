@@ -21,3 +21,6 @@ public/images/ASSETS.md
 .wrangler/
 .dev.vars
 .dev.vars.*
+
+# 変更履歴: 2026-11-11 コラムの下書き・パスワードハッシュをローカル専用にする。
+.local/

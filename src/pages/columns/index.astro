@@ -1,0 +1,13 @@
+---
+// 変更履歴: 2026-11-11 経営者・個人事業主向けのコラム一覧を追加。
+// 役割: 専門用語より仕事の困りごとから記事を選べる入口。
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import {columns,columnDate,categories} from '../../data/columns';
+import '../../styles/columns.css';
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
+---
+<SiteLayout title="セキュリティと業務システムのコラム｜SITEVEIL" description="ハッキングへの備え、セキュリティ検査の違い、業務システム導入の考え方を、社長・個人事業主に分かりやすく解説します。" breadcrumbs={[{name:'ホーム',path:home},{name:'コラム',path:`${home}columns/`}]}>
+<div class="shell column-index"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">コラム</span></nav>
+<header class="column-heading"><h1>知って、選べる。<br/>ウェブとシステムの話。</h1><p>ハッキングへの備えから、日々の仕事を変える仕組みまで。<br/>専門知識がなくても読めるコラムです。</p></header>
+<div class="column-list">{columns.map(article=><article><div class="column-meta"><span>{categories[article.category]}</span><time datetime={article.publishedAt}>{columnDate(article.publishedAt)}</time></div><h2><a href={`${home}columns/${article.slug}/`}>{article.title}</a></h2><p>{article.summary}</p></article>)}{columns.length===0&&<p>コラムを準備しています。</p>}</div></div>
+</SiteLayout>

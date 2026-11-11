@@ -42,3 +42,9 @@ GitHub Pages は `main` ブランチへの更新を自動公開します。
 
 ## 2026-11-11 問い合わせとトップの更新
 変更履歴：ナビとヒーローを正式トップへ統一。ロゴから/#after-heroへ戻る。問い合わせはResend経由の直接送信に変更し、従来のコピー案内を廃止。RESEND_API_KEYはCloudflareのWorker Secretにのみ登録。送信元contact@site-veil.com、送信先info@site-veil.com（siteveiljapna@gmail.comへ転送）。詳細はdocs/design/2026-11-11-simple-site-contact.md。
+
+
+## コラム管理（2026-11-11）
+変更履歴: ローカル専用のコラム管理を追加。`npm run columns:admin` で起動し、表示された初回設定URLをこのMacのブラウザで開く。管理パスワードは本人が入力する。`http://127.0.0.1:8792/` 以外では待ち受けない。
+
+下書きと認証ハッシュは `.local/column-admin/` のみ。公開確定した記事だけ `src/data/columns.json` へ移す。実サイトへの公開は、内容を確認後、このチャットへ依頼するか、既存のmainへのコミット・pushとGitHub Actionsで配信する。管理HTTPサーバーはGitやクラウドの認証情報を利用しない。詳しい操作手順は `docs/design/2026-11-11-column-operations.md`、判断記録は `docs/design/2026-11-11-local-column-admin.md`。`package.json` に起動と境界テストのコマンドを追加。

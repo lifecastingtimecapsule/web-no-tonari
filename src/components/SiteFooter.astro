@@ -6,6 +6,7 @@
 // 変更履歴: 2026-11-11 末尾の安全確認リンクを削除し、メールを問い合わせ欄へ移動。
 // 変更履歴: 2026-11-11 無料メール照会への入口を追加。
 // 変更履歴: 2026-11-11 余白を縮め、サービスを2列に整理。重複するブランド説明を省いて回遊と連絡先を集約。
+// 変更履歴: 2026-11-11 コラム一覧を案内欄へ追加。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
 import Brand from './Brand.astro';
@@ -14,7 +15,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
   ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
-  ['ご案内', [['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
+  ['ご案内', [['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
   ['お問い合わせ', [['相談を送る', `${home}#contact`], ['info@site-veil.com', 'mailto:info@site-veil.com']]],
 ];
 ---

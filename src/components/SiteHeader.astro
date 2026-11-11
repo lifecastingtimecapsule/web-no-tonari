@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-11 ホームへの明示リンクをPC・スマホ共通メニュー先頭へ追加。
 // 変更履歴: 2026-11-11 サービス配下の6リンクと会社・理念・料金・FAQ・相談を共通ナビに整理。
 // 変更履歴: 2026-11-11 メール漏えいチェックの実照会ページをサービス配下に追加。
+// 変更履歴: 2026-11-11 公開コラムへの入口を追加。管理画面は案内しない。
 // 役割: PCのサービスドロップダウンとスマホ右下の縦型メニューを共通のリンクで提供する。
 import Brand from './Brand.astro';
 import {servicePages} from '../data/services';
@@ -19,6 +20,7 @@ const currentPath = Astro.url.pathname;
       <a href={`${home}email-check/`}>無料メール漏えいチェック</a>
       <a href={`${home}check/`}>かんたん安全チェック</a>
     </div></details>
+    <a href={`${home}columns/`} aria-current={currentPath.includes('/columns/') ? 'page' : undefined}>コラム</a>
     <a href={`${home}company/`} aria-current={currentPath.endsWith('/company/') ? 'page' : undefined}>会社概要</a>
     <a href={`${home}philosophy/`} aria-current={currentPath.endsWith('/philosophy/') ? 'page' : undefined}>企業理念</a>
     <a href={`${home}pricing/`} aria-current={currentPath === `${home}pricing/` ? 'page' : undefined}>料金</a>
