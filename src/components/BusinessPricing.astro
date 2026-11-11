@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 業務別の作業・制作費・当社運用の月額を同じ行で確認できる料金表を追加。
 // 変更履歴: 2026-11-11 料金を抑える理由を、AI活用と少人数開発の説明として常時表示。
@@ -6,15 +7,15 @@
 // 役割: 顧客が目安と追加条件を操作なしで比較し、その内容を引き継いで問い合わせる。
 import {businessPricing,businessPricingConditions} from '../data/business-pricing';
 import {formatPrice} from '../data/pricing';
-interface Props {id?:string;}
-const {id='business-pricing'}=Astro.props;
+interface Props {id?:string;showContact?:boolean;}
+const {id='business-pricing',showContact=true}=Astro.props;
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 ---
 <section class="business-pricing" id={id} aria-labelledby={`${id}-title`}>
 <h2 id={`${id}-title`}>業務システムでできること・料金の目安</h2><p>{businessPricingConditions.base}</p>
 <div class="business-pricing__table" role="table" aria-label="業務別の税込制作費と月額費用">
 <div class="business-pricing__head" role="row"><span role="columnheader">つくるもの・含まれる機能</span><span role="columnheader">制作費（初回）</span><span role="columnheader">月々（当社運用）</span></div>
-{businessPricing.map(plan=><><div class="business-pricing__row" role="row"><div role="cell"><h3>{plan.name}</h3><p class="business-pricing__label">制作に含む機能</p><ul>{plan.features.map(feature=><li>{feature}</li>)}</ul><p class="business-pricing__scope">{plan.scope}</p><p class="business-pricing__scope"><b>別料金：</b>{plan.excluded}</p></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">制作費</span><strong>{formatPrice(plan.initial)}〜</strong></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">月々</span><strong>{plan.monthly?`${formatPrice(plan.monthly)}〜`:'¥0'}</strong><small>{plan.monthly?'当社で運用する場合':'納品型・月額契約不要'}</small><p class="business-pricing__operation">{plan.operation}</p></div></div><div role="row"><div class="business-pricing__contact" role="cell" aria-colspan="3"><a href={`${home}?service=${encodeURIComponent(`業務システム開発・${plan.name}`)}&note=${encodeURIComponent(`掲載目安：制作${formatPrice(plan.initial)}〜／当社月額${plan.monthly?`${formatPrice(plan.monthly)}〜`:'¥0（納品型）'}（税込）`)}#contact`}>{plan.name}について問い合わせる</a></div></div></>)}
+{businessPricing.map(plan=><><div class="business-pricing__row" role="row"><div role="cell"><h3>{plan.name}</h3><p class="business-pricing__label">制作に含む機能</p><ul>{plan.features.map(feature=><li>{feature}</li>)}</ul><p class="business-pricing__scope">{plan.scope}</p><p class="business-pricing__scope"><b>別料金：</b>{plan.excluded}</p></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">制作費</span><strong>{formatPrice(plan.initial)}〜</strong></div><div class="business-pricing__price" role="cell"><span class="business-pricing__mobile" aria-hidden="true">月々</span><strong>{plan.monthly?`${formatPrice(plan.monthly)}〜`:'¥0'}</strong><small>{plan.monthly?'当社で運用する場合':'納品型・月額契約不要'}</small><p class="business-pricing__operation">{plan.operation}</p></div></div>{showContact&&<div role="row"><div class="business-pricing__contact" role="cell" aria-colspan="3"><a href={`${home}?service=${encodeURIComponent(`業務システム開発・${plan.name}`)}&note=${encodeURIComponent(`掲載目安：制作${formatPrice(plan.initial)}〜／当社月額${plan.monthly?`${formatPrice(plan.monthly)}〜`:'¥0（納品型）'}（税込）`)}#contact`}>{plan.name}について問い合わせる</a></div></div>}</>)}
 </div>
 <div class="business-pricing__conditions"><h3>費用を抑えられる理由</h3><p>{businessPricingConditions.approach}</p><h3>制作費に含むこと</h3><p>{businessPricingConditions.included}</p><h3>月々の費用に含むこと</h3><p>{businessPricingConditions.monthly}</p><p><b>月額に含まないこと：</b>{businessPricingConditions.monthlyExcluded}</p><p><b>契約前に決めること：</b>{businessPricingConditions.agreement}</p><p>{businessPricingConditions.delivery}</p><h3>別料金になること</h3><p>{businessPricingConditions.extras}</p><p>{businessPricingConditions.quote}</p></div>
 </section>

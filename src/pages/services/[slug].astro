@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 経営者向けに料金・作業・対象外を常時表示。教材は補足ページへ分離。
@@ -8,7 +9,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import '../../styles/services.css';
 import {servicePages} from '../../data/services';
 import {businessPricing} from '../../data/business-pricing';
-import {formatPrice} from '../../data/pricing';
+import {pricingPlans,formatPrice} from '../../data/pricing';
 import BusinessPricing from '../../components/BusinessPricing.astro';
 import InlinePricing from '../../components/InlinePricing.astro';
 export function getStaticPaths(){return servicePages.map(service=>({params:{slug:service.slug},props:{service}}));}
@@ -18,15 +19,18 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 ---
 <SiteLayout title={`${service.name}・内容と料金｜SITEVEIL`} description={service.description}>
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
-<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]}/>}{service.slug==='ai-apps'&&<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>開発について問い合わせる</a>}</div>
+<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]} showContact={false}/>}</div>
 <aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
-{service.slug==='ai-apps'&&<BusinessPricing/>}
+{service.slug==='ai-apps'&&<BusinessPricing showContact={false}/>}
 <section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。専門的な資料の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
 {service.slug==='security'&&<p>メールの漏えい確認や、システムの詳しい検査は別のサービスです。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
 
+<section class="service-inquiry" aria-label="このサービスへのお問い合わせ">
+{service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}&note=${encodeURIComponent(`掲載料金：${formatPrice(plan.amount)}（税込・${plan.unit}）`)}#contact`}>{plan.name}について問い合わせる</a>)}
+</section>
 </div>
 </SiteLayout>
 <style>
 /* 役割: 必須の情報は開閉操作なしで読める。補足リンクを依頼内容と区別する。 */
-.seo-method{padding:16px 0;border-top:1px solid #e4e8e5}.seo-method h3{margin:0 0 8px}.seo-method p{margin:0}.service-order{padding-block:24px;border-top:1px solid #e4e8e5}.service-order ol{padding-left:24px;display:grid;gap:16px}.service-order p{margin:6px 0;font-size:16px;line-height:1.85}.service-reference{margin-top:24px;padding-top:24px;border-top:1px solid #e4e8e5}.service-reference h2{font-size:22px}
+.service-inquiry{display:flex;flex-wrap:wrap;gap:16px;padding:24px 0;border-top:1px solid #e4e8e5}.service-inquiry .button{white-space:normal;text-align:center;max-width:100%}.seo-method{padding:16px 0;border-top:1px solid #e4e8e5}.seo-method h3{margin:0 0 8px}.seo-method p{margin:0}.service-order{padding-block:24px;border-top:1px solid #e4e8e5}.service-order ol{padding-left:24px;display:grid;gap:16px}.service-order p{margin:6px 0;font-size:16px;line-height:1.85}.service-reference{margin-top:24px;padding-top:24px;border-top:1px solid #e4e8e5}.service-reference h2{font-size:22px}
 </style>
