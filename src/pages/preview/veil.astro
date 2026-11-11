@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 ヒーロー通過に合わせて左上ロゴを表示する指定を反映。
 // 変更履歴: 2026-11-11 インクヒーローへ作り直し、試作内のヘッダーを平らな構成に変更。説明より視覚を優先する指示を反映。
 // 変更履歴: 2026-11-11 操作待ちのないVeil演出を比較できる独立した試作ページを追加。本番採用は試作確認後。
 // 変更履歴: 2026-11-11 問い合わせ先とメール作成への導線を追加。
@@ -232,4 +233,7 @@ const faqs = [
 
 <!-- 試作の役割: アンカー移動も待たせず、素早い往復操作をそのまま反映する。 -->
 <style is:global>html:has([data-veil-stage]) { scroll-behavior: auto; }
-html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:#f5f5f2; }</style>
+html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:#f5f5f2; }html:has([data-brand-observed]) .site-header .brand { opacity:0; visibility:hidden; transition:opacity 180ms ease; }
+html:has([data-hero-passed]) .site-header .brand { opacity:1; visibility:visible; }
+@media(prefers-reduced-motion:reduce){html:has([data-veil-stage]) .site-header .brand { transition:none; }}
+</style>

@@ -1,15 +1,16 @@
 ---
 // 変更履歴: 2026-11-11 説明カード中心の試作を撤回。巨大な文字と流動的なインクのヒーローへ更新。
+// 変更履歴: 2026-11-11 英語コピーを削除し、ヒーローもVの切れ目がある正式な文字ロゴに統一。
 // 役割: 最小限の言葉と触覚的な表現でSITEVEILの印象をつくり、通常のサービス・相談導線へつなぐ。
+const brandBase = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 <section class="ink-hero" id="top" aria-labelledby="hero-title" data-veil-stage>
-  <img class="ink-hero__fallback" src={`${import.meta.env.BASE_URL}brand/ink-static.svg`} alt="" aria-hidden="true" />
+  <img class="ink-hero__fallback" src={`${brandBase}brand/ink-static.svg`} alt="" aria-hidden="true" />
   <canvas class="ink-hero__canvas" aria-hidden="true" data-ink-canvas></canvas>
   <div class="ink-hero__intro">
     <h1 id="hero-title">ウェブと、その先。</h1>
-    <p>Design. Develop. Defend.</p>
   </div>
-  <div class="ink-hero__word" aria-hidden="true">SITEVEIL</div>
+  <img class="ink-hero__word" src={`${brandBase}brand/siteveil-wordmark-white.svg`} width="424" height="72" alt="" aria-hidden="true" />
   <div class="ink-hero__bottom">
     <a class="ink-hero__discover" href="#services">つくる。守る。育てる。<span aria-hidden="true">↘</span></a>
     <a class="ink-hero__contact" href="#contact">話してみる <span aria-hidden="true">↗</span></a>
@@ -33,7 +34,7 @@
   .ink-hero__intro{color:#fff;mix-blend-mode:difference;position:absolute;left:4%;right:4%;top:22%;display:flex;justify-content:space-between;align-items:start;gap:24px}
   .ink-hero__intro h1{font-size:clamp(22px,2.7vw,44px);line-height:1.2;font-weight:700;letter-spacing:-.045em;margin:0}
   .ink-hero__intro p{font-size:14px;line-height:1.5;margin:0;font-weight:500}
-  .ink-hero__word{position:absolute;left:2%;right:2%;top:50%;translate:0 -50%;font-family:Arial,Helvetica,sans-serif;font-size:23vw;font-weight:900;line-height:.85;letter-spacing:-.075em;white-space:nowrap;color:#fff;mix-blend-mode:difference;pointer-events:none;user-select:none}
+  .ink-hero__word{position:absolute;left:3%;top:50%;translate:0 -50%;width:94%;height:auto;mix-blend-mode:difference;pointer-events:none;user-select:none}
   .ink-hero__bottom{position:absolute;left:4%;right:4%;bottom:8%;display:flex;justify-content:space-between;align-items:center;gap:24px}
   .ink-hero__bottom a{display:flex;align-items:center;justify-content:space-between;gap:36px;padding:14px 0;font-size:15px;color:#16191d;text-decoration:none;font-weight:700;position:relative}
   .ink-hero__contact{background:#16191d!important;color:#fff!important;padding:17px 24px!important;border-radius:0}

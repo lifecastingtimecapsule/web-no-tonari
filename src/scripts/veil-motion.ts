@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 ヒーロー通過時だけヘッダーに正式ロゴを表示する監視を追加。
 // 変更履歴: 2026-11-11 説明カード切替を撤去。非同期の操作待ちを作らない、独自の流動インク描画へ変更。
 
 /** GPUで顔料の流れと指跡のマスクを描く。外部画像・通信・入力内容は使わない。 */
@@ -94,6 +95,19 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
     },
   };
 }
+
+/** ヒーロー全体が画面上へ抜けたときだけ、小さなヘッダーロゴに引き継ぐ。 */
+function setupHeroBrand(): void {
+  const heroSection = document.querySelector<HTMLElement>('[data-veil-stage]');
+  if (!heroSection) return;
+  heroSection.setAttribute('data-brand-observed', '');
+  const syncHeroBrand = (): void => {
+    heroSection.toggleAttribute('data-hero-passed', heroSection.getBoundingClientRect().bottom <= 0);
+  };
+  new IntersectionObserver(syncHeroBrand, {threshold:0}).observe(heroSection);
+  syncHeroBrand();
+}
+setupHeroBrand();
 
 /** 一つの描画予約だけを保ち、スクロール・タップ・リンク操作は一切捕捉しない。 */
 function setupVeilPreview(): void {
