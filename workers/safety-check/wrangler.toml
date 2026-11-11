@@ -1,3 +1,4 @@
+# 変更履歴: 2026-11-11 新ドメインからの簡易チェックを許可。
 # 変更履歴: 2026-11-08 「かんたん安全チェック」APIのCloudflare Workers設定を追加。
 name = "web-no-tonari-safety-check"
 main = "src/index.ts"
@@ -7,4 +8,4 @@ compatibility_flags = ["global_fetch_strictly_public"]
 workers_dev = true
 
 [vars]
-ALLOWED_ORIGINS = "https://web-no-tonari.amaretto.workers.dev,https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"
+ALLOWED_ORIGINS = "https://site-veil.com,https://www.site-veil.com,https://web-no-tonari.amaretto.workers.dev,https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"

@@ -5,6 +5,12 @@ interface Env { ASSETS: { fetch(request: Request): Promise<Response> } }
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
+    // 2026-11-11: Preserve paths and queries while using the canonical apex.
+    if (url.hostname === 'www.site-veil.com') {
+      url.hostname = 'site-veil.com';
+      url.protocol = 'https:';
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.protocol === 'http:' && !['127.0.0.1', 'localhost'].includes(url.hostname)) {
       url.protocol = 'https:';
       return Response.redirect(url.toString(), 301);

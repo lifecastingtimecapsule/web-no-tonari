@@ -36,3 +36,6 @@ GitHub Pages は `main` ブランチへの更新を自動公開します。
 
 ## SITEVEILへの名称変更（2026-11-10）
 変更履歴：Web制作・保守・セキュリティを一つのブランドへ統合。独自のアウトラインロゴと/security/の案内を追加。ドメイン未購入のため配信URLは従来のまま。受付メール未接続の表示も維持。詳細はdocs/design/2026-11-10-siteveil-brand.md。
+
+## 独自ドメインと問い合わせメール（2026-11-11）
+変更履歴：ユーザーがsite-veil.comを取得したため、Cloudflare版の正規ドメインとして接続。問い合わせ先はinfo@site-veil.com、ライフキャスティングの既存Gmailへ受信転送する。フォームは相談文の作成・コピーとメールアプリへの引き継ぎで、直接送信APIではない。詳細はdocs/design/2026-11-11-site-veil-domain-email.md。

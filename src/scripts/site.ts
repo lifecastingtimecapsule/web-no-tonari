@@ -255,9 +255,12 @@ function setupDemoForm(): void {
       const message = form.querySelector<HTMLTextAreaElement>('#message')!.value.trim();
       const siteUrl = form.querySelector<HTMLInputElement>('#site-url')!.value.trim();
       const consultationText = `会社名・屋号\n${companyName}\n\n担当者名\n${contactName}\n\nメールアドレス\n${contactEmail}\n\n相談したいこと\n${message}${siteUrl ? `\n\nサイトのURL\n${siteUrl}` : ''}`;
+      // 2026-11-11: Prepare a draft link; visitors send from their own mail application.
+      const composeLink = form.querySelector<HTMLAnchorElement>('[data-compose-mail]');
+      if (composeLink) composeLink.href = 'mailto:info@site-veil.com?subject=' + encodeURIComponent('SITEVEILへのお問い合わせ') + '&body=' + encodeURIComponent(consultationText);
       await navigator.clipboard.writeText(consultationText);
       status.dataset.state = 'success';
-      status.textContent = '相談内容をコピーしました。メモなどに貼り付けて保存できます。まだ送信はされていません。';
+      status.textContent = '相談内容をコピーしました。「メールアプリで開く」から送信してください。まだ送信はされていません。';
     } catch {
       status.dataset.state = 'error';
       status.textContent = '自動でコピーできませんでした。入力欄の文章を選択してコピーしてください。内容はそのまま残っています。';

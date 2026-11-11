@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 問い合わせ先とメール作成への導線を追加。
 // 変更履歴: 2026-11-09 任意URLを常時表示し、ホームページがある場合だけ入力する案内へ変更。
 // 変更履歴: 2026-11-09 サービス一覧を共通化し、料金は概要と専用ページへの入口へ整理。
 // 変更履歴: 2026-11-09 ウェブ教材の入口と画像説明を三テーマへ合わせる。EC削除は共通データから反映。
@@ -182,7 +183,7 @@ const faqs = [
           <div class="contact__intro">
             <h2 id="contact-title">お問い合わせ</h2>
             <p>ご相談・ご質問をお書きください。</p>
-            <p class="contact__demo-note">メールの受付先を準備中です。いまは入力内容をコピーして保存できます。外部へは送信されません。</p>
+            <p class="contact__demo-note">お問い合わせは <a href="mailto:info@site-veil.com">info@site-veil.com</a> へ。下のフォームで相談内容をまとめてコピーし、メールに貼り付けてお送りいただけます。フォーム自体からは送信されません。</p>
           </div>
 
           <form class="contact-form" data-contact-form novalidate>
@@ -204,7 +205,7 @@ const faqs = [
             <div class="field">
               <label for="message">相談したいこと <span>必須</span></label>
               <textarea id="message" name="message" rows="2" required aria-describedby="message-help message-error" placeholder="例：お店のホームページを作り直したいです…"></textarea>
-              <p class="field__help" id="message-help">短い文章で大丈夫です。入力に合わせて欄が広がります。</p>
+              <p class="field__help" id="message-help">短い文章で大丈夫です。パスワードやAPIキーは記載しないでください。入力に合わせて欄が広がります。</p>
               <p class="field__error" id="message-error" data-error-for="message"></p>
             </div>
             <div class="field contact-form__website">
@@ -217,6 +218,7 @@ const faqs = [
               <span data-submit-label>相談内容をコピーする</span>
               <span class="button__spinner" aria-hidden="true"></span>
             </button>
+            <p><a class="button button--human" href="mailto:info@site-veil.com?subject=SITEVEILへのお問い合わせ" data-compose-mail>メールアプリで開く</a></p>
             <div class="form-status" role="status" aria-live="polite" tabindex="-1" data-form-status></div>
           </form>
         </div>

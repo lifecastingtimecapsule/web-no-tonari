@@ -12,3 +12,12 @@ binding = "ASSETS"
 not_found_handling = "404-page"
 html_handling = "auto-trailing-slash"
 run_worker_first = true
+
+# 変更履歴: 2026-11-11 取得済みのsite-veil.comへ接続。
+[[routes]]
+pattern = "site-veil.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.site-veil.com"
+custom_domain = true
