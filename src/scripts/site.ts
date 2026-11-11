@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 古い問い合わせURLの掲載料金・掲載目安も本文へ入れず、チェック結果の補足は維持。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 コピー式の送信処理を削除。Resendへの直接送信はcontact-form.tsへ集約。
 // 変更履歴: 2026-11-09 任意URLの常時表示に合わせ、不要な折りたたみ開閉処理を除去。検証と引き継ぎは維持。
@@ -294,7 +295,7 @@ setupExpressiveMotion();
 const requestedService = new URLSearchParams(window.location.search).get('service');
 const consultationMessage = document.querySelector<HTMLTextAreaElement>('#message');
 if (requestedService && consultationMessage && !consultationMessage.value.trim()) {
-  const requestedNote = new URLSearchParams(window.location.search).get('note')?.slice(0, 500);
+  const requestedNote = new URLSearchParams(window.location.search).get('note')?.slice(0, 500).split('\n').filter(line => !/^\s*掲載(?:料金|目安)[:：]/.test(line)).join('\n');
   consultationMessage.value = `${requestedService.slice(0, 100).replace(/^AIアプリ開発$/, '業務システム開発')}について問い合わせたいです。\n${requestedNote ? `${requestedNote}\n` : ''}困っていること：`;
 }
 const requestedSiteUrl = new URLSearchParams(window.location.search).get('siteUrl');

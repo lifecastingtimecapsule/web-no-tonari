@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
 // 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
@@ -26,7 +27,7 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 {service.slug==='security'&&<p>メールの漏えい確認や、システムの詳しい検査は別のサービスです。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
 
 <section class="service-inquiry" aria-label="このサービスへのお問い合わせ">
-{service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}&note=${encodeURIComponent(`掲載料金：${formatPrice(plan.amount)}（税込・${plan.unit}）`)}#contact`}>{plan.name}について問い合わせる</a>)}
+{service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
 </section>
 </div>
 </SiteLayout>

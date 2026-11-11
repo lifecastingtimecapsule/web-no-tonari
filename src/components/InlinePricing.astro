@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
 // 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
 // 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 料金と対象範囲を他ページと統一し、重複説明を短縮。
@@ -16,7 +17,7 @@ const visiblePlans=pricingPlans.filter(plan=>planIds.includes(plan.id));
     <p class="inline-pricing__label">{plan.name}</p>
     <strong class="inline-pricing__amount">{formatPrice(plan.amount)}<small>（税込・{plan.unit}）</small></strong>
     <div class="inline-pricing__scope"><p><strong>この料金に含まれること</strong></p><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p class="inline-pricing__note">{plan.note}</p><p class="inline-pricing__excluded"><strong>別料金・対象外</strong><br />{plan.excluded}</p>{['website','maintenance'].includes(plan.id)&&<ul aria-label="追加料金（税込）">{(plan.id==='website'?pricingOptions.slice(0,3):pricingOptions.slice(3)).map(option=><li>{option.name}：{formatPrice(option.amount)}（{option.unit}）</li>)}</ul>}</div>
-    {showContact&&(<a class="inline-pricing__contact" href={`${home}?service=${encodeURIComponent(plan.name)}&note=${encodeURIComponent(`掲載料金：${formatPrice(plan.amount)}（税込・${plan.unit}）`)}#contact`}>{plan.name}について問い合わせる</a>)}
+    {showContact&&(<a class="inline-pricing__contact" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
   </div>)}
 </div>
 <style>
