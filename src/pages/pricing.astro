@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 料金と対象範囲を他ページと統一し、重複説明を短縮。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 顧客が作業内容を判断できる平易な表現へ統一。金額・契約範囲は維持。
@@ -31,7 +32,7 @@ const examples = [
   <nav class="pricing-jump" aria-label="料金ページの目次"><a href="#included">基本料金の範囲</a><a href="#business-pricing">業務システムの料金</a><a href="#options">追加オプション</a><a href="#examples">合計金額の例</a><a href="#other-costs">個別見積もり・外部費用</a></nav>
 
   <section class="pricing-section" id="included" aria-labelledby="included-title"><h2 id="included-title">この料金で、ここまで。</h2>
-    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{plan.id === 'email-breach-check' ? '無料' : formatPrice(plan.amount)}<span>{plan.id === 'email-breach-check' ? 'オンラインの詳細結果' : `税込・${plan.unit}`}</span></p>{plan.id === 'email-breach-check' && <p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み）</p>}<p>{plan.lead}</p><a class="text-link" href={plan.id === 'email-breach-check' ? `${home}email-check/` : `${home}?service=${encodeURIComponent(plan.service)}#contact`}>{plan.id === 'email-breach-check' ? '無料でメールを確認する' : 'この内容を相談する'}</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>別料金・対象外</h4><p>{plan.excluded}</p></div></article>)}
+    {pricingPlans.map(plan => <article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan && <p class="pricing-plan-status">{plan.status}</p>}<p class="price-detail__amount">{plan.id === 'email-breach-check' ? '無料' : formatPrice(plan.amount)}<span>{plan.id === 'email-breach-check' ? 'オンラインの詳細結果' : `税込・${plan.unit}`}</span></p>{plan.id === 'email-breach-check' && <p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み）</p>}<p>{plan.lead}</p><a class="text-link" href={plan.id === 'email-breach-check' ? `${home}email-check/` : `${home}?service=${encodeURIComponent(plan.name)}&note=${encodeURIComponent(`掲載料金：${formatPrice(plan.amount)}（税込・${plan.unit}）`)}#contact`}>{plan.id === 'email-breach-check' ? '無料でメールを確認する' : `${plan.name}について問い合わせる`}</a></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item => <li>{item}</li>)}</ul><p>{plan.note}</p><h4>別料金・対象外</h4><p>{plan.excluded}</p></div></article>)}
   </section>
 
   <BusinessPricing/>

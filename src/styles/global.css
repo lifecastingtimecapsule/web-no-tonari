@@ -1392,3 +1392,6 @@ p {
 input::placeholder, textarea::placeholder { color: var(--placeholder); opacity: 1; }
 @media (max-width: 900px) { .page-inner #main { padding-top: 116px; padding-bottom: 72px; } }
 @media (max-width: 560px) { .site-footer__nav { grid-template-columns: 1fr 1fr; } .site-footer__nav > div:first-child { grid-column: 1 / -1; } }
+
+/* 変更履歴: 2026-11-11 問い合わせへの移動でヘッダー分の余白が二重に入るのを解消。htmlのscroll-paddingを利用する。 */
+#contact { scroll-margin-top: 0; }

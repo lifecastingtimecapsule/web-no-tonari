@@ -1,13 +1,14 @@
 ---
+// 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 コピー・メーラー起動を撤去し、入力と一つの送信ボタンに整理。
 // 役割: 問い合わせを自社窓口へ送り、失敗時には入力を残して再試行できるようにする。
 ---
 <form class="contact-form" data-direct-contact novalidate>
-  <div class="field"><label for="contact-name">お名前</label><input id="contact-name" name="name" autocomplete="name" maxlength="100" required /></div>
-  <div class="field"><label for="contact-company">会社名 <span>任意</span></label><input id="contact-company" name="company" autocomplete="organization" maxlength="200" /></div>
-  <div class="field"><label for="contact-email">メールアドレス</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
-  <div class="field"><label for="message">お問い合わせ内容</label><textarea id="message" name="message" rows="4" maxlength="5000" placeholder="例：ホームページを作り直したい／Excelで同じ情報を何度も入力している" required></textarea></div>
+  <div class="field"><label for="contact-name">お名前 <span>必須</span></label><input id="contact-name" name="name" autocomplete="name" maxlength="100" required /></div>
+  <div class="field"><label for="contact-email">メールアドレス <span>必須</span></label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+  <div class="field"><label for="message">お問い合わせ内容 <span>必須</span></label><textarea id="message" name="message" rows="4" maxlength="5000" placeholder="困っていることを、ひと言でも大丈夫です。" required></textarea></div>
+  <div class="field"><label for="contact-company">会社名・屋号 <span class="optional">任意</span></label><input id="contact-company" name="company" autocomplete="organization" maxlength="200" /></div>
   <div class="contact-trap" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" name="website" tabindex="-1" autocomplete="off" /></div>
   <p class="contact-use">入力内容はお問い合わせへの返信に利用します。パスワードなどの秘密情報は記入しないでください。</p>
   <button class="button button--human" type="submit" data-contact-send>送信する <span aria-hidden="true">↗</span></button>
