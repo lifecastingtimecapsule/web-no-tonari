@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 フォームの簡素化に合わせ、送信後・失敗後もボタンを「送信する」で統一。
 // 変更履歴: 2026-11-11 直接送信を追加。連打時は並行送信せず、失敗した入力は消さない。
 /** 入力を検証して固定の自社APIへ送信する。再試行には同じIDを使い二重配送を防ぐ。 */
 function setupContactForm():void {
@@ -33,7 +34,7 @@ function setupContactForm():void {
       submitting=false;
       button.disabled=false;
       form.querySelectorAll<HTMLInputElement|HTMLTextAreaElement>('input,textarea').forEach(field=>{field.disabled=false;});
-      button.textContent='送信する ↗';
+      button.textContent='送信する';
       status.focus({preventScroll:true});
     }
   });
