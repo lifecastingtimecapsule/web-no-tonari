@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-11 ホームへの明示リンクをPC・スマホ共通メニュー先頭へ追加。
 // 変更履歴: 2026-11-11 サービス配下の6リンクと会社・理念・料金・FAQ・相談を共通ナビに整理。
 // 変更履歴: 2026-11-11 メール漏えいチェックの実照会ページをサービス配下に追加。
 // 役割: PCのサービスドロップダウンとスマホ右下の縦型メニューを共通のリンクで提供する。
@@ -11,6 +12,7 @@ const currentPath = Astro.url.pathname;
   <Brand homeSection />
   <button class="menu-button" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-nav" data-menu-button><span class="menu-button__label">メニュー</span><span class="menu-button__lines" aria-hidden="true"></span></button>
   <nav class="site-nav" id="site-nav" aria-label="メインナビゲーション" data-nav>
+    <a href={`${home}#top`} aria-current={currentPath===home?'page':undefined}>ホーム</a>
     <details class="nav-services"><summary>サービス<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg></summary><div class="nav-services__links">
       <a href={`${home}services/`} aria-current={currentPath === `${home}services/` ? 'page' : undefined}>サービス一覧</a>
       {servicePages.map(service=><a href={`${home}services/${service.slug}/`} aria-current={currentPath === `${home}services/${service.slug}/` ? 'page' : undefined}>{service.name}</a>)}

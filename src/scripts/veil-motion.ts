@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-11 ヒーローのスクロール開始でロゴを即表示。ヒーロー通過の背景切替とは分離。
 // 変更履歴: 2026-11-11 描画の地色を白にし、ナビ・本文と連続させる。
 // 変更履歴: 2026-11-11 タップ位置への顔料の集合と復帰を追加。小画面の描画量・フレーム数を抑え、毎フレームのレイアウト参照を撤去。
 // 変更履歴: 2026-11-11 青の領域を縮小し、オレンジに重なる赤い顔料を増加。
@@ -120,12 +121,14 @@ function createInkRenderer(canvas: HTMLCanvasElement) {
   };
 }
 
-/** ヒーロー全体が画面上へ抜けたときだけ、小さなヘッダーロゴに引き継ぐ。 */
+/** スクロール開始でヘッダーロゴを表示し、ヒーロー通過時には背景を白へ切り替える。 */
 function setupHeroBrand(): void {
   const heroSection = document.querySelector<HTMLElement>('[data-veil-stage]');
   if (!heroSection) return;
   heroSection.setAttribute('data-brand-observed', '');
+  /** 現在のスクロール位置とヒーロー境界を、ロゴと背景それぞれへ反映する。 */
   const syncHeroBrand = (): void => {
+    heroSection.toggleAttribute('data-brand-visible', window.scrollY > 1);
     heroSection.toggleAttribute('data-hero-passed', heroSection.getBoundingClientRect().bottom <= 1);
   };
   new IntersectionObserver(syncHeroBrand, {threshold:[0,.001]}).observe(heroSection);
