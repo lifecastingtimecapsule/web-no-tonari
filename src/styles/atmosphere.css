@@ -174,3 +174,21 @@ body .site-footer__heading{margin-bottom:6px}
 }
 
 body.page-inner #main .siteveil-guide h1{font-size:clamp(32px,4.5vw,52px);margin-block:0 20px;letter-spacing:-.03em}
+
+/* 変更履歴: 2026-11-11 ページ別の文字サイズ・行間を役割別に統一。価格と注記、体験UIの文字は区別。 */
+/* 役割: 全案内の見出しと本文に共通の読みやすさを与え、スマホでも本文16pxを維持する。 */
+:root{--reading-body:16px;--reading-leading:1.85;--reading-note:14px;--reading-title:clamp(32px,4.5vw,52px);--reading-section:clamp(24px,3vw,32px);--reading-subhead:clamp(19px,2vw,22px)}
+body.page-inner #main h1{font-size:var(--reading-title);line-height:1.3;letter-spacing:-.03em}
+body.page-inner #main :is(.catalog-heading,.service-intro,.company,.philosophy,.siteveil-guide,.email-check,.check-page,.php-article) h2:not(:where(.service-demo *,#sample *)){font-size:var(--reading-section);line-height:1.4;letter-spacing:-.02em}
+body.page-inner #main :is(.catalog-page,.service-intro,.service-close,.company,.philosophy,.siteveil-guide,.learning-reading) h3:not(:where(.service-demo *)){font-size:var(--reading-subhead);line-height:1.5}
+body.page-inner #main :is(.catalog-heading,.service-intro,.service-close,.company,.philosophy,.siteveil-guide,.learning-reading) p:not(:where(.inline-pricing *,.note,.signature,.guide-price,[class*="price"],.service-close__notice)){font-size:var(--reading-body);line-height:var(--reading-leading)}
+body.page-inner #main :is(.company dl,.price-detail__scope,.pricing-other,.pricing-questions,.check-lead,.email-check header>p:last-child){font-size:var(--reading-body);line-height:var(--reading-leading)}
+body.page-inner #main :is(.siteveil-guide .note,.service-close__notice,.service-notes__articles p,.seo-method p,.check-form__note,.email-check__consent){font-size:var(--reading-note);line-height:1.75}
+body #main .service-overview p{font-size:15px;line-height:1.8}
+body #main .service-overview :is(h2,h3){font-size:21px;line-height:1.5}
+body #main .inline-pricing :is(p,li,summary){font-size:14px;line-height:1.75}
+body #main .inline-pricing__amount,body #main .guide-price strong{font-size:26px;line-height:1.4}
+body.page-inner #main .service-price-quote{margin-block:20px;font-size:14px;line-height:1.75}
+body.page-inner #main .service-price-quote strong{font-size:26px;line-height:1.4}
+body.page-inner #main .siteveil-guide .links{align-self:start}
+body.page-home #main :is(.section-heading>p,.declaration__body p,.contact__intro p,.faq-list__answer p){font-size:var(--reading-body);line-height:var(--reading-leading)}

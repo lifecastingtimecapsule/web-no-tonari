@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-09 ナビのサービスをスクロールからページ遷移へ変えるため一覧ページを追加。
 // 変更履歴: 2026-11-11 写真付きの縦横一覧へ統一し、横送りと重複導線を撤去。
 // 変更履歴: 2026-11-11 トップと同じSEO対策を含むサービス紹介へ統一。
+// 変更履歴: 2026-11-11 カード内の料金を優先し、料金を見るだけの重複誘導を撤去。
 // 役割: 四サービスの画像・横送り・詳細への入口を同じブランドで提供する。
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import ServiceOverview from '../../components/ServiceOverview.astro';
@@ -13,6 +14,6 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
     <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">サービス</span></nav>
     <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>ウェブ制作、SEO対策、AI開発、保守・セキュリティ。</p></header>
     <ServiceOverview headingTag="h2" />
-    <section class="catalog-close"><h2>料金も、明快に。</h2><a class="button button--human" href={`${home}pricing/`}>料金を見る</a></section>
+
   </div>
 </SiteLayout>

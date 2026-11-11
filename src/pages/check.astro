@@ -2,6 +2,7 @@
 // 変更履歴: 2026-11-08 SEO確認を廃止し、公開情報だけで確認する「かんたん安全チェック」ページを追加。
 // 変更履歴: 2026-11-11 導入を短くし、確認項目を開閉式へ整理。結果や診断範囲は維持。
 // 変更履歴: 2026-11-11 基本セキュリティ確認の改定料金を無料チェック後の案内に反映。
+// 変更履歴: 2026-11-11 入力前に無料・登録不要を明示し、料金確認の移動を不要にする。
 // 役割: 確認範囲を先に示し、結果を3段階で表示して、有料の基本セキュリティ確認と相談へつなぐ。
 import SiteLayout from '../layouts/SiteLayout.astro';
 import '../styles/services.css';
@@ -22,7 +23,7 @@ const notChecked = ['CMS・プラグインの更新状況', '管理者アカウ�
 <div class="shell check-page">
   <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
   <h1>サイトの安全性を、<br />かんたんチェック。</h1>
-  <p class="check-lead">URLから、公開されている情報を確認します。</p>
+  <p class="check-lead">無料・登録不要。URLから、公開されている情報を確認します。</p>
 
   <form class="check-form" data-check-form data-api={checkApi} novalidate>
     <label for="check-url">確認したいサイトのURL</label>

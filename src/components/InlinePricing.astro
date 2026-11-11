@@ -1,0 +1,19 @@
+---
+// 変更履歴: 2026-11-11 別ページへ移動せず料金・対象・条件を確認できる共通表示を追加。
+// 役割: 正本の料金データから、説明中のサービスに対応する税込価格と範囲を表示する。
+import {pricingPlans,pricingOptions,formatPrice} from '../data/pricing';
+interface Props {planIds:string[];}
+const {planIds}=Astro.props;
+const visiblePlans=pricingPlans.filter(plan=>planIds.includes(plan.id));
+---
+<div class="inline-pricing">
+  {visiblePlans.map(plan=><div class="inline-pricing__plan">
+    <p class="inline-pricing__label">{plan.name}</p>
+    <strong class="inline-pricing__amount">{formatPrice(plan.amount)}<small>（税込・{plan.unit}）</small></strong>
+    <p class="inline-pricing__summary">{plan.summary}</p>
+    <details><summary>含まれる内容・条件</summary><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p>{plan.note}</p><p>別途：{plan.excluded}</p>{['website','maintenance'].includes(plan.id) && <ul aria-label="追加料金（税込）">{(plan.id==='website'?pricingOptions.slice(0,3):pricingOptions.slice(3)).map(option=><li>{option.name}：{formatPrice(option.amount)}（{option.unit}）</li>)}</ul>}</details>
+  </div>)}
+</div>
+<style>
+.inline-pricing{margin:20px 0;display:grid;gap:16px}.inline-pricing__plan{padding-top:12px;border-top:1px solid #e4e8e5}.inline-pricing__label{margin:0 0 4px;font-size:14px;font-weight:700}.inline-pricing__amount{display:block;font-size:26px;line-height:1.4;font-variant-numeric:tabular-nums}.inline-pricing__amount small{display:inline-block;font-size:13px;font-weight:400;line-height:1.7}.inline-pricing__summary{margin:8px 0;font-size:14px;line-height:1.75}.inline-pricing details{margin-top:8px}.inline-pricing summary{font-size:14px;line-height:1.7;cursor:pointer;padding-block:4px}.inline-pricing details p,.inline-pricing li{font-size:14px;line-height:1.75}.inline-pricing ul{padding-left:1.3em;margin-block:12px}
+</style>
