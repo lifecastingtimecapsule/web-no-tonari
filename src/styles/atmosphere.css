@@ -201,6 +201,9 @@ body #main details>summary::marker{content:''}
 body #main details>summary::after{content:'開く';flex:none;font-size:12px;font-weight:400;text-decoration:underline;text-underline-offset:3px}
 body #main details[open]>summary::after{content:'閉じる'}
 body #main .faq-list summary>span{display:none}
+/* 変更履歴: 2026-11-12 FAQの開閉表示を指定どおり＋／−へ変更。操作可能な領域はsummary全体を維持。 */
+body #main .faq-list summary::after{content:'＋';font-size:24px;font-weight:400;line-height:1;text-decoration:none}
+body #main .faq-list details[open]>summary::after{content:'−'}
 body #main .inline-pricing__scope{font-size:14px;line-height:1.75}
 body #main .inline-pricing__scope>p{margin-block:12px 8px}
 body #main .inline-pricing__excluded{color:#465359}

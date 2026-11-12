@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-12 問い合わせ欄をメール・お問い合わせフォームの2リンクで明示。
 // 変更履歴: 2026-11-09 サービス・料金をページ内スクロールから専用ページへの遷移へ変更。
 // 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
 // 変更履歴: 2026-11-08 右寄せの1行構成を、ブランド・相談導線・3列のサイトマップ・運営表記の構成へ再設計。全ページで同じ余白から始まるよう統一。
@@ -16,7 +17,7 @@ const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
   ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
   ['ご案内', [['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
-  ['お問い合わせ', [['相談を送る', `${home}#contact`], ['info@site-veil.com', 'mailto:info@site-veil.com']]],
+  ['お問い合わせ', [['info@site-veil.com', 'mailto:info@site-veil.com'], ['お問い合わせフォーム', `${home}#contact`]]],
 ];
 ---
 <footer class="site-footer">
