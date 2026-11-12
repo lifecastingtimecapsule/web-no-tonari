@@ -227,3 +227,5 @@ body.page-inner :is(.catalog-heading,.service-intro,.company__intro,.philosophy_
 body .security{background:linear-gradient(115deg,#fff8f3,#fff 58%,#faf7fd)}
 body .site-footer{border-top:3px solid transparent;border-image:var(--brand-spectrum) 1;background:linear-gradient(115deg,#fffaf6,#fff 65%,#fbf9fd)}
 @media(hover:hover){body .service-overview__item:hover{background:#fff9f4}body .button--human:hover{background:#833c2d}}
+/* 変更履歴: 2026-11-12 サービス一覧は左上へ色の重心を移し、右下の白へ抜いて見出しから読み始めやすくする。 */
+body.page-inner .service-catalog .catalog-heading{background-image:radial-gradient(ellipse at 0% 0%,rgb(242 132 65 / 13%),transparent 66%),radial-gradient(ellipse at 18% 8%,rgb(145 105 184 / 5%),transparent 55%)}
