@@ -209,3 +209,18 @@ body #main .service-order li{font-size:16px;line-height:1.8}
 body #main .email-check__scope h2{font-size:22px;line-height:1.4;margin:0 0 12px}
 body #main .guide-conditions h3{font-size:18px;margin:16px 0 8px}
 body .restore-service-link{font-size:15px;line-height:1.7;margin:16px 0}
+
+/* 変更履歴: 2026-11-12 ヒーローの朱・オレンジ・紫と少量の青緑を本文へ継承。白地と黒文字を保つ。 */
+/* 役割: 静的な淡い色面と細い色帯で全ページをつなぎ、描画負荷や結果の警告色を増やさない。 */
+:root{--brand-ember:#ed633e;--brand-violet:#8562b9;--brand-sea:#408d98;--brand-spectrum:linear-gradient(105deg,#e74c40 0%,#f39a48 45%,#a183be 78%,#68a5ab 100%)}
+body .safety-entry{background:radial-gradient(ellipse at 90% 24%,rgb(242 132 65 / 9%),transparent 53%),radial-gradient(ellipse at 4% 80%,rgb(145 105 184 / 5%),transparent 48%)}
+body .check-visual::before{background:linear-gradient(135deg,#f8c8a4,#f2b8aa 48%,#d6c5e6 80%,#c5dee0)}
+body #services .section-heading::before,body #pricing .section-heading::before,body #contact .section-heading::before{content:'';display:block;width:64px;height:4px;margin-bottom:18px;background:var(--brand-spectrum);border-radius:4px}
+body .service-overview__item{border-top:3px solid var(--brand-ember)}
+body .service-overview__item:nth-child(2){border-top-color:#d49a37}
+body .service-overview__item:nth-child(3){border-top-color:var(--brand-violet)}
+body .service-overview__item:nth-child(4){border-top-color:var(--brand-sea)}
+body.page-inner :is(.catalog-heading,.service-intro,.company__intro,.philosophy__mission){background-image:radial-gradient(ellipse at 100% 0%,rgb(242 132 65 / 7%),transparent 60%),radial-gradient(ellipse at 0% 100%,rgb(145 105 184 / 4%),transparent 55%)}
+body .security{background:linear-gradient(115deg,#fff8f3,#fff 58%,#faf7fd)}
+body .site-footer{border-top:3px solid transparent;border-image:var(--brand-spectrum) 1;background:linear-gradient(115deg,#fffaf6,#fff 65%,#fbf9fd)}
+@media(hover:hover){body .service-overview__item:hover{background:#fff9f4}body .button--human:hover{background:#833c2d}}
