@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-13 AI電話受付の導入相談ページへの入口を追加。
 // 変更履歴: 2026-11-12 サービス一覧の色面を左上から右下へ薄くするため専用クラスを追加。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
@@ -17,6 +18,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
     <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">サービス</span></nav>
     <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>ウェブ制作、SEO対策、業務システム開発、保守・セキュリティ。</p></header>
     <ServiceOverview headingTag="h2" />
+<section class="service-order"><h2>電話受付も、仕事に合わせて。</h2><p>接客中・施術中・現場作業中のご用件をAIが伺い、予約希望や伝言を整理。業種別の会話例と参考料金をご覧いただけます。現在は導入相談・試験受付中です。</p><a class="button button--human" href={home+'services/phone-reception/'}>AI電話受付の内容・参考料金を見る</a></section>
 
   </div>
 </SiteLayout>

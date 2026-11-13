@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-13 AI電話受付の導入相談ページへの入口を追加。
 // 変更履歴: 2026-11-13 最新指定により緊急初動を撤回し、PHP・WordPress更新への問い合わせに統一。
 // 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
@@ -27,6 +28,7 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 <div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
 <section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]} showContact={false}/>}</div>
 <aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
+{service.slug==='ai-apps'&&<section class="service-order"><h2>電話受付も、仕事に合わせて。</h2><p>接客中・施術中・現場作業中のご用件をAIが伺い、予約希望や伝言を整理。業種別の会話例と参考料金をご覧いただけます。現在は導入相談・試験受付中です。</p><a class="button button--human" href={home+'services/phone-reception/'}>AI電話受付の内容・参考料金を見る</a></section>}
 {service.slug==='ai-apps'&&<BusinessPricing showContact={false}/>}
 {service.slug==='security'&&<EmergencyMaintenancePlans showContact={false}/>}
 {service.slug==='security'&&<SecurityInvestigationPlans showContact={false}/>}
