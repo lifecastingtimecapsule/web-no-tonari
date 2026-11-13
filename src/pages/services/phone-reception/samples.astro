@@ -1,0 +1,15 @@
+---
+// 変更履歴: 2026-11-13 業種ごとの受付会話を比較するサンプル集を追加。24ケースと聞き取り・メモを掲載。
+// 役割: 顧客が自分の業務に近い電話内容を選び、応対と引き継ぎの流れを確認する。
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import catalog from '../../../data/reception-samples.json';
+import '../../../styles/phone-reception.css';
+const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
+const reception=home+'services/phone-reception/';
+---
+<SiteLayout title="AI電話受付の会話サンプル集｜6業種・24の応対例｜SITEVEIL" description="写真館・美容室・飲食店・不動産・工務店・士業のAI電話受付サンプル。予約相談、変更、営業電話、クレームの聞き取りと担当者へ残すメモをご覧いただけます。" breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:home+'services/'},{name:'AI電話受付',path:reception},{name:'会話サンプル集',path:reception+'samples/'}]}>
+<div class="shell reception-lp reception-sample-collection"><nav class="page-breadcrumb" aria-label="パンくず"><a href={reception}>AI電話受付</a><span>/</span><span aria-current="page">会話サンプル集</span></nav>
+<header class="reception-section"><h1>いつもの電話を、<br/>AIが受けたら。</h1><p>6業種・24の受付会話を、担当者へ残すメモとあわせてご紹介します。気になる業種を選び、電話の内容を開いてください。</p><p class="reception-note">すべて架空の店舗・お客様による文章のサンプルです。音声の再生や電話発信はありません。実際の日時・空き・料金は確認後に案内し、未確認の予約や折り返しは確約しません。</p><nav class="reception-industry-links" aria-label="業種別サンプル">{catalog.map(industry=><a href={'#'+industry.id}>{industry.industry}</a>)}</nav></header>
+{catalog.map(industry=><section class="reception-section" id={industry.id}><h2>{industry.industry}の会話サンプル</h2><p class="reception-note">架空の受付先：{industry.name}</p><div class="reception-examples">{industry.scenarios.map(scenario=><details><summary>{scenario.title}</summary><h3>最初のご挨拶</h3><p class="reception-opening">{industry.opening}</p><div class="reception-dialog">{scenario.dialog.map((line,index)=><div class:list={['reception-turn',{'reception-turn--ai':index%2===1}]}><strong>{index%2===1?'AI受付・佐藤':'お客様・お電話の相手'}</strong><p>{line}</p></div>)}</div><h3>確認すること</h3><ul>{scenario.checks.map(check=><li>{check}</li>)}</ul><h3>担当者へ残すメモ</h3><p class="reception-memo">{scenario.memo}</p></details>)}</div><a class="reception-back-to-industries" href="#main">業種の一覧へ戻る</a></section>)}
+<section class="reception-section"><h2>貴社の受付に合わせて、整えます。</h2><p>ご案内する内容、言い方、予約のルール、確認する項目を、いつもの電話に合わせて設定します。</p><p><a class="button button--human" href={reception+'#reception-pricing'}>AI電話受付の内容・参考料金を見る</a></p><a href={home+'?service='+encodeURIComponent('AI電話受付・会話サンプルについて')+'#contact'}>自社向けの受付について相談する</a><details><summary>会話づくりで参考にした資料</summary><p>名乗り・復唱・傾聴・引き継ぎの考え方を参考に、独自の会話例を作成しています。特定の機関による本サービスの推奨を意味しません。</p><ul><li><a href="https://www.mhlw.go.jp/content/000643407.pdf" target="_blank" rel="noopener noreferrer">厚生労働省：生衛業向け 顧客満足向上マニュアル</a></li><li><a href="https://www.jtua.or.jp/education/column/skillup/201402_01/" target="_blank" rel="noopener noreferrer">ユーザ協会：心を伝える添えことばを</a></li><li><a href="https://www.insource.co.jp/ins-archives/column-claim-3.html" target="_blank" rel="noopener noreferrer">インソース：クレーム対応マニュアル・一次対応</a></li></ul></details></section>
+</div></SiteLayout>
