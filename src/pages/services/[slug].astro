@@ -1,5 +1,5 @@
 ---
-// 変更履歴: 2026-11-13 PHP更新と緊急初動、他社で断られた案件の相談を価格付きで追加。
+// 変更履歴: 2026-11-13 最新指定により緊急初動を撤回し、PHP・WordPress更新への問い合わせに統一。
 // 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
@@ -35,7 +35,7 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 
 <section class="service-inquiry" aria-label="このサービスへのお問い合わせ">
 {service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
-{service.slug==='security'&&<a class="button button--human" href={`${home}?service=${encodeURIComponent('PHP更新・緊急対応')}#contact`}>更新・急ぎの対応について相談する</a>}
+{service.slug==='security'&&<a class="button button--human" href={`${home}?service=${encodeURIComponent('PHP・WordPress更新')}#contact`}>PHP・WordPress更新について相談する</a>}
 {service.slug==='security'&&securityInvestigationPlans.map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
 </section>
 </div>
