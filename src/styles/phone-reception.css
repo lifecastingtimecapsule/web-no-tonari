@@ -3,3 +3,6 @@
 
 /* 変更履歴: 2026-11-13 長い会話集でも業種の移動とキーボード操作をしやすくする。 */
 .reception-industry-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.reception-industry-links a{display:block;border:1px solid var(--mist);padding:12px 18px;color:var(--ink);text-decoration:none}.reception-industry-links a:hover{border-color:var(--signal);color:var(--signal-deep)}.reception-sample-collection section[id]{scroll-margin-top:120px}.reception-back-to-industries{display:inline-block;padding:12px 0;margin-top:16px}.reception-sample-collection header h1{font-size:clamp(32px,4vw,52px);line-height:1.5}
+
+/* 変更履歴: 2026-11-13 MP3を読み込み前提にせず、スマホ幅内の標準再生操作を表示。 */
+.reception-sample-audio{margin:24px 0;padding:20px;background:#f5f5f7}.reception-sample-audio audio{display:block;width:100%;max-width:560px}.reception-sample-audio p{margin:8px 0}

@@ -1,0 +1,26 @@
+{
+  "voice": "shida",
+  "kind": "script-reading",
+  "available": [
+    "industry-1-1",
+    "industry-1-2",
+    "industry-1-3",
+    "industry-1-4",
+    "industry-2-1",
+    "industry-2-2",
+    "industry-2-3",
+    "industry-2-4",
+    "industry-3-1",
+    "industry-3-2",
+    "industry-3-3",
+    "industry-3-4",
+    "industry-4-1",
+    "industry-4-2",
+    "industry-4-3",
+    "industry-4-4",
+    "industry-5-2",
+    "industry-5-3",
+    "industry-5-4",
+    "industry-6-1"
+  ]
+}
