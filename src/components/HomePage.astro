@@ -29,6 +29,8 @@
 // 変更履歴: 2026-11-08 全ページ共通のSiteLayoutへhead・ヘッダー・フッターを集約。
 // 変更履歴: 2026-11-08 依頼者の会社名・担当者名・メール欄を追加し、相談欄を入力に合わせて伸びる2行の初期表示へ変更。
 import SiteLayout from '../layouts/SiteLayout.astro';
+// 変更履歴: 2026-11-13 ヒーローと文字サイズを維持したまま、本文の色面・余白・画像の扱いをホーム限定で統一。
+import '../styles/home-continuity.css';
 import ContactForm from '../components/ContactForm.astro';
 import VeilHero from '../components/VeilHero.astro';
 import SafetyCheck from './SafetyCheck.astro';

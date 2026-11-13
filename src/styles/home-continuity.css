@@ -1,0 +1,126 @@
+/* 変更履歴: 2026-11-13 ヒーローと文字サイズを保ち、本文の配色・整列・画像の台座を一つの表現へ統一。 */
+/* 役割: ホームの本文だけに適用。font-sizeとヒーローの構図・描画・操作を変更しない。 */
+body.page-home {
+  --home-paper: #fffaf6;
+  --home-border: #e9dfd8;
+  --home-accent: #af3f29;
+  --home-surface: linear-gradient(135deg, #fff0e3 0%, #fff9f5 52%, #fcf9ff 100%);
+  --home-radius: 14px;
+}
+
+/* 本文の各章を同じ幅・基準線に置き、装飾の疑似要素でグリッドがずれるのを防ぐ。 */
+body.page-home #main > .section > .shell,
+body.page-home #main > .section > .shell.security__layout,
+body.page-home #main > .section > .shell.faq__layout,
+body.page-home #main > .section > .shell.contact__layout {
+  width: min(1120px, calc(100% - 80px));
+}
+body.page-home #main > .section { padding-block: 72px; }
+body.page-home #services .section-heading::before,
+body.page-home #pricing .section-heading::before,
+body.page-home #contact .section-heading::before { content: none; }
+body.page-home #services .section-heading {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, .8fr);
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+body.page-home #services .section-heading > p { max-width: 25em; }
+body.page-home #main .section-heading h2 { margin-bottom: 0; }
+
+/* 元の安全チェックの左右配置と画像を維持し、次章への色と余白だけをつなぐ。 */
+body.page-home #after-hero {
+  background: linear-gradient(135deg, #fff6ee 0%, #fff 60%, #fdfaff 100%);
+  border-radius: 0 0 24px 24px;
+  padding-top: 96px;
+  padding-bottom: 64px;
+}
+body.page-home #after-hero .check-visual::before {
+  background: linear-gradient(135deg, #f8c9a6, #f3b9a7 58%, #dfd0eb);
+}
+
+/* 四つの説明画面を同じ額装で扱う。全画像を収め、画像内の文字や情報を切らない。 */
+body.page-home #services { background: #fff; }
+body.page-home #services .service-overview { gap: 24px; margin-top: 0; }
+body.page-home #services .service-overview__item { display: flex; flex-direction: column; border-top: 0; background: transparent; }
+body.page-home #services .service-overview__media {
+  aspect-ratio: 4 / 3;
+  padding: 12px;
+  border-radius: var(--home-radius);
+  background: var(--home-surface);
+}
+body.page-home #services .service-overview__media img {
+  width: 100%; height: 100%; object-fit: contain;
+  border-radius: 7px;
+  box-shadow: 0 6px 16px rgb(71 39 24 / 7%);
+}
+body.page-home #services .service-overview__item :is(h2,h3) { margin-block: 20px 12px; }
+body.page-home #services .service-overview__item > p { margin-block: 0 16px; }
+body.page-home #services .service-overview__item > .service-overview__price { margin-top: auto; padding-top: 4px; color: #5c3026; }
+@media (hover:hover) {
+  body.page-home #services .service-overview__item:hover { background: transparent; }
+  body.page-home #services .service-overview__item:hover .service-overview__media { background: #ffeadb; }
+  body.page-home #services .service-overview__item:hover :is(h2,h3) { color: var(--home-accent); }
+}
+
+/* 価格を大きな空白の表から、同じ基準線を持つ落ち着いた一つの一覧へ。 */
+body.page-home #pricing { background: var(--home-paper); }
+body.page-home #pricing .pricing__heading { margin-bottom: 32px; gap: 32px; align-items: end; }
+body.page-home #pricing .pricing__heading > * { margin-bottom: 0; }
+body.page-home #pricing .pricing__primary {
+  border: 1px solid var(--home-border);
+  border-radius: var(--home-radius);
+  overflow: hidden;
+  background: #fff;
+}
+body.page-home #pricing .pricing__primary-item {
+  padding: 28px 32px;
+  min-height: 0;
+  border-color: var(--home-border);
+}
+body.page-home #pricing .pricing-summary__item { gap: 14px; }
+body.page-home #pricing .pricing-summary__item strong { margin-bottom: 8px; }
+body.page-home #pricing .pricing-summary__arrow { color: var(--home-accent); }
+body.page-home #pricing .pricing__external { margin: 20px 0 0; }
+
+/* 安心の案内は一つの暖かな面にまとめ、FAQ・問い合わせは同じ間隔で続ける。 */
+body.page-home #main > .security { background: #fff; }
+body.page-home #main .security__layout {
+  padding: 40px;
+  gap: 48px;
+  border-radius: var(--home-radius);
+  background: var(--home-surface);
+}
+body.page-home #main .security__checks li { border-color: #e5d6ce; }
+body.page-home #main .security__checks li span { width: 10px; height: 10px; border: 0; background: #bf6144; }
+body.page-home #main .security__check-link { color: var(--home-accent); }
+body.page-home #faq { padding-top: 0; }
+body.page-home #faq .faq__layout { gap: 48px; }
+body.page-home #faq .faq-list details { border-color: var(--home-border); }
+body.page-home #contact { background: var(--home-paper); }
+body.page-home #contact .contact__layout { gap: 48px; }
+body.page-home #contact .contact__intro { padding-top: 0; }
+body.page-home #contact .contact-form .field { border-color: var(--home-border); }
+body.page-home #contact .contact-form input,
+body.page-home #contact .contact-form textarea { border-color: #d9ccc3; border-radius: 8px; background: #fff; }
+body.page-home #contact [data-contact-send] { border-radius: 8px; background: #a63e2b; }
+body.page-home .site-footer { border-image: none; border-top: 1px solid var(--home-border); background: #fff; }
+
+@media (max-width: 800px) {
+  body.page-home #main > .section > .shell,
+  body.page-home #main > .section > .shell.security__layout,
+  body.page-home #main > .section > .shell.faq__layout,
+  body.page-home #main > .section > .shell.contact__layout { width: calc(100% - 40px); }
+  body.page-home #main > .section { padding-block: 48px; }
+  body.page-home #after-hero { padding-top: 96px; padding-bottom: 48px; }
+  body.page-home #services .section-heading { grid-template-columns: minmax(0,1fr); gap: 20px; margin-bottom: 24px; }
+  body.page-home #services .service-carousel { margin-top: 0; }
+  body.page-home #services .service-overview { gap: 18px; }
+  body.page-home #services .service-overview__media { padding: 14px; }
+  body.page-home #pricing .pricing__heading { gap: 16px; margin-bottom: 24px; }
+  body.page-home #pricing .pricing__primary-item { padding: 24px; }
+  body.page-home #main .security__layout { padding: 28px 24px; gap: 24px; }
+  body.page-home #faq { padding-top: 0; }
+  body.page-home #faq .faq__layout,
+  body.page-home #contact .contact__layout { gap: 24px; }
+}
