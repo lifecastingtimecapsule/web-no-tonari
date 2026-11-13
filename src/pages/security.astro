@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-13 PHP更新と緊急初動、他社で断られた案件の相談を価格付きで追加。
 // 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
@@ -10,6 +11,7 @@
 // 変更履歴: 2026-11-11 各説明に価格・対象範囲を併記し、料金確認だけの移動を撤去。
 // 変更履歴: 2026-11-11 無料確認・有料の依頼を分け、検査条件を常時表示。内部運用の説明を省く。
 // 役割: 簡易確認から詳しい調査へ、対象と同意の範囲を理解したうえで進める。
+import EmergencyMaintenancePlans from '../components/EmergencyMaintenancePlans.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import SecurityInvestigationPlans from '../components/SecurityInvestigationPlans.astro';
 import '../styles/services.css';
@@ -26,7 +28,7 @@ const consultation=(service:string)=>`${home}?service=${encodeURIComponent(servi
 <article><div><h3>サイトの状態を知りたい</h3><p>サイトのアドレスから、通信や保護の設定を調べます。</p><p class="guide-price"><strong>簡易チェック 無料</strong><span>登録不要・サイトURLを入力するだけ</span></p><InlinePricing planIds={['security','maintenance']} /></div><div class="links"><a class="button button--human" href={`${home}check/`}>無料の簡易チェックを使う</a><a href={consultation('サイト管理・安全確認')}>管理・安全確認について問い合わせる</a></div></article>
 <article><div><h3>メールの漏洩を調べたい</h3><p>サービス名・発生時期・漏洩した情報を確認できます。</p><p class="guide-price"><strong>オンライン 無料</strong><span>詳細結果まで無料・登録不要</span></p><p class="guide-price"><strong>郵送報告書 {formatPrice(postalPlan.amount)}</strong><span>税込・国内送料込み／10アドレスまで／受付準備中</span></p><p class="note">パスワード全文はお預かりしません。記録が見つからなくても、漏洩していないことを保証するものではありません。</p></div><div class="links"><a class="button button--human" href={`${home}email-check/`}>無料でメールを確認する</a></div></article>
 
-</section><SecurityInvestigationPlans/><section class="closing"><h2>調査をご依頼いただく前に</h2><p>対象と同意範囲を確認し、内容・費用を合意してから調査します。個人向けの漏洩調査と、企業のシステム検査は対象・手順が異なります。</p><p>調査の報告書・管理データは発送・納品後30日（約1か月）で削除。再発行で期限は延長しません。検査に使う環境の保存・削除条件も、実施前にご案内します。</p><p class="note">お問い合わせ：<a href="mailto:info@site-veil.com">info@site-veil.com</a>。フォームからもお問い合わせいただけます。</p></section></div>
+</section><EmergencyMaintenancePlans/><SecurityInvestigationPlans/><section class="closing"><h2>調査をご依頼いただく前に</h2><p>対象と同意範囲を確認し、内容・費用を合意してから調査します。個人向けの漏洩調査と、企業のシステム検査は対象・手順が異なります。</p><p>調査の報告書・管理データは発送・納品後30日（約1か月）で削除。再発行で期限は延長しません。検査に使う環境の保存・削除条件も、実施前にご案内します。</p><p class="note">お問い合わせ：<a href="mailto:info@site-veil.com">info@site-veil.com</a>。フォームからもお問い合わせいただけます。</p></section></div>
 </SiteLayout>
 <style>.siteveil-guide{padding-top:130px;padding-bottom:90px}.siteveil-guide header{padding:40px 0 70px}.signature{font-size:14px;letter-spacing:.2em}.siteveil-guide h1{font-size:clamp(46px,7vw,88px);line-height:1.22;letter-spacing:-.04em;margin:25px 0}.lead{font-size:18px;line-height:1.9}.siteveil-guide h2{font-size:30px;margin:0 0 30px}.siteveil-guide article{display:grid;grid-template-columns:1fr 290px;gap:48px;padding:40px 0;border-top:1px solid #d5d5d5}.siteveil-guide h3{font-size:25px;margin:0 0 18px}.siteveil-guide p{line-height:1.9}.links{display:flex;flex-direction:column;align-items:flex-start;gap:20px}.note{font-size:13px;color:#626262}.siteveil-guide details{margin-top:20px}.siteveil-guide summary{cursor:pointer}.closing{border-top:2px solid #151515;padding-top:40px;margin-top:20px}.closing p{max-width:760px}@media(max-width:700px){.siteveil-guide article{grid-template-columns:1fr;gap:20px;padding:30px 0}.siteveil-guide{padding-top:100px}.siteveil-guide header{padding-bottom:45px}.siteveil-guide h3{font-size:22px}}</style>
 
