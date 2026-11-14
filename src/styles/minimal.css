@@ -1,0 +1,96 @@
+/* 変更履歴: 2026-11-14 日本語中心の簡素化。冒頭のモヤモヤを残し、本文の色面・装飾枠・過大な見出しを整理。 */
+/* 役割: 公開ページの本文と共通ナビだけを白・墨色へ統一。診断結果・警告・ヒーロー描画の意味や動作は維持する。 */
+body {
+  --font-display: 'Noto Sans JP', sans-serif;
+  --ink: #1d1d1f;
+  --ink-muted: #55555b;
+  --home-paper: #f5f5f7;
+  --home-border: #dedee2;
+  --home-accent: #1d1d1f;
+  --home-surface: #f5f5f7;
+  color: var(--ink);
+}
+body #main :is(h1,h2,h3) { text-wrap: pretty; }
+body #main > .section h2 { font-weight: 700; font-size: clamp(28px,3.1vw,40px); line-height: 1.5; letter-spacing: -.025em; }
+body #main :is(.catalog-heading h1,.service-intro h1,.company h1,.philosophy h1,.check-page h1,.siteveil-guide h1) {
+  font-size: clamp(32px,4vw,48px); font-weight:700; line-height:1.5; letter-spacing:-.025em;
+}
+body.page-inner :is(.catalog-heading,.service-intro,.company__intro,.philosophy__mission),
+body.page-inner .service-catalog .catalog-heading { background: none; }
+body :is(.safety-entry,.security) { background: #fff; }
+body #services .section-heading::before,
+body #pricing .section-heading::before,
+body #contact .section-heading::before { content:none; }
+body .service-overview__item { border-top:0; }
+body .service-overview__media { padding:0; border-radius:10px; background:#f5f5f7; }
+body .service-overview__media img { object-fit:contain; box-shadow:none; border-radius:10px; }
+body .service-overview__price { color:var(--ink); }
+body #main .service-overview :is(h2,h3) { font-size:21px; line-height:1.6; letter-spacing:0; }
+body .site-footer { border-image:none; border-top:1px solid #dedee2; background:#f5f5f7; }
+body .site-footer :is(p,a,small,.site-footer__heading) { color:#424247; }
+body .site-footer__bottom { border-color:#dedee2; }
+body .nav-services__links { border-color:#dedee2; box-shadow:0 8px 24px rgb(0 0 0 / 5%); }
+body .site-header :is(.site-nav>a,.nav-services summary) { color:var(--ink); }
+body .site-header .site-nav [aria-current='page'] { color:var(--ink); text-underline-offset:7px; }
+body .button--human { background:var(--ink); border-radius:8px; }
+body .service-close { background:#f5f5f7; border-radius:10px; }
+body .catalog-close { padding-inline:0; }
+body .service-demo { border-radius:10px; background:#f5f5f7; }
+body .service-tabs { scrollbar-width:none; }
+body .service-tabs::-webkit-scrollbar { display:none; }
+body #main :is(.service-tabs,.price-detail,.price-options>div,.pricing-jump,.service-task) { border-color:#dedee2; }
+body .service-tabs [aria-current] { color:var(--ink); }
+body .service-tabs a { min-height:44px; }
+body .service-source { overflow-wrap:anywhere; }
+body .contact-form :is(input,textarea) { caret-color:var(--ink); }
+body .contact-form [data-contact-send] { background:var(--ink); }
+body #main :is(.service-section-heading,.section-heading) { align-items:start; }
+body #main .service-section-heading h2 { font-size:clamp(25px,2.7vw,34px); font-weight:700; line-height:1.5; }
+body #main .price-detail__amount { color:var(--ink); }
+body #main :is(.price-examples article,.service-notes article) { border-top-width:1px; border-color:#dedee2; }
+/* ホームは同じ基準線と控えめな画像処理でつなぎ、各章を装飾カードにしない。 */
+body.page-home #after-hero { background:#fff; border-radius:0; }
+body.page-home #after-hero .restore-title { font-size:clamp(32px,4vw,48px); font-weight:700; line-height:1.5; letter-spacing:-.025em; }
+body.page-home #after-hero .restore-title em { color:inherit; }
+body.page-home #after-hero .check-visual::before { background:#f5f5f7; }
+body.page-home #after-hero :is(.check-browser-card,.check-mobile-card,.check-health-card) { box-shadow:none; border-color:#dedee2; }
+body.page-home #after-hero .check-health-card { display:none; }
+body.page-home #after-hero .restore-consult { box-shadow:none; border-radius:10px; }
+body.page-home #after-hero .restore-consult-action { background:var(--ink); border-radius:7px; }
+body.page-home #services .section-heading { grid-template-columns:1fr; gap:0; }
+body.page-home #services .service-overview__media { padding:0; background:#f5f5f7; border-radius:10px; }
+body.page-home #services .service-overview__media img { box-shadow:none; border-radius:10px; }
+body.page-home #services .service-overview__price { color:var(--ink); }
+body.page-home #pricing { background:#f5f5f7; }
+body.page-home #pricing .pricing__primary { border:0; border-radius:0; background:transparent; }
+body.page-home #pricing .pricing__primary-item { padding-inline:0; }
+body.page-home #pricing .pricing__primary-item:nth-child(odd) { padding-right:32px; }
+body.page-home #main .security__layout { padding:0; background:none; border-radius:0; }
+body.page-home #main .security__checks li span { width:5px; height:5px; background:var(--ink); }
+body.page-home #main .security__check-link { color:var(--ink); }
+body.page-home #contact { background:#fff; }
+body.page-home #contact [data-contact-send] { background:var(--ink); }
+body.page-home .site-footer { background:#f5f5f7; }
+@media(hover:hover) {
+  body .service-overview__item:hover,
+  body.page-home #services .service-overview__item:hover { background:transparent; }
+  body.page-home #services .service-overview__item:hover .service-overview__media { background:#f5f5f7; }
+  body .button--human:hover,body.page-home #contact [data-contact-send]:hover { background:#353538; }
+}
+@media(max-width:800px) {
+  body #main > .section h2 { font-size:28px; line-height:1.5; }
+  body.page-home #after-hero .restore-title { font-size:32px; }
+  body.page-home #after-hero .restore-title span { white-space:normal; }
+  body.page-home #main .security__layout { padding:0; }
+  body.page-home #pricing .pricing__primary-item:nth-child(odd) { padding-right:0; }
+  body #main :is(.catalog-heading h1,.service-intro h1,.company h1,.philosophy h1,.check-page h1,.siteveil-guide h1) { font-size:32px; }
+  body #main .service-section-heading h2 { font-size:25px; }
+}
+/* 電話受付も同じ本文表現へ。受付状態の文言は残し、装飾としての赤・紫だけを省く。 */
+body .reception-status { color:var(--ink-muted); font-weight:500; }
+body :is(.reception-note-sheet,.reception-policy,.reception-turn--ai) { background:#f5f5f7; border-color:#dedee2; }
+body .reception-note-sheet { border-top-width:1px; }
+body .reception-hero h1 { font-size:clamp(32px,4vw,48px); font-weight:700; }
+/* 個別ページの旧見出し指定より共通の強弱を優先し、遷移時の大きさの差をなくす。 */
+body.page-inner #main h1 { font-size:clamp(32px,4vw,48px); font-weight:700; line-height:1.5; letter-spacing:-.025em; }
+@media(max-width:800px) { body.page-inner #main h1 { font-size:32px; } }

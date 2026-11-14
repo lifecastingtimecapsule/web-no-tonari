@@ -3,9 +3,11 @@
 // 変更履歴: 2026-11-08 ページごとに複製されていたhead・ロゴ・ヘッダー・フッターを共通レイアウトへ集約。
 // 変更履歴: 2026-11-11 全ページに明るい共通トーン・文字・余白を適用。
 // 変更履歴: 2026-11-11 公開済み会社情報による構造化データと共有画像を追加。試作の正規先をホームへ統一。
+// 変更履歴: 2026-11-14 日本語中心の簡素な本文表現を全公開ページで共有。
 // 役割: サイト共通の見た目・書体・メタ情報・ナビを維持し、本文だけをページごとに差し替える。
 import '../styles/global.css';
 import '../styles/atmosphere.css';
+import '../styles/minimal.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 interface Props { title: string; description: string; homePage?: boolean; noindex?: boolean; breadcrumbs?: {name:string;path:string}[]; }
@@ -44,7 +46,7 @@ const organizationSchema = {'@context':'https://schema.org','@graph':[
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(organizationSchema).replace(/</g,'\u003c')} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@500;600;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
   </head>
   <body class:list={[homePage ? 'page-home' : 'page-inner']}>
     <a class="skip-link" href="#main">本文へ移動</a>
