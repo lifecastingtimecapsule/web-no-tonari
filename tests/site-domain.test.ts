@@ -18,3 +18,12 @@ describe('SITEVEIL public domain', () => {
     expect(response.headers.get('Location')).toBe('https://site-veil.com/');
   });
 });
+
+// 変更履歴: 2026-11-14 直接URLから音声と受付案内を取得できないことを保証する。
+it.each(['/services/phone-reception/', '/services/phone-reception/samples/', '/audio/reception/industry-1-1.mp3'])('keeps paused reception resources private: %s', async path => {
+  const assets = {fetch: vi.fn().mockResolvedValue(new Response('should not be served'))};
+  const response = await siteWorker.fetch(new Request('https://site-veil.com'+path), {ASSETS:assets});
+  expect(response.status).toBe(404);
+  expect(response.headers.get('X-Robots-Tag')).toContain('noindex');
+  expect(assets.fetch).not.toHaveBeenCalled();
+});
