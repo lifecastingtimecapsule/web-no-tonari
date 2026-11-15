@@ -20,7 +20,7 @@ body.page-home .editorial-heading { display: grid; grid-template-columns: minmax
 body.page-home .editorial-heading h2,
 body.page-home .positioning h2,
 body.page-home .boundary-grid__heading h2,
-body.page-home .reporting h2 { margin: 0; font-size: clamp(3.25rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.16; letter-spacing: -.045em; }
+body.page-home .reporting h2 { margin: 0; font-size: clamp(3.25rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.16; letter-spacing: -.045em; text-wrap: balance; }
 body.page-home .editorial-heading > p,
 body.page-home .positioning__copy > p,
 body.page-home .boundary-copy p,
@@ -29,6 +29,7 @@ body.page-home .reporting__body > p { max-width: 62ch; margin: 0; font-size: cla
 body.page-home .positioning { padding-top: clamp(112px, 13vw, 176px); background: #fff; }
 body.page-home .positioning__grid { display: grid; grid-template-columns: minmax(150px, .34fr) minmax(0, 1fr); gap: 72px; border-top: 1px solid var(--editorial-rule); padding-top: 28px; }
 body.page-home .positioning__copy { display: grid; gap: 48px; }
+body.page-home .positioning h2 span { display: block; }
 body.page-home .positioning__copy > p { margin-left: min(12vw, 160px); }
 
 body.page-home .service-modes { background: #fff; }
@@ -107,7 +108,7 @@ body.page-home .editorial-section a:focus-visible { outline: 3px solid var(--edi
 .policy-page__hero > p:last-child { grid-column: 2; max-width: 62ch; margin: 16px 0 0; font-size: 18px; line-height: 1.9; }
 .policy-page__section { padding-block: 72px; border-top: 1px solid #dfe3e8; }
 .policy-page__section > h2,
-.policy-page__section-heading h2 { max-width: 16em; margin: 0 0 40px; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.3; letter-spacing: -.035em; }
+.policy-page__section-heading h2 { max-width: 20em; margin: 0 0 40px; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.3; letter-spacing: -.035em; text-wrap: balance; }
 .policy-page__section > p { max-width: 62ch; font-size: 17px; line-height: 1.9; }
 .policy-page__decision > div,
 .policy-page__split { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }

@@ -19,8 +19,10 @@ describe('SITEVEILの公開ホーム', () => {
 
   it('explains_risk_discovery_with_stable_sections', () => {
     const publicCopy = `${positioningSource}\n${boundariesSource}`;
+    const visibleCopy = publicCopy.replace(/<[^>]+>/g, '');
 
-    expect(publicCopy).toContain('確認できるリスクを、早期に見つける。');
+    expect(visibleCopy).toContain('確認できるリスクを、早期に見つける。');
+    expect(positioningSource).toContain('<span>早期に見つける。</span>');
     for (const sectionId of ['positioning', 'service-modes', 'update-boundary', 'clone-testing', 'reporting']) {
       expect(publicCopy).toContain(`id="${sectionId}"`);
     }
