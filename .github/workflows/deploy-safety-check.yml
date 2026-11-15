@@ -1,3 +1,4 @@
+# 変更履歴: 2026-11-15 共通Turnstile検証の変更でもWorkerを再公開し、専用回帰テストも実行。
 # 変更履歴: 2026-11-08 安全チェックのWorkerを、main更新時にCloudflareへ公開するワークフローを追加。
 # 必要な設定: リポジトリのSecretsに CLOUDFLARE_API_TOKEN（Workers編集権限）と CLOUDFLARE_ACCOUNT_ID。
 name: Deploy safety-check Worker
@@ -5,7 +6,7 @@ name: Deploy safety-check Worker
 on:
   push:
     branches: [main]
-    paths: ['workers/safety-check/**', '.github/workflows/deploy-safety-check.yml']
+    paths: ['workers/safety-check/**', 'workers/shared/**', '.github/workflows/deploy-safety-check.yml']
   workflow_dispatch:
 
 permissions:
@@ -21,7 +22,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx vitest run tests/safety-check.test.ts
+      - run: npx vitest run tests/safety-check.test.ts tests/turnstile.test.ts
       - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:

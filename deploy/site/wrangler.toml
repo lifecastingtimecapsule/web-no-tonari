@@ -1,3 +1,4 @@
+# 変更履歴: 2026-11-15 Turnstile検証を本番2ホストだけに限定。Secretは管理画面のTURNSTILE_SECRETへ保存。
 # 変更履歴: 2026-11-08 サイト本体をCloudflare Workers（静的アセット）で配信する設定を追加。
 # 変更履歴: 2026-11-08 http://をhttps://へ転送するため、アセットより先に入口のスクリプトを通す設定へ変更。
 # ビルドは SITE_URL・BASE_PATH=/ を指定した dist を配信する。保護ヘッダーは public/_headers で付与する。
@@ -5,6 +6,9 @@ name = "web-no-tonari"
 main = "src/index.ts"
 compatibility_date = "2026-11-01"
 workers_dev = true
+
+[vars]
+TURNSTILE_HOSTNAMES = "site-veil.com,www.site-veil.com"
 
 [assets]
 directory = "../../dist"

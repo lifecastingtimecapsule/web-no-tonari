@@ -6,7 +6,9 @@
 - メール照会はIPと復元不可ハッシュ化アドレスの二重制限とし、公開結果を有無と件数区分に限定。
 - `/privacy/` とフッター導線を追加。外部送信先・非保存・利用目的・IPの濫用対策利用を公開。
 - 公開ページと構造化データから `info@` を外し、フォームへ集約。内部の受信宛先は維持。
-- DMARCとTurnstileは外部設定が未実行のため、確認結果と公開前条件を `docs/design/2026-11-15-public-check-security.md` に記録。
+- DMARCを隔離方針で追加し、公開DNSの反映を確認。Turnstileは管理モードで作成し、2つのWorkerへSecretを保存。
+- URLチェックとメール照会は、Turnstileの成功・用途別action・本番hostnameが一致するまで外部へ接続しない。通常時の画面は維持し、必要な場合だけ確認画面を表示。
+- Secretはコード・文書へ保存せず、サーバー側の許可hostnameからlocalhostを除外。実装と未実施の公開後確認を `docs/design/2026-11-15-public-check-security.md` に記録。
 
 ## 2026-11-15：明るいセキュリティサービス本文と契約境界
 

@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-15 Turnstileが成功するまでメール照会元へ接続しない回帰検証を追加。
 // 変更履歴: 2026-11-15 第三者照会の濫用を抑えるため、結果を件数区分に限定し、IPとアドレス単位の制限を検証。
 // 変更履歴: 2026-11-11 公開メール照会の入力保護・失敗時の判定・メタ情報限定・重複統合を検証。実メールや外部APIは使わない。
 import {afterEach,describe,expect,it,vi} from 'vitest';
@@ -5,14 +6,15 @@ import {handleBreach,type BreachEnv} from '../deploy/site/src/breach';
 import {mergeBreaches,normalizeBreachDate,translateFields} from '../deploy/site/src/breach-model';
 /** 単一の許可済みアドレスを模擬し、認証情報を含まないテスト用環境を作る。 */
 function environment():BreachEnv {
- return {HIBP_API_KEY:'test-only',BREACH_RATE_LIMITER:{limit:vi.fn(async()=>({success:true}))},BREACH_BUDGET:{idFromName:name=>name,get:()=>({fetch:vi.fn(async()=>Response.json({allowed:true}))})}};
+ return {HIBP_API_KEY:'test-only',TURNSTILE_SECRET:'test-secret',TURNSTILE_HOSTNAMES:'site-veil.com',BREACH_RATE_LIMITER:{limit:vi.fn(async()=>({success:true}))},BREACH_BUDGET:{idFromName:name=>name,get:()=>({fetch:vi.fn(async()=>Response.json({allowed:true}))})}};
 }
-function request(fields:unknown={email:'test@example.com',consent:true},origin='https://site-veil.com') {
+function request(fields:unknown={email:'test@example.com',consent:true,turnstileToken:'valid-token'},origin='https://site-veil.com') {
  return new Request('https://site-veil.com/api/breach-check',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','CF-Connecting-IP':'192.0.2.2'},body:JSON.stringify(fields)});
 }
 /** 公式ホスト以外の通信や、メタ情報以外の応答への依存を検出する。 */
 function providerTransport(hibpStatus=200,xonStatus=200){
  return vi.fn(async(url:string,_options?:RequestInit)=>{
+  if(url.includes('turnstile/v0/siteverify'))return Response.json({success:true,action:'email_check',hostname:'site-veil.com'});
   if(url.includes('haveibeenpwned.com'))return hibpStatus===200?Response.json([{Name:'MovieBoxPro',Title:'MovieBoxPro',BreachDate:'2024-04-15',DataClasses:['Email addresses','Passwords'],Description:'Do not retain FULL_SECRET_VALUE',password:'FULL_SECRET_VALUE'}]):new Response(null,{status:hibpStatus});
   if(url.endsWith('/breaches'))return Response.json({exposedBreaches:[{breachID:'MovieBoxPro',breachedDate:'2024-04-01T00:00:00Z',exposedData:['Email addresses','Usernames'],sensitive:false,searchable:true}]});
   if(url.includes('api.xposedornot.com'))return xonStatus===200?Response.json({status:'success',email:'test@example.com',breaches:[['MovieBoxPro']],breach_details:[{name:'MovieBoxPro',description:'FULL_SECRET_VALUE'}]}):Response.json({Error:xonStatus===404?'Not found':'Unavailable'},{status:xonStatus});
@@ -47,9 +49,9 @@ describe('public breach check',()=>{
   const payload=await (await handleBreach(request(),environment())).json();expect(payload.result).toEqual({found:true,countBand:'1'});expect(payload.breaches).toBeUndefined();
  });
  it('上流の不正JSONを該当なしにしない',async()=>{
-  vi.stubGlobal('fetch',async()=>Response.json({unexpected:[]}));const response=await handleBreach(request(),environment());expect(response.status).toBe(503);
+  vi.stubGlobal('fetch',async(url:string)=>url.includes('turnstile/v0/siteverify')?Response.json({success:true,action:'email_check',hostname:'site-veil.com'}):Response.json({unexpected:[]}));const response=await handleBreach(request(),environment());expect(response.status).toBe(503);
  });
- it.each([{email:'a@example.com\r\nSecret: x',consent:true},{email:'a@example.com',consent:false},{email:'a@example.com',consent:true,website:'bot'},{email:'a'.repeat(1100),consent:true},[]])('不正入力・未同意・大きな本文で外部照会しない %j',async(fields)=>{
+ it.each([{email:'a@example.com\r\nSecret: x',consent:true,turnstileToken:'valid-token'},{email:'a@example.com',consent:false,turnstileToken:'valid-token'},{email:'a@example.com',consent:true,website:'bot',turnstileToken:'valid-token'},{email:'a'.repeat(1100),consent:true,turnstileToken:'valid-token'},[]])('不正入力・未同意・大きな本文で外部照会しない %j',async(fields)=>{
   const transport=vi.fn();vi.stubGlobal('fetch',transport);expect((await handleBreach(request(fields),environment())).status).toBe(400);expect(transport).not.toHaveBeenCalled();
  });
  it('外部Origin・GET・利用制限を拒否する',async()=>{
@@ -61,7 +63,7 @@ describe('public breach check',()=>{
  });
  it('IPと正規化したメールアドレスの両方で連続照会を制限する',async()=>{
   vi.stubGlobal('fetch',providerTransport());const env=environment();
-  await handleBreach(request({email:' Test@Example.com ',consent:true}),env);
+  await handleBreach(request({email:' Test@Example.com ',consent:true,turnstileToken:'valid-token'}),env);
   const limit=env.BREACH_RATE_LIMITER?.limit as ReturnType<typeof vi.fn>;
   expect(limit).toHaveBeenCalledTimes(2);
   expect(limit.mock.calls[0][0]).toEqual({key:'ip:192.0.2.2'});
@@ -69,8 +71,13 @@ describe('public breach check',()=>{
   expect(limit.mock.calls[1][0].key).not.toContain('test@example.com');
  });
  it('共通利用枠を予約できない場合は上流へ送信しない',async()=>{
-  const transport=vi.fn();vi.stubGlobal('fetch',transport);const env=environment();env.BREACH_BUDGET={idFromName:name=>name,get:()=>({fetch:async()=>new Response(null,{status:429})})};
-  expect((await handleBreach(request(),env)).status).toBe(429);expect(transport).not.toHaveBeenCalled();
+  const transport=vi.fn(async(url:string)=>url.includes('turnstile/v0/siteverify')?Response.json({success:true,action:'email_check',hostname:'site-veil.com'}):Promise.reject(new Error('照会元へ接続しない')));vi.stubGlobal('fetch',transport);const env=environment();env.BREACH_BUDGET={idFromName:name=>name,get:()=>({fetch:async()=>new Response(null,{status:429})})};
+  expect((await handleBreach(request(),env)).status).toBe(429);expect(transport).toHaveBeenCalledTimes(1);
+ });
+ it('Turnstileが失敗した場合はメール照会元へ接続しない',async()=>{
+  const transport=vi.fn(async(url:string)=>url.includes('turnstile/v0/siteverify')?Response.json({success:false,action:'email_check',hostname:'site-veil.com'}):Promise.reject(new Error('照会元へ接続しない')));
+  vi.stubGlobal('fetch',transport);const response=await handleBreach(request({email:'test@example.com',consent:true,turnstileToken:'bad-token'}),environment());
+  expect(response.status).toBe(403);expect(transport).toHaveBeenCalledTimes(1);
  });
 });
 describe('metadata normalization',()=>{

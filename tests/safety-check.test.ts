@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-15 Turnstileが成功するまで対象サイトへ接続しない回帰検証を追加。
 // 変更履歴: 2026-11-15 名前解決後の非公開IP、別ホスト転送、分散レート制限の回帰検証を追加。
 // 変更履歴: 2026-11-08 安全チェックの入力制限と判定（3段階・確認できず）を固定するテストを追加。
 import { describe, expect, it, vi, afterEach } from 'vitest';
@@ -90,7 +91,8 @@ describe('worker', () => {
   afterEach(() => vi.unstubAllGlobals());
   const ctx = { waitUntil: () => undefined };
   const limiter = { limit: vi.fn(async () => ({ success: true })) };
-  const env = { ALLOWED_ORIGINS: 'https://lifecastingtimecapsule.github.io', SAFETY_RATE_LIMITER: limiter };
+  const env = { ALLOWED_ORIGINS: 'https://lifecastingtimecapsule.github.io', SAFETY_RATE_LIMITER: limiter, TURNSTILE_SECRET: 'test-secret', TURNSTILE_HOSTNAMES: 'site-veil.com' };
+  const checkRequest = (target: string, token = 'valid-token') => new Request(`https://w.example/api/check?url=${target}`, { headers: { Origin: env.ALLOWED_ORIGINS, 'X-Turnstile-Token': token } });
 
   /** DNS照会に公開IPを返し、テストが対象サイトの応答だけに集中できるようにする。 */
   const publicDns = (input: string): Response | null => {
@@ -101,6 +103,11 @@ describe('worker', () => {
     const answer = input.includes('_dmarc') ? '"v=DMARC1; p=quarantine"' : '"v=spf1 -all"';
     return Response.json({ Status: 0, Answer: [{ type: 16, data: answer }] });
   };
+
+  /** 成功したTurnstile検証を返し、その後の安全チェックだけを各テストで差し替えられるようにする。 */
+  const turnstile = (input: string): Response | null => input.includes('challenges.cloudflare.com/turnstile/v0/siteverify')
+    ? Response.json({ success: true, action: 'safety_check', hostname: 'site-veil.com' })
+    : null;
 
   it('許可していないオリジンからの確認を断る', async () => {
     const response = await worker.fetch(new Request('https://w.example/api/check?url=example.com', { headers: { Origin: 'https://evil.example' } }), env, ctx);
@@ -119,17 +126,19 @@ describe('worker', () => {
     const requested: string[] = [];
     vi.stubGlobal('fetch', vi.fn(async (input: string) => {
       requested.push(input);
+      const turnstileResponse = turnstile(input);
+      if (turnstileResponse) return turnstileResponse;
       if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
       const dnsResponse = publicDns(input);
       if (dnsResponse) return dnsResponse;
       return new Response(securePage.html, { headers: { 'Content-Type': 'text/html', ...securePage.headers } });
     }));
-    const response = await worker.fetch(new Request('https://w.example/api/check?url=www.example.com', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
+    const response = await worker.fetch(checkRequest('www.example.com'), env, ctx);
     const body = await response.json() as { counts: Record<string, number> };
     expect(response.status).toBe(200);
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe(env.ALLOWED_ORIGINS);
     expect(body.counts).toMatchObject({ action: 0, unknown: 0 });
-    expect(requested.filter((url) => !url.includes('dns-query'))).toEqual(['https://www.example.com/', 'http://www.example.com/']);
+    expect(requested.filter((url) => !url.includes('dns-query') && !url.includes('turnstile/v0/siteverify'))).toEqual(['https://www.example.com/', 'http://www.example.com/']);
     expect(limiter.limit).toHaveBeenCalledWith({ key: 'safety:unknown' });
   });
 
@@ -137,25 +146,29 @@ describe('worker', () => {
     const requested: string[] = [];
     vi.stubGlobal('fetch', vi.fn(async (input: string) => {
       requested.push(input);
+      const turnstileResponse = turnstile(input);
+      if (turnstileResponse) return turnstileResponse;
       if (input.includes('dns-query')) return Response.json({ Status: 0, Answer: [{ type: 1, data: '169.254.169.254' }] });
       throw new Error('対象サイトへは接続しない');
     }));
-    const response = await worker.fetch(new Request('https://w.example/api/check?url=metadata.example', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
+    const response = await worker.fetch(checkRequest('metadata.example'), env, ctx);
     expect(response.status).toBe(400);
-    expect(requested.every((url) => url.includes('cloudflare-dns.com/dns-query'))).toBe(true);
+    expect(requested.every((url) => url.includes('cloudflare-dns.com/dns-query') || url.includes('turnstile/v0/siteverify'))).toBe(true);
   });
 
   it('別ホストへの転送を追跡しない', async () => {
     const requested: string[] = [];
     vi.stubGlobal('fetch', vi.fn(async (input: string) => {
       requested.push(input);
+      const turnstileResponse = turnstile(input);
+      if (turnstileResponse) return turnstileResponse;
       const dnsResponse = publicDns(input);
       if (dnsResponse) return dnsResponse;
       if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
       if (input === 'https://example.org/') throw new Error('別ホストを追跡しない');
       return new Response(null, { status: 302, headers: { Location: 'https://example.org/' } });
     }));
-    const response = await worker.fetch(new Request('https://w.example/api/check?url=redirector.example.net', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
+    const response = await worker.fetch(checkRequest('redirector.example.net'), env, ctx);
     expect(response.status).toBe(200);
     expect(requested).not.toContain('https://example.org/');
     expect((await response.json()).reachable).toBe(false);
@@ -169,5 +182,15 @@ describe('worker', () => {
     const limitedEnv = { ...env, SAFETY_RATE_LIMITER: { limit: async () => ({ success: false }) } };
     expect((await worker.fetch(request.clone(), limitedEnv, ctx)).status).toBe(429);
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('Turnstileが失敗した場合はDNSにも対象サイトにも接続しない', async () => {
+    const transport=vi.fn(async(input:string)=>input.includes('turnstile/v0/siteverify')
+      ? Response.json({success:false,action:'safety_check',hostname:'site-veil.com'})
+      : Promise.reject(new Error('Turnstile以外へ接続しない')));
+    vi.stubGlobal('fetch',transport);
+    const response=await worker.fetch(checkRequest('example.com','bad-token'),env,ctx);
+    expect(response.status).toBe(403);
+    expect(transport).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,7 +1,9 @@
+// 変更履歴: 2026-11-15 Turnstileの成功・action・本番hostnameを確認してから外部照会するよう変更。
 // 変更履歴: 2026-11-15 公開結果を件数区分に限定し、IPとアドレス単位の濫用制限を追加。
 // 変更履歴: 2026-11-11 HIBP・XposedOrNotの公開漏えいメタ情報を同時照会。入力・結果の保存やログ出力は行わない。
 import {cleanLabel,mergeBreaches,normalizeBreachDate,translateFields,type BreachRecord,type Provider} from './breach-model';
-export interface BreachEnv {
+import {verifyTurnstile,type TurnstileEnv} from '../../../workers/shared/turnstile';
+export interface BreachEnv extends TurnstileEnv {
   HIBP_API_KEY?:string;
   BREACH_RATE_LIMITER?:{limit(options:{key:string}):Promise<{success:boolean}>};
   BREACH_BUDGET?:{idFromName(name:string):unknown;get(id:unknown):{fetch(request:Request):Promise<Response>}};
@@ -111,9 +113,12 @@ export async function handleBreach(request:Request,env:BreachEnv):Promise<Respon
     const ip=request.headers.get('CF-Connecting-IP')||'unknown';
     if(!(await env.BREACH_RATE_LIMITER.limit({key:`ip:${ip}`})).success)return respond(429,{message:'続けて照会されています。1分ほどおいてお試しください。'});
     let fields:Record<string,unknown>;
-    try{const submitted=await boundedJson(request,1024);if(!submitted||typeof submitted!=='object'||Array.isArray(submitted))throw new Error('schema');fields=submitted as Record<string,unknown>;}catch{return respond(400,{message:'メールアドレスと確認欄を見直してください。'});}
+    try{const submitted=await boundedJson(request,4096);if(!submitted||typeof submitted!=='object'||Array.isArray(submitted))throw new Error('schema');fields=submitted as Record<string,unknown>;}catch{return respond(400,{message:'メールアドレスと確認欄を見直してください。'});}
     const email=typeof fields.email==='string'?fields.email.trim().toLowerCase():'';
     if(fields.website||fields.consent!==true||email.length>254||!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i.test(email)||email.split('@')[0].startsWith('.')||email.includes('..'))return respond(400,{message:'メールアドレスと確認欄を見直してください。'});
+    const turnstile=await verifyTurnstile({request,env,token:fields.turnstileToken,expectedAction:'email_check'});
+    if(turnstile==='unavailable')return respond(503,{message:'照会を利用できません。時間をおいてお試しください。'});
+    if(turnstile!=='valid')return respond(403,{message:'操作を確認できませんでした。画面を更新して、もう一度お試しください。'});
     if(!(await env.BREACH_RATE_LIMITER.limit({key:await emailRateLimitKey(email)})).success)return respond(429,{message:'このメールアドレスは続けて照会されています。時間をおいてお試しください。'});
     const results=await Promise.all([lookupHibp(email,env),lookupXon(email,env)]);
     const successful=results.filter(result=>result.status==='ok');

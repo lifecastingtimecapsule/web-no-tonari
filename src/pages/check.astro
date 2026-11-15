@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 通常時の見た目を保つTurnstileの受け口を安全チェック実行欄へ追加。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
 // 変更履歴: 2026-11-11 顧客が作業内容を判断できる平易な表現へ統一。金額・契約範囲は維持。
 // 変更履歴: 2026-11-11 有料メニューを一律20%値上げし、本文・紹介・メタ情報の料金を統一。無料と対象範囲は維持。
@@ -13,6 +14,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 // 変更履歴: 2026-11-08 公開済みWorkerのURLを既定値にし、リポジトリ変数がなくても動くよう変更（変数があれば優先）。
 const checkApi = import.meta.env.PUBLIC_SAFETY_CHECK_API || 'https://web-no-tonari-safety-check.amaretto.workers.dev';
 const apiAvailable = Boolean(checkApi);
+const turnstileSitekey = '0x4AAAAAAGBp3rc6eEe2zLBS';
 const checks = [
   ['通信の暗号化', 'https:// で開けるか、http:// から自動で切り替わるか、暗号化を固定する設定（HSTS）があるか。'],
   ['ブラウザ向けの保護設定', '他サイトへの埋め込みや、読み込み元の制限など、主な4つの設定が有効か。'],
@@ -34,6 +36,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
       <input id="check-url" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com" required aria-describedby="check-disclosure check-status" />
       <button class="button button--human" type="submit" data-check-run disabled={!apiAvailable}>チェックする</button>
     </div>
+    <div class="check-form__challenge" data-turnstile data-sitekey={turnstileSitekey}></div>
     <p id="check-disclosure" class="check-form__note">確認するのはトップページ1件と、サイトのアドレスに関する公開設定（DNS）だけです。侵入や攻撃にあたる操作は行いません。</p>
     <p id="check-status" class="check-form__status" role="status" aria-live="polite" data-check-status>{apiAvailable ? '' : 'チェック機能は公開準備中です。お急ぎの場合は、お問い合わせからご相談ください。'}</p>
   </form>
@@ -76,6 +79,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 .check-form { padding: 28px; border-radius: 16px; background: var(--mist-light); }
 .check-form label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; }
 .check-form__row { display: flex; gap: 12px; }
+.check-form__challenge:not(:empty) { margin-top: 14px; }
 .check-form input { flex: 1; min-width: 0; min-height: 52px; padding: 12px 14px; border: 1px solid var(--input-border); border-radius: 8px; background: white; color: var(--ink); font: inherit; }
 .check-form .button { flex: none; width: auto; min-height: 52px; }
 .check-form .button:disabled { opacity: .45; cursor: not-allowed; }

@@ -1,5 +1,8 @@
+// 変更履歴: 2026-11-15 実行ごとにTurnstileの単回トークンを取得し、API送信後に破棄するよう変更。
 // 変更履歴: 2026-11-08 安全チェックAPIの呼び出し、3段階の結果表示、相談欄への引き継ぎを追加。
 // 役割: 入力URLの軽い検証、有限時間の呼び出し、取得結果だけの描画（結果を創作しない）を担当する。
+
+import {createTurnstileController} from './turnstile';
 
 type Status = 'ok' | 'advice' | 'action' | 'unknown';
 interface Item { id: string; title: string; status: Status; summary: string; detail: string }
@@ -14,6 +17,8 @@ const button = document.querySelector<HTMLButtonElement>('[data-check-run]')!;
 const status = document.querySelector<HTMLElement>('[data-check-status]')!;
 const resultSection = document.querySelector<HTMLElement>('[data-check-result]')!;
 const consult = document.querySelector<HTMLAnchorElement>('[data-check-consult]')!;
+const challenge = document.querySelector<HTMLElement>('[data-turnstile]')!;
+const turnstile=createTurnstileController(challenge,'safety_check');
 const api = form.dataset.api?.replace(/\/$/, '') ?? '';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
@@ -94,7 +99,8 @@ async function runCheck(event?: Event): Promise<void> {
   button.textContent = '確認しています…';
   status.textContent = '確認しています。10秒ほどかかる場合があります。';
   try {
-    const response = await fetch(`${api}/api/check?url=${encodeURIComponent(entered)}`, { signal: AbortSignal.timeout(30000) });
+    const turnstileToken=await turnstile.token();
+    const response = await fetch(`${api}/api/check?url=${encodeURIComponent(entered)}`, { headers:{'X-Turnstile-Token':turnstileToken},signal: AbortSignal.timeout(30000) });
     const data = await response.json() as Result & { message?: string };
     if (!response.ok) {
       status.textContent = data.message ?? '確認できませんでした。時間をおいてお試しください。';
@@ -109,6 +115,7 @@ async function runCheck(event?: Event): Promise<void> {
   } catch {
     status.textContent = '確認できませんでした。通信状況を確かめて、時間をおいてお試しください。';
   } finally {
+    turnstile.reset();
     button.disabled = false;
     button.textContent = 'チェックする';
   }

@@ -1,3 +1,4 @@
+# 変更履歴: 2026-11-15 Turnstile検証を本番2ホストだけに限定。Secretは管理画面のTURNSTILE_SECRETへ保存。
 # 変更履歴: 2026-11-11 新ドメインからの簡易チェックを許可。
 # 変更履歴: 2026-11-08 「かんたん安全チェック」APIのCloudflare Workers設定を追加。
 name = "web-no-tonari-safety-check"
@@ -9,6 +10,7 @@ workers_dev = true
 
 [vars]
 ALLOWED_ORIGINS = "https://site-veil.com,https://www.site-veil.com,https://web-no-tonari.amaretto.workers.dev,https://lifecastingtimecapsule.github.io,http://127.0.0.1:4321,http://localhost:4321"
+TURNSTILE_HOSTNAMES = "site-veil.com,www.site-veil.com"
 
 # 変更履歴: 2026-11-15 キャッシュ命中も含めた全照会を複数Worker間で制限。
 [[ratelimits]]

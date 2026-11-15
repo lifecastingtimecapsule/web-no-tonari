@@ -1,11 +1,13 @@
+// 変更履歴: 2026-11-15 Turnstileの成功・action・本番hostnameを確認してから外部サイトへ接続するよう変更。
 // 変更履歴: 2026-11-15 名前解決後の非公開IPを遮断し、転送を同一ホスト2回まで、呼び出し制限をCloudflare共有カウンタに変更。
 // 変更履歴: 2026-11-08 「かんたん安全チェック」のCloudflare Worker入口を追加。
 // 役割: 公開サイトのトップページ1件とDNSのTXTだけを取得し、確認結果をJSONで返す。
 // 方針: 1回の確認でトップページへのGETは最大2系統（https・http）、転送は同一ホスト2回まで。結果は10分間キャッシュする。
 import { analyzeMail, analyzePage, countStatuses, isIpLiteral, joinTxtData, normalizeTarget, organizationalDomain } from './checks';
 import type { PageSnapshot } from './checks';
+import {verifyTurnstile,type TurnstileEnv} from '../../shared/turnstile';
 
-export interface Env {
+export interface Env extends TurnstileEnv {
   /** カンマ区切りで、APIを呼べるサイトのオリジンを指定する。 */
   ALLOWED_ORIGINS?: string;
   /** 複数インスタンス間で共有する無料照会の回数制限。 */
@@ -32,7 +34,7 @@ function corsHeaders(request: Request, env: Env): Record<string, string> {
   const origin = request.headers.get('Origin') ?? '';
   const allowed = (env.ALLOWED_ORIGINS ?? 'https://lifecastingtimecapsule.github.io').split(',').map((value) => value.trim());
   return allowed.includes(origin)
-    ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Max-Age': '86400', Vary: 'Origin' }
+    ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET, OPTIONS', 'Access-Control-Allow-Headers': 'X-Turnstile-Token', 'Access-Control-Max-Age': '86400', Vary: 'Origin' }
     : { Vary: 'Origin' };
 }
 
@@ -199,6 +201,10 @@ export default {
     if (!env.SAFETY_RATE_LIMITER) return json({ error: 'unavailable', message: ERROR_MESSAGES.unavailable }, 503, cors);
     const clientKey = request.headers.get('CF-Connecting-IP') ?? 'unknown';
     if (!(await env.SAFETY_RATE_LIMITER.limit({ key: `safety:${clientKey}` })).success) return json({ error: 'rate', message: ERROR_MESSAGES.rate }, 429, cors);
+
+    const turnstile=await verifyTurnstile({request,env,token:request.headers.get('X-Turnstile-Token'),expectedAction:'safety_check'});
+    if(turnstile==='unavailable')return json({error:'unavailable',message:ERROR_MESSAGES.unavailable},503,cors);
+    if(turnstile!=='valid')return json({error:'challenge',message:'操作を確認できませんでした。画面を更新して、もう一度お試しください。'},403,cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
     const cacheKey = new Request(`https://safety-check.cache/v6/${normalized.url.hostname}`);
