@@ -1,0 +1,41 @@
+---
+// 変更履歴: 2026-11-15 SITEVEILの役割と単発・定期の違いを、明るい編集的レイアウトで追加。
+// 役割: 無料チェックの次に、完全保証ではなく確認可能なリスクの発見を提供する会社だと伝える。
+import { serviceModes } from '../data/security-service-policy';
+---
+<section class="editorial-section positioning" id="positioning" aria-labelledby="positioning-title">
+  <div class="editorial-shell positioning__grid">
+    <p class="editorial-index">見つける会社</p>
+    <div class="positioning__copy">
+      <h2 id="positioning-title">確認できるリスクを、早期に見つける。</h2>
+      <p>SITEVEILは、すべての攻撃を防ぐことや、安全を完全に保証することを約束する会社ではありません。サイト・メール・業務システムの状態を確認し、見つかったリスクと、まだ確認できていない範囲を分けてお伝えします。</p>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-section service-modes" id="service-modes" aria-labelledby="service-modes-title">
+  <div class="editorial-shell">
+    <div class="editorial-heading">
+      <h2 id="service-modes-title">一度確かめる。<br />変化を見ていく。</h2>
+      <p>必要な時点を確認する単発診断と、契約で決めた範囲を定期的に確認するサービスを分けています。</p>
+    </div>
+    <div class="service-modes__list">
+      {serviceModes.map((mode) => (
+        <article class:list={['service-mode', `service-mode--${mode.id}`]}>
+          <div class="service-mode__heading">
+            <h3>{mode.publicName}</h3>
+            <p>{mode.summary}</p>
+          </div>
+          <div class="service-mode__details">
+            <p class="service-mode__timing">{mode.timing}</p>
+            <dl>
+              <div><dt>含むこと</dt><dd>{mode.included.join('／')}</dd></div>
+              <div><dt>含まないこと</dt><dd>{mode.excluded.join('／')}</dd></div>
+            </dl>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="editorial-document-link"><a href="/service-specification/">確認項目と契約前に決める内容を見る</a></p>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+---
+// 変更履歴: 2026-11-15 更新通知、複製環境での検証、報告書の境界をホームへ追加。
+// 役割: 契約前に誤解されやすい作業範囲を、関連するサービス説明の近くで明示する。
+import { cloneTestBoundary, updateBoundary } from '../data/security-service-policy';
+---
+<section class="editorial-section boundary-section boundary-section--update" id="update-boundary" aria-labelledby="update-boundary-title">
+  <div class="editorial-shell boundary-grid">
+    <div class="boundary-grid__heading">
+      <p class="editorial-index">更新について</p>
+      <h2 id="update-boundary-title">知らせることと、<br />更新することは別です。</h2>
+    </div>
+    <div class="boundary-comparison">
+      <div>
+        <h3>定期リスクウォッチに含む</h3>
+        <ul>{updateBoundary.included.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <div>
+        <h3>別途ご依頼いただく作業</h3>
+        <ul>{updateBoundary.separateWork.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <p>{updateBoundary.note}</p>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-section boundary-section boundary-section--clone" id="clone-testing" aria-labelledby="clone-testing-title">
+  <div class="editorial-shell boundary-grid">
+    <div class="boundary-grid__heading">
+      <p class="editorial-index">侵入テスト</p>
+      <h2 id="clone-testing-title">試すのは、<br />本番ではありません。</h2>
+    </div>
+    <div class="boundary-copy">
+      <p class="boundary-copy__lead">{cloneTestBoundary.environment}</p>
+      <p>本番環境では、{cloneTestBoundary.productionProhibited.join('、')}を行いません。複製環境では、{cloneTestBoundary.clonePreparation.join('、')}したうえで検証します。</p>
+      <p>{cloneTestBoundary.report}</p>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-section reporting" id="reporting" aria-labelledby="reporting-title">
+  <div class="editorial-shell reporting__grid">
+    <div>
+      <p class="editorial-index">報告書</p>
+      <h2 id="reporting-title">分かったことと、<br />分からないことを残す。</h2>
+    </div>
+    <div class="reporting__body">
+      <p>結果だけでなく、何をどの方法で確認したか、本番との差異、確認できなかった範囲、対応の優先順位を記録します。</p>
+      <ul>
+        <li>合意した対象と実施した確認</li>
+        <li>確認できた根拠と影響</li>
+        <li>未確認の範囲と追加確認の候補</li>
+        <li>先に対応する項目の整理</li>
+      </ul>
+      <div class="reporting__documents">
+        <a href="/service-specification/">サービス仕様</a>
+        <a href="/terms/">利用規約</a>
+      </div>
+    </div>
+  </div>
+</section>
