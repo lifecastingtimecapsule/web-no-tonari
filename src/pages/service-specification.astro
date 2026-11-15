@@ -1,0 +1,88 @@
+---
+// 変更履歴: 2026-11-15 セキュリティサービスの確定範囲と契約前に決める項目を公開する仕様ページを追加。
+// 役割: LPの短い説明だけでは判断できない確認頻度、作業対象外、中止条件、成果物を契約前に確認できるようにする。
+import SiteLayout from '../layouts/SiteLayout.astro';
+import {
+  cloneTestBoundary,
+  monitoringDraft,
+  serviceModes,
+  updateBoundary,
+} from '../data/security-service-policy';
+import '../styles/security-editorial.css';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+---
+<SiteLayout
+  title="サービス仕様｜SITEVEIL"
+  description="SITEVEILの単発リスクチェック、定期リスクウォッチ、更新情報の通知、複製環境での侵入テストについて、含むことと含まないことを説明します。"
+  breadcrumbs={[{name:'ホーム',path:home},{name:'サービス仕様',path:`${home}service-specification/`}]}
+>
+  <article class="policy-page shell">
+    <nav class="policy-page__breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><span aria-current="page">サービス仕様</span></nav>
+    <header class="policy-page__hero">
+      <p>サービス仕様</p>
+      <h1>どこまで確認し、<br />どこから別の仕事になるか。</h1>
+      <p>SITEVEILは、確認できるリスクを早期に見つけ、判断できる形に整理します。安全の完全保証、常時監視、自動修正を提供するものではありません。</p>
+    </header>
+
+    <section class="policy-page__section policy-page__decision" aria-labelledby="decision-title">
+      <h2 id="decision-title">確定していること／契約前に確定すること</h2>
+      <div>
+        <article><h3>確定していること</h3><p>許可された範囲だけを確認し、確認できたことと未確認の範囲を分けて報告します。本番環境で侵入を伴う検証は行いません。</p></article>
+        <article><h3>契約前に確定すること</h3><p>対象URL・環境・確認項目・頻度・通知期限・許可操作・停止方法・成果物・費用を、申込書または個別契約で決めます。</p></article>
+      </div>
+    </section>
+
+    <section class="policy-page__section" aria-labelledby="mode-title">
+      <h2 id="mode-title">単発と定期の違い</h2>
+      <div class="policy-page__rows">
+        {serviceModes.map((mode) => (
+          <article>
+            <h3>{mode.publicName}</h3>
+            <p><strong>確認する時点：</strong>{mode.timing}</p>
+            <p><strong>含むこと：</strong>{mode.included.join('／')}</p>
+            <p><strong>含まないこと：</strong>{mode.excluded.join('／')}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="policy-page__section policy-page__proposal" aria-labelledby="monitoring-title">
+      <div class="policy-page__section-heading">
+        <h2 id="monitoring-title">定期リスクウォッチの確認頻度</h2>
+        <p>{monitoringDraft.label}</p>
+      </div>
+      <p>以下は運用可能性の検証中であり、公開時点の保証頻度ではありません。実際に提供する対象と頻度だけを契約前に確定します。</p>
+      <dl>
+        {monitoringDraft.items.map((item) => <div><dt>{item.target}</dt><dd>{item.proposedFrequency}</dd></div>)}
+      </dl>
+      <p>{monitoringDraft.proposedNotification}</p>
+    </section>
+
+    <section class="policy-page__section" aria-labelledby="update-title">
+      <h2 id="update-title">更新情報の通知と更新作業</h2>
+      <div class="policy-page__split">
+        <div><h3>定期確認に含む</h3><ul>{updateBoundary.included.map((item) => <li>{item}</li>)}</ul></div>
+        <div><h3>別契約の作業</h3><ul>{updateBoundary.separateWork.map((item) => <li>{item}</li>)}</ul></div>
+      </div>
+      <p>{updateBoundary.note}</p>
+    </section>
+
+    <section class="policy-page__section" aria-labelledby="clone-title">
+      <h2 id="clone-title">複製環境での侵入テスト</h2>
+      <p>{cloneTestBoundary.environment}</p>
+      <p><strong>本番環境で行わないこと：</strong>{cloneTestBoundary.productionProhibited.join('／')}</p>
+      <p><strong>複製環境の準備：</strong>{cloneTestBoundary.clonePreparation.join('／')}</p>
+      <p>{cloneTestBoundary.report}</p>
+      <div class="policy-page__stop">
+        <h3>中止条件</h3>
+        <p>合意外の対象への到達、実データまたは本番用認証情報の発見、予期しない外部送信、サービス停止につながる兆候、事前合意した負荷または時間の上限到達を確認した場合は、その操作を中止して連絡します。</p>
+      </div>
+    </section>
+
+    <section class="policy-page__section" aria-labelledby="report-title">
+      <h2 id="report-title">報告書と調査データ</h2>
+      <p>報告書には、合意した対象、実施日時、確認方法、確認できた結果、根拠、優先順位、本番との差異、未確認範囲を記載します。未確認の項目を「問題なし」とは扱いません。</p>
+      <p>有料検査の調査データは、現在の案内どおり報告書発送後30日で削除します。法令、個別契約または事故対応上の保存義務がある場合は、その条件を契約前に明示します。</p>
+    </section>
+  </article>
+</SiteLayout>
