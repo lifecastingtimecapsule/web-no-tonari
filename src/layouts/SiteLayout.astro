@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 クロール対象となる構造化データから公開メールアドレスを削除。
 // 変更履歴: 2026-11-15 共有画像と説明をセキュリティ専門へ更新。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-08 ページごとに複製されていたhead・ロゴ・ヘッダー・フッターを共通レイアウトへ集約。
@@ -17,7 +18,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const canonical = new URL(noindex && homePage ? home : Astro.url.pathname, Astro.site ?? 'https://site-veil.com').toString();
 const organizationRoot = new URL(home, Astro.site ?? 'https://site-veil.com').href;
 const organizationSchema = {'@context':'https://schema.org','@graph':[
-  {'@type':'Organization','@id':`${organizationRoot}#organization`,name:'SITEVEIL',legalName:'株式会社ライフキャスティングジャパン',url:organizationRoot,email:'info@site-veil.com',logo:new URL(`${home}brand/siteveil-horizontal-black.svg`,organizationRoot).href,address:{'@type':'PostalAddress',addressRegion:'愛知県',addressLocality:'大府市',addressCountry:'JP'}},
+  {'@type':'Organization','@id':`${organizationRoot}#organization`,name:'SITEVEIL',legalName:'株式会社ライフキャスティングジャパン',url:organizationRoot,logo:new URL(`${home}brand/siteveil-horizontal-black.svg`,organizationRoot).href,address:{'@type':'PostalAddress',addressRegion:'愛知県',addressLocality:'大府市',addressCountry:'JP'}},
   {'@type':'WebSite','@id':`${organizationRoot}#website`,url:organizationRoot,name:'SITEVEIL',inLanguage:'ja',publisher:{'@id':`${organizationRoot}#organization`}},
   {'@type':'WebPage',url:canonical,name:title,description,inLanguage:'ja',isPartOf:{'@id':`${organizationRoot}#website`}},
   // 役割: 画面に表示するパンくずと同じ階層だけを検索エンジンへ伝える。

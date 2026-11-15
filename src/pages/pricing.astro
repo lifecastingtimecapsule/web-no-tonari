@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 無料メール照会の公開結果を詳細から件数区分へ限定。
 // 変更履歴: 2026-11-15 セキュリティ専門の料金表へ転換。制作・SEO・業務開発の価格案内を終了し、既存検査料金は維持。
 // 役割: 確認・検査・保守・更新の費用と対象外を一つのページで説明する。
 import SiteLayout from '../layouts/SiteLayout.astro';
@@ -13,7 +14,7 @@ const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 <div class="shell catalog-page pricing-page"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><span aria-current="page">料金</span></nav><header class="catalog-heading"><h1>調べる範囲と、<br/>費用を明確に。</h1><p>すべて税込。追加作業は、内容と費用にご了承いただいてから進めます。</p></header>
 <PricingSummary/>
 <section class="pricing-section" id="included"><h2>基本確認・保守・漏えいチェック</h2>
-{pricingPlans.filter(plan=>['maintenance','security','email-breach-check'].includes(plan.id)).map(plan=><article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan&&<p>{plan.status}</p>}<p class="price-detail__amount">{plan.id==='email-breach-check'?'無料':formatPrice(plan.amount)}<span>{plan.id==='email-breach-check'?'オンラインの詳細結果':`税込・${plan.unit}`}</span></p>{plan.id==='email-breach-check'&&<p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み／準備中）</p>}<p>{plan.lead}</p></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p>{plan.note}</p><h4>別料金・対象外</h4><p>{plan.excluded}</p><a class="text-link" href={plan.id==='email-breach-check'?`${home}email-check/`:`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.id==='email-breach-check'?'無料でメールを確認する':`${plan.name}について問い合わせる`}</a></div></article>)}
+{pricingPlans.filter(plan=>['maintenance','security','email-breach-check'].includes(plan.id)).map(plan=><article class="price-detail" id={plan.id}><header><h3>{plan.name}</h3>{'status' in plan&&<p>{plan.status}</p>}<p class="price-detail__amount">{plan.id==='email-breach-check'?'無料':formatPrice(plan.amount)}<span>{plan.id==='email-breach-check'?'オンラインの件数区分':`税込・${plan.unit}`}</span></p>{plan.id==='email-breach-check'&&<p>郵送報告書 {formatPrice(plan.amount)}（税込・国内送料込み／準備中）</p>}<p>{plan.lead}</p></header><div class="price-detail__scope"><h4>含まれる内容</h4><ul>{plan.included.map(item=><li>{item}</li>)}</ul><p>{plan.note}</p><h4>別料金・対象外</h4><p>{plan.excluded}</p><a class="text-link" href={plan.id==='email-breach-check'?`${home}email-check/`:`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.id==='email-breach-check'?'無料でメールを確認する':`${plan.name}について問い合わせる`}</a></div></article>)}
 </section><EmergencyMaintenancePlans/><SecurityInvestigationPlans/>
 <section class="catalog-close"><h2>どこから調べるか、相談できます。</h2><p>状況が分からない段階でも大丈夫です。対象・必要な資料・実施できる範囲を確認し、正式な費用をご案内します。検査で全ての弱点の発見や安全を保証するものではありません。</p><a class="button button--human" href={`${home}#contact`}>お問い合わせ</a></section></div>
 </SiteLayout>

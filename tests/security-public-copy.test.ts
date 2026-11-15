@@ -8,6 +8,11 @@ import policySource from '../src/data/security-service-policy.ts?raw';
 import footerSource from '../src/components/SiteFooter.astro?raw';
 import sitemapSource from '../src/pages/sitemap.xml.ts?raw';
 import termsSource from '../src/pages/terms.astro?raw';
+import privacySource from '../src/pages/privacy.astro?raw';
+import layoutSource from '../src/layouts/SiteLayout.astro?raw';
+import securitySource from '../src/pages/security.astro?raw';
+import contactSource from '../deploy/site/src/contact.ts?raw';
+import emailCheckSource from '../src/pages/email-check.astro?raw';
 
 describe('SITEVEILの公開ホーム', () => {
   it('keeps_the_approved_hero_and_safety_check_first', () => {
@@ -31,8 +36,12 @@ describe('SITEVEILの公開ホーム', () => {
   it('links_visible_boundaries_to_their_full_documents', () => {
     const homeSources = [homeSource, positioningSource, boundariesSource].join('\n');
 
-    expect(homeSources).toContain('href="/service-specification/"');
-    expect(homeSources).toContain('href="/terms/"');
+    expect(homeSources).toContain('service-specification/');
+    expect(homeSources).toContain('terms/');
+    expect(homeSources).not.toContain('href="/service-specification/"');
+    expect(homeSources).not.toContain('href="/terms/"');
+    expect(positioningSource).toContain('import.meta.env.BASE_URL');
+    expect(boundariesSource).toContain('import.meta.env.BASE_URL');
     expect(homeSources).not.toContain('守り続ける');
     expect(homeSources).not.toContain('安心して使い続ける');
   });
@@ -75,6 +84,29 @@ describe('利用規約', () => {
     expect(footerSource).toContain('利用規約');
     expect(footerSource).toContain('terms/');
     expect(sitemapSource).toContain("'terms/'");
+  });
+});
+
+describe('プライバシーと公開連絡先', () => {
+  it('メール照会の外部送信・非保存・濫用対策を事前に公開する', () => {
+    expect(privacySource).toContain('Have I Been Pwned');
+    expect(privacySource).toContain('XposedOrNot');
+    expect(privacySource).toContain('メールアドレスと照会結果は保存しません');
+    expect(privacySource).toContain('IPアドレス');
+    expect(privacySource).toContain('利用目的');
+    expect(footerSource).toContain('プライバシーポリシー');
+    expect(footerSource).toContain('privacy/');
+    expect(sitemapSource).toContain("'privacy/'");
+    expect(emailCheckSource).toContain('既知の漏えい記録の有無と件数区分');
+    expect(emailCheckSource).not.toContain('サービス名・時期・情報の種類を確認できます');
+  });
+
+  it('公開画面にinfoアドレスを直接掲載せず、フォームへ集約する', () => {
+    const publicSources = `${footerSource}\n${layoutSource}\n${securitySource}\n${termsSource}\n${contactSource}`;
+    expect(publicSources).not.toContain('mailto:info@site-veil.com');
+    expect(layoutSource).not.toContain("email:'info@site-veil.com'");
+    expect(contactSource).not.toContain('へお送りください。');
+    expect(footerSource).toContain('お問い合わせフォーム');
   });
 });
 

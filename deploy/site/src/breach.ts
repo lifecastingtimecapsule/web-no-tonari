@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-15 公開結果を件数区分に限定し、IPとアドレス単位の濫用制限を追加。
 // 変更履歴: 2026-11-11 HIBP・XposedOrNotの公開漏えいメタ情報を同時照会。入力・結果の保存やログ出力は行わない。
 import {cleanLabel,mergeBreaches,normalizeBreachDate,translateFields,type BreachRecord,type Provider} from './breach-model';
 export interface BreachEnv {
@@ -6,7 +7,6 @@ export interface BreachEnv {
   BREACH_BUDGET?:{idFromName(name:string):unknown;get(id:unknown):{fetch(request:Request):Promise<Response>}};
 }
 interface ProviderResult {source:Provider;status:'ok'|'error'|'limited'|'unconfigured';records:BreachRecord[];}
-const sourceLabels={hibp:'Have I Been Pwned',xposedornot:'XposedOrNot'};
 /** 本文サイズをストリームで制限し、パスワードや未使用の上流データをログへ残さず破棄する。 */
 async function boundedJson(response:Response|Request,maxBytes:number):Promise<unknown>{
   const reader=response.body?.getReader();if(!reader)throw new Error('empty');
@@ -92,6 +92,13 @@ async function lookupXon(email:string,env:BreachEnv):Promise<ProviderResult>{
     return {source,status:'ok',records};
   }catch{return {source,status:'error',records:[]};}
 }
+/** 正規化したアドレスを復元できない制限用キーに変換する。 */
+async function emailRateLimitKey(email:string):Promise<string>{
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(email));
+  return `email:${Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('')}`;
+}
+/** 照会された第三者の情報を必要以上に公開しない件数区分を作る。 */
+function countBand(count:number):'0'|'1'|'2'|'3+'{return count<=0?'0':count===1?'1':count===2?'2':'3+';}
 /** 同意した単一アドレスをPOSTで受け、照会失敗を「漏えいなし」として返さない。 */
 export async function handleBreach(request:Request,env:BreachEnv):Promise<Response>{
   const respond=(status:number,payload:Record<string,unknown>)=>Response.json(payload,{status,headers:{'Cache-Control':'no-store, private','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'}});
@@ -102,15 +109,17 @@ export async function handleBreach(request:Request,env:BreachEnv):Promise<Respon
   if(!env.BREACH_RATE_LIMITER||!env.BREACH_BUDGET)return respond(503,{message:'照会を利用できません。時間をおいてお試しください。'});
   try{
     const ip=request.headers.get('CF-Connecting-IP')||'unknown';
-    if(!(await env.BREACH_RATE_LIMITER.limit({key:ip})).success)return respond(429,{message:'続けて照会されています。1分ほどおいてお試しください。'});
+    if(!(await env.BREACH_RATE_LIMITER.limit({key:`ip:${ip}`})).success)return respond(429,{message:'続けて照会されています。1分ほどおいてお試しください。'});
     let fields:Record<string,unknown>;
     try{const submitted=await boundedJson(request,1024);if(!submitted||typeof submitted!=='object'||Array.isArray(submitted))throw new Error('schema');fields=submitted as Record<string,unknown>;}catch{return respond(400,{message:'メールアドレスと確認欄を見直してください。'});}
     const email=typeof fields.email==='string'?fields.email.trim().toLowerCase():'';
     if(fields.website||fields.consent!==true||email.length>254||!/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i.test(email)||email.split('@')[0].startsWith('.')||email.includes('..'))return respond(400,{message:'メールアドレスと確認欄を見直してください。'});
+    if(!(await env.BREACH_RATE_LIMITER.limit({key:await emailRateLimitKey(email)})).success)return respond(429,{message:'このメールアドレスは続けて照会されています。時間をおいてお試しください。'});
     const results=await Promise.all([lookupHibp(email,env),lookupXon(email,env)]);
     const successful=results.filter(result=>result.status==='ok');
-    const providers=results.map(result=>({source:result.source,name:sourceLabels[result.source],status:result.status,count:result.status==='ok'?result.records.length:null}));
-    if(!successful.length)return respond(results.every(result=>result.status==='limited')?429:503,{message:'現在、照会元に接続できないか利用枠が混み合っています。漏えいの有無は判定できません。時間をおいて再度お試しください。',providers});
-    return respond(200,{state:successful.length===results.length?'complete':'partial',checkedAt:new Date().toISOString(),providers,breaches:mergeBreaches(successful.flatMap(result=>result.records))});
+    const unavailableSources=results.length-successful.length;
+    if(!successful.length)return respond(results.every(result=>result.status==='limited')?429:503,{message:'現在、照会元に接続できないか利用枠が混み合っています。漏えいの有無は判定できません。時間をおいて再度お試しください。',unavailableSources});
+    const total=mergeBreaches(successful.flatMap(result=>result.records)).length;
+    return respond(200,{state:successful.length===results.length?'complete':'partial',checkedAt:new Date().toISOString(),result:{found:total>0,countBand:countBand(total)},unavailableSources});
   }catch{return respond(503,{message:'照会できませんでした。漏えいの有無は判定できません。'});}
 }

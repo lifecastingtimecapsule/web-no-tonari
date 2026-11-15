@@ -9,6 +9,7 @@
 // 変更履歴: 2026-11-11 余白を縮め、サービスを2列に整理。重複するブランド説明を省いて回遊と連絡先を集約。
 // 変更履歴: 2026-11-11 コラム一覧を案内欄へ追加。
 // 変更履歴: 2026-11-15 サービス範囲を契約前に確認できる「サービス仕様」への共通導線を追加。
+// 変更履歴: 2026-11-15 公開メールアドレスを外し、プライバシーポリシーとフォームへ導線を集約。
 // 変更履歴: 2026-11-15 非保証・責任範囲を確認できる「利用規約」への共通導線を追加。
 // 役割: サイトの締めくくりと回遊先を一貫して提供する。
 // 変更履歴: 2026-11-08 運営会社を本文で説明する会社概要ページでは、フッターの運営者再掲を省いて重複を減らす。
@@ -18,8 +19,8 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
   ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
-  ['ご案内', [['サービス仕様', `${home}service-specification/`], ['利用規約', `${home}terms/`], ['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
-  ['お問い合わせ', [['info@site-veil.com', 'mailto:info@site-veil.com'], ['お問い合わせフォーム', `${home}#contact`]]],
+  ['ご案内', [['サービス仕様', `${home}service-specification/`], ['利用規約', `${home}terms/`], ['プライバシーポリシー', `${home}privacy/`], ['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
+  ['お問い合わせ', [['お問い合わせフォーム', `${home}#contact`]]],
 ];
 ---
 <footer class="site-footer">

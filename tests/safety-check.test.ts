@@ -1,7 +1,8 @@
+// 変更履歴: 2026-11-15 名前解決後の非公開IP、別ホスト転送、分散レート制限の回帰検証を追加。
 // 変更履歴: 2026-11-08 安全チェックの入力制限と判定（3段階・確認できず）を固定するテストを追加。
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import { analyzeMail, analyzePage, joinTxtData, normalizeTarget, organizationalDomain } from '../workers/safety-check/src/checks';
-import worker from '../workers/safety-check/src/index';
+import worker, { isPublicIpAddress } from '../workers/safety-check/src/index';
 
 const securePage = {
   httpsReachable: true,
@@ -23,6 +24,15 @@ describe('normalizeTarget', () => {
   });
   it.each(['http://127.0.0.1/', 'localhost', 'http://[::1]/', 'intranet', 'https://a.local', 'https://user:pass@example.com', 'ftp://example.com', 'https://example.com:8080'])('%s は確認しない', (input) => {
     expect('error' in normalizeTarget(input)).toBe(true);
+  });
+});
+
+describe('isPublicIpAddress', () => {
+  it.each(['10.0.0.1', '169.254.169.254', '127.0.0.1', '::1', 'fd00::1', 'fe80::1', '::ffff:a9fe:a9fe', '2001:db8::1'])('%s を非公開宛先として拒否する', (address) => {
+    expect(isPublicIpAddress(address)).toBe(false);
+  });
+  it.each(['93.184.216.34', '2606:4700:4700::1111'])('%s は公開宛先として扱う', (address) => {
+    expect(isPublicIpAddress(address)).toBe(true);
   });
 });
 
@@ -79,7 +89,18 @@ describe('analyzeMail', () => {
 describe('worker', () => {
   afterEach(() => vi.unstubAllGlobals());
   const ctx = { waitUntil: () => undefined };
-  const env = { ALLOWED_ORIGINS: 'https://lifecastingtimecapsule.github.io' };
+  const limiter = { limit: vi.fn(async () => ({ success: true })) };
+  const env = { ALLOWED_ORIGINS: 'https://lifecastingtimecapsule.github.io', SAFETY_RATE_LIMITER: limiter };
+
+  /** DNS照会に公開IPを返し、テストが対象サイトの応答だけに集中できるようにする。 */
+  const publicDns = (input: string): Response | null => {
+    if (!input.includes('dns-query')) return null;
+    const type = new URL(input).searchParams.get('type');
+    if (type === 'A') return Response.json({ Status: 0, Answer: [{ type: 1, data: '93.184.216.34' }] });
+    if (type === 'AAAA') return Response.json({ Status: 0, Answer: [] });
+    const answer = input.includes('_dmarc') ? '"v=DMARC1; p=quarantine"' : '"v=spf1 -all"';
+    return Response.json({ Status: 0, Answer: [{ type: 16, data: answer }] });
+  };
 
   it('許可していないオリジンからの確認を断る', async () => {
     const response = await worker.fetch(new Request('https://w.example/api/check?url=example.com', { headers: { Origin: 'https://evil.example' } }), env, ctx);
@@ -99,10 +120,8 @@ describe('worker', () => {
     vi.stubGlobal('fetch', vi.fn(async (input: string) => {
       requested.push(input);
       if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
-      if (input.includes('dns-query')) {
-        const answer = input.includes('_dmarc') ? '"v=DMARC1; p=quarantine"' : '"v=spf1 -all"';
-        return Response.json({ Status: 0, Answer: [{ type: 16, data: answer }] });
-      }
+      const dnsResponse = publicDns(input);
+      if (dnsResponse) return dnsResponse;
       return new Response(securePage.html, { headers: { 'Content-Type': 'text/html', ...securePage.headers } });
     }));
     const response = await worker.fetch(new Request('https://w.example/api/check?url=www.example.com', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
@@ -111,5 +130,44 @@ describe('worker', () => {
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe(env.ALLOWED_ORIGINS);
     expect(body.counts).toMatchObject({ action: 0, unknown: 0 });
     expect(requested.filter((url) => !url.includes('dns-query'))).toEqual(['https://www.example.com/', 'http://www.example.com/']);
+    expect(limiter.limit).toHaveBeenCalledWith({ key: 'safety:unknown' });
+  });
+
+  it('名前解決後がプライベートIPなら対象サイトへ接続しない', async () => {
+    const requested: string[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (input: string) => {
+      requested.push(input);
+      if (input.includes('dns-query')) return Response.json({ Status: 0, Answer: [{ type: 1, data: '169.254.169.254' }] });
+      throw new Error('対象サイトへは接続しない');
+    }));
+    const response = await worker.fetch(new Request('https://w.example/api/check?url=metadata.example', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
+    expect(response.status).toBe(400);
+    expect(requested.every((url) => url.includes('cloudflare-dns.com/dns-query'))).toBe(true);
+  });
+
+  it('別ホストへの転送を追跡しない', async () => {
+    const requested: string[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (input: string) => {
+      requested.push(input);
+      const dnsResponse = publicDns(input);
+      if (dnsResponse) return dnsResponse;
+      if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
+      if (input === 'https://example.org/') throw new Error('別ホストを追跡しない');
+      return new Response(null, { status: 302, headers: { Location: 'https://example.org/' } });
+    }));
+    const response = await worker.fetch(new Request('https://w.example/api/check?url=redirector.example.net', { headers: { Origin: env.ALLOWED_ORIGINS } }), env, ctx);
+    expect(response.status).toBe(200);
+    expect(requested).not.toContain('https://example.org/');
+    expect((await response.json()).reachable).toBe(false);
+  });
+
+  it('分散レート制限が未設定または超過の場合は照会しない', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    const request = new Request('https://w.example/api/check?url=example.com', { headers: { Origin: env.ALLOWED_ORIGINS } });
+    expect((await worker.fetch(request.clone(), { ALLOWED_ORIGINS: env.ALLOWED_ORIGINS }, ctx)).status).toBe(503);
+    const limitedEnv = { ...env, SAFETY_RATE_LIMITER: { limit: async () => ({ success: false }) } };
+    expect((await worker.fetch(request.clone(), limitedEnv, ctx)).status).toBe(429);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

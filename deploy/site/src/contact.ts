@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-15 送信準備中の応答から公開メールアドレスを除外。
 // 変更履歴: 2026-11-11 コピー式の問い合わせをResend経由の直接送信へ変更。本文の保存・ログ出力は行わない。
 export interface ContactEnv {
   RESEND_API_KEY?: string;
@@ -41,7 +42,7 @@ export async function handleContact(request:Request,env:ContactEnv):Promise<Resp
   if(request.method==='OPTIONS') return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'POST','Access-Control-Allow-Headers':'Content-Type','Vary':'Origin','Cache-Control':'no-store'}});
   if(request.method!=='POST') return respond(405,'送信方法を確認してください。');
   if(!request.headers.get('Content-Type')?.startsWith('application/json')) return respond(415,'送信形式を確認してください。');
-  if(!env.RESEND_API_KEY||!env.CONTACT_RATE_LIMITER) return respond(503,'ただいま送信の準備中です。info@site-veil.comへお送りください。');
+  if(!env.RESEND_API_KEY||!env.CONTACT_RATE_LIMITER) return respond(503,'ただいま送信機能を利用できません。時間をおいて再度お試しください。');
   try {
     const allowed=await env.CONTACT_RATE_LIMITER.limit({key:`contact:${request.headers.get('CF-Connecting-IP')||'unknown'}`});
     if(!allowed.success) return respond(429,'少し時間をおいてからお試しください。');

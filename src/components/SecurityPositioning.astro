@@ -1,7 +1,9 @@
 ---
 // 変更履歴: 2026-11-15 SITEVEILの役割と単発・定期の違いを、明るい編集的レイアウトで追加。
+// 変更履歴: 2026-11-15 GitHub Pagesのサブパスでも詳細ページへ移動できる共通URLへ修正。
 // 役割: 無料チェックの次に、完全保証ではなく確認可能なリスクの発見を提供する会社だと伝える。
 import { serviceModes } from '../data/security-service-policy';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 <section class="editorial-section positioning" id="positioning" aria-labelledby="positioning-title">
   <div class="editorial-shell positioning__grid">
@@ -36,6 +38,6 @@ import { serviceModes } from '../data/security-service-policy';
         </article>
       ))}
     </div>
-    <p class="editorial-document-link"><a href="/service-specification/">確認項目と契約前に決める内容を見る</a></p>
+    <p class="editorial-document-link"><a href={`${home}service-specification/`}>確認項目と契約前に決める内容を見る</a></p>
   </div>
 </section>

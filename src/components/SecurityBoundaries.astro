@@ -1,7 +1,9 @@
 ---
 // 変更履歴: 2026-11-15 更新通知、複製環境での検証、報告書の境界をホームへ追加。
+// 変更履歴: 2026-11-15 GitHub Pagesのサブパスでも仕様・規約へ移動できる共通URLへ修正。
 // 役割: 契約前に誤解されやすい作業範囲を、関連するサービス説明の近くで明示する。
 import { cloneTestBoundary, updateBoundary } from '../data/security-service-policy';
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
 <section class="editorial-section boundary-section boundary-section--update" id="update-boundary" aria-labelledby="update-boundary-title">
   <div class="editorial-shell boundary-grid">
@@ -52,8 +54,8 @@ import { cloneTestBoundary, updateBoundary } from '../data/security-service-poli
         <li>先に対応する項目の整理</li>
       </ul>
       <div class="reporting__documents">
-        <a href="/service-specification/">サービス仕様</a>
-        <a href="/terms/">利用規約</a>
+        <a href={`${home}service-specification/`}>サービス仕様</a>
+        <a href={`${home}terms/`}>利用規約</a>
       </div>
     </div>
   </div>

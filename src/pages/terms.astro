@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 公開メールアドレスを外し、連絡先をフォームへ集約。
 // 変更履歴: 2026-11-15 SITEVEILのサービス範囲、非保証、責任制限を明示する利用規約案を追加。
 // 役割: 申込み前に、許可範囲、顧客の協力、複製環境、データ、賠償上限、法令上の例外を確認できるようにする。
 import SiteLayout from '../layouts/SiteLayout.astro';
@@ -46,7 +47,7 @@ const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 
     <section class="terms-page__section" aria-labelledby="terms-10"><h2 id="terms-10"><span>10</span>準拠法と裁判管轄</h2><div><p>本規約および個別契約は日本法に準拠します。本サービスに関して訴訟が必要となった場合は、法令上別の管轄が認められる場合を除き、名古屋地方裁判所または名古屋簡易裁判所を第一審の専属的合意管轄裁判所とします。</p></div></section>
 
-    <section class="terms-page__section" aria-labelledby="terms-11"><h2 id="terms-11"><span>11</span>運営者と連絡先</h2><div><dl><div><dt>運営会社</dt><dd>株式会社ライフキャスティングジャパン</dd></div><div><dt>所在地</dt><dd>愛知県大府市</dd></div><div><dt>連絡先</dt><dd><a href="mailto:info@site-veil.com">info@site-veil.com</a></dd></div></dl></div></section>
+    <section class="terms-page__section" aria-labelledby="terms-11"><h2 id="terms-11"><span>11</span>運営者と連絡先</h2><div><dl><div><dt>運営会社</dt><dd>株式会社ライフキャスティングジャパン</dd></div><div><dt>所在地</dt><dd>愛知県大府市</dd></div><div><dt>連絡先</dt><dd><a href={`${home}#contact`}>お問い合わせフォーム</a></dd></div></dl></div></section>
   </article>
 </SiteLayout>
 

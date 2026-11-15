@@ -1,3 +1,4 @@
+// 変更履歴: 2026-11-15 第三者照会の濫用を抑えるため、結果を件数区分に限定し、IPとアドレス単位の制限を検証。
 // 変更履歴: 2026-11-11 公開メール照会の入力保護・失敗時の判定・メタ情報限定・重複統合を検証。実メールや外部APIは使わない。
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {handleBreach,type BreachEnv} from '../deploy/site/src/breach';
@@ -20,30 +21,30 @@ function providerTransport(hibpStatus=200,xonStatus=200){
 }
 afterEach(()=>vi.unstubAllGlobals());
 describe('public breach check',()=>{
- it('両照会元の同一月の記録を統合し、日付差と日本語の情報種類を保持する',async()=>{
+ it('結果は件数区分だけを返し、事案名・日付・情報種類を公開しない',async()=>{
   const transport=providerTransport();vi.stubGlobal('fetch',transport);
   const response=await handleBreach(request(),environment());const payload=await response.json();
-  expect(response.status).toBe(200);expect(payload.state).toBe('complete');expect(payload.breaches).toHaveLength(1);
-  expect(payload.breaches[0].dateConflict).toBe(true);expect(payload.breaches[0].dates).toEqual(expect.arrayContaining([{source:'hibp',date:'2024-04-15'},{source:'xposedornot',date:'2024-04-01'}]));
-  expect(payload.breaches[0].fields).toEqual(expect.arrayContaining(['メールアドレス','パスワード','ユーザー名']));
+  expect(response.status).toBe(200);expect(payload.state).toBe('complete');expect(payload.result).toEqual({found:true,countBand:'1'});
+  expect(payload.breaches).toBeUndefined();expect(payload.providers).toBeUndefined();
   const serialized=JSON.stringify(payload);expect(serialized).not.toContain('FULL_SECRET_VALUE');expect(serialized).not.toContain('test@example.com');expect(serialized).not.toContain('test-only');
+  expect(serialized).not.toContain('MovieBoxPro');expect(serialized).not.toContain('2024-04');expect(serialized).not.toContain('パスワード');
   expect(response.headers.get('Cache-Control')).toContain('no-store');
   for(const [url,options] of transport.mock.calls as unknown as [string,RequestInit][]){if(!url.includes('haveibeenpwned.com'))expect(new Headers(options.headers).has('hibp-api-key')).toBe(false);expect(options.redirect).toBe('manual');}
  });
  it('一方が失敗したら未完了とし、失敗した照会元の件数を0にしない',async()=>{
   vi.stubGlobal('fetch',providerTransport(500));const payload=await (await handleBreach(request(),environment())).json();
-  expect(payload.state).toBe('partial');expect(payload.providers[0]).toMatchObject({status:'error',count:null});expect(payload.breaches).toHaveLength(1);
+  expect(payload.state).toBe('partial');expect(payload.result).toEqual({found:true,countBand:'1'});expect(payload.unavailableSources).toBe(1);
  });
  it('両方失敗したときに漏えいなしや完了を返さない',async()=>{
   vi.stubGlobal('fetch',providerTransport(500,500));const response=await handleBreach(request(),environment());const payload=await response.json();
-  expect(response.status).toBe(503);expect(payload.state).toBeUndefined();expect(payload.breaches).toBeUndefined();
+  expect(response.status).toBe(503);expect(payload.state).toBeUndefined();expect(payload.result).toBeUndefined();
  });
  it('正しい404応答だけを該当なしとして扱う',async()=>{
-  vi.stubGlobal('fetch',providerTransport(404,404));const payload=await (await handleBreach(request(),environment())).json();expect(payload.state).toBe('complete');expect(payload.breaches).toEqual([]);
+  vi.stubGlobal('fetch',providerTransport(404,404));const payload=await (await handleBreach(request(),environment())).json();expect(payload.state).toBe('complete');expect(payload.result).toEqual({found:false,countBand:'0'});
  });
- it('カタログが失敗しても記録名を保持し、日付と項目は不明にする',async()=>{
+ it('カタログが失敗しても、詳細を公開せず検出有無だけを返す',async()=>{
   const transport=providerTransport(500);vi.stubGlobal('fetch',async(url:string,options:RequestInit)=>url.endsWith('/breaches')?new Response(null,{status:500}):transport(url,options));
-  const payload=await (await handleBreach(request(),environment())).json();expect(payload.breaches[0]).toMatchObject({service:'MovieBoxPro',fields:[],dates:[{source:'xposedornot',date:null}]});
+  const payload=await (await handleBreach(request(),environment())).json();expect(payload.result).toEqual({found:true,countBand:'1'});expect(payload.breaches).toBeUndefined();
  });
  it('上流の不正JSONを該当なしにしない',async()=>{
   vi.stubGlobal('fetch',async()=>Response.json({unexpected:[]}));const response=await handleBreach(request(),environment());expect(response.status).toBe(503);
@@ -57,6 +58,15 @@ describe('public breach check',()=>{
   expect((await handleBreach(new Request('https://site-veil.com/api/breach-check'),environment())).status).toBe(405);
   const limited=environment();limited.BREACH_RATE_LIMITER={limit:async()=>({success:false})};expect((await handleBreach(request(),limited)).status).toBe(429);
   expect((await handleBreach(request(),{})).status).toBe(503);expect(transport).not.toHaveBeenCalled();
+ });
+ it('IPと正規化したメールアドレスの両方で連続照会を制限する',async()=>{
+  vi.stubGlobal('fetch',providerTransport());const env=environment();
+  await handleBreach(request({email:' Test@Example.com ',consent:true}),env);
+  const limit=env.BREACH_RATE_LIMITER?.limit as ReturnType<typeof vi.fn>;
+  expect(limit).toHaveBeenCalledTimes(2);
+  expect(limit.mock.calls[0][0]).toEqual({key:'ip:192.0.2.2'});
+  expect(limit.mock.calls[1][0].key).toMatch(/^email:[a-f0-9]{64}$/);
+  expect(limit.mock.calls[1][0].key).not.toContain('test@example.com');
  });
  it('共通利用枠を予約できない場合は上流へ送信しない',async()=>{
   const transport=vi.fn();vi.stubGlobal('fetch',transport);const env=environment();env.BREACH_BUDGET={idFromName:name=>name,get:()=>({fetch:async()=>new Response(null,{status:429})})};
