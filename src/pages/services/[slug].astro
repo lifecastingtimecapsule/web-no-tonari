@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 公開対象をセキュリティへ限定し、調査の合意と報告の流れへ更新。
 // 変更履歴: 2026-11-13 AI電話受付の導入相談ページへの入口を追加。
 // 変更履歴: 2026-11-13 最新指定により緊急初動を撤回し、PHP・WordPress更新への問い合わせに統一。
 // 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
@@ -32,7 +33,7 @@ const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],s
 {service.slug==='ai-apps'&&<BusinessPricing showContact={false}/>}
 {service.slug==='security'&&<EmergencyMaintenancePlans showContact={false}/>}
 {service.slug==='security'&&<SecurityInvestigationPlans showContact={false}/>}
-<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>今のサイトや仕事の進め方を教えてください。専門的な資料の準備は不要です。</p></li><li><strong>内容・金額・納期を確認します</strong><p>作業範囲、必要な資料、修正回数、納品するものを着手前に合意します。</p></li><li><strong>作業し、ご確認後に納品します</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
+<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>対象のサイトやシステム、気になっていることを教えてください。必要な資料は相談時にご案内します。</p></li><li><strong>内容・金額・納期を確認します</strong><p>対象・許可範囲・検査環境・停止条件・報告内容を着手前に合意します。</p></li><li><strong>調査し、結果を書面でお届けします</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
 {service.slug==='security'&&<p>サイト・メールの無料チェックは、こちらからご利用いただけます。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
 
 <section class="service-inquiry" aria-label="このサービスへのお問い合わせ">

@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 セキュリティ専門のサービス一覧へ更新。
 // 変更履歴: 2026-11-14 音声・電話受付の公開停止に伴い案内と導線を撤去。
 // 変更履歴: 2026-11-13 AI電話受付の導入相談ページへの入口を追加。
 // 変更履歴: 2026-11-12 サービス一覧の色面を左上から右下へ薄くするため専用クラスを追加。
@@ -10,15 +11,15 @@
 // 変更履歴: 2026-11-11 カード内の料金を優先し、料金を見るだけの重複誘導を撤去。
 // 役割: 四サービスの画像・横送り・詳細への入口を同じブランドで提供する。
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import ServiceOverview from '../../components/ServiceOverview.astro';
+import SecurityServices from '../../components/SecurityServices.astro';
 import '../../styles/catalog.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
-<SiteLayout title="サービス一覧｜SITEVEIL" breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:`${home}services/`}]} description="ウェブサイト制作、SEO対策、業務システム開発、保守・セキュリティ。依頼できる作業・税込料金・対象範囲を確認し、そのままお問い合わせいただけます。">
+<SiteLayout title="サービス一覧｜SITEVEIL" breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:`${home}services/`}]} description="セキュリティの無料チェックから、有料検査・侵入テスト・保守・更新まで。内容と税込料金をご案内します。">
   <div class="shell catalog-page service-catalog">
     <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">サービス</span></nav>
-    <header class="catalog-heading"><h1>つくる、守る、育てるを、<br />ひとつの相談先で。</h1><p>ウェブ制作、SEO対策、業務システム開発、保守・セキュリティ。</p></header>
-    <ServiceOverview headingTag="h2" />
+    <header class="catalog-heading"><h1>事業を守るために、<br />必要な確認から。</h1><p>サイト・メールの無料チェック、設定の確認、詳しい検査と侵入テスト、保守・更新。</p></header>
+    <SecurityServices />
 
   </div>
 </SiteLayout>

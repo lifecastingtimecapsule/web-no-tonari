@@ -1,143 +1,30 @@
 ---
-// 変更履歴: 2026-11-14 サービス名を繰り返す説明を省き、本文の要素を整理。
-// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
-// 変更履歴: 2026-11-11 大ロゴ消失時の切り替えに合わせ、ヘッダーロゴのフェードを撤去。
-// 変更履歴: 2026-11-11 ロゴはスクロール開始で表示し、ヒーローを抜けるまでの待ちを撤去。
-// 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
-// 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
-// 変更履歴: 2026-11-11 顧客が作業内容を判断できる平易な表現へ統一。金額・契約範囲は維持。
-// 変更履歴: 2026-11-11 有料メニューを一律20%値上げし、本文・紹介・メタ情報の料金を統一。無料と対象範囲は維持。
-// 変更履歴: 2026-11-11 共通ヘッダーとヒーロー上の高さを76pxに統一し、スクロール時の段差を解消。
-// 変更履歴: 2026-11-11 指定により「小さく、近く。」と説明のセクションを削除。
-// 変更履歴: 2026-11-11 サービス見出し下にSEO対策を明記し、相談できる範囲を短く表示。
-// 変更履歴: 2026-11-11 画像付き安全チェックを復元し、説明の重複と料金の重複ボタンを整理。
-// 変更履歴: 2026-11-11 トップと試作を共通化。送信フォームと背景になじむナビへ更新。
-// 変更履歴: 2026-11-11 ヒーロー通過に合わせて左上ロゴを表示する指定を反映。
-// 変更履歴: 2026-11-11 インクヒーローへ作り直し、試作内のヘッダーを平らな構成に変更。説明より視覚を優先する指示を反映。
-// 変更履歴: 2026-11-11 操作待ちのないVeil演出を比較できる独立した試作ページを追加。本番採用は試作確認後。
-// 変更履歴: 2026-11-11 問い合わせ先とメール作成への導線を追加。
-// 変更履歴: 2026-11-09 任意URLを常時表示し、ホームページがある場合だけ入力する案内へ変更。
-// 変更履歴: 2026-11-09 サービス一覧を共通化し、料金は概要と専用ページへの入口へ整理。
-// 変更履歴: 2026-11-09 ウェブ教材の入口と画像説明を三テーマへ合わせる。EC削除は共通データから反映。
-// 変更履歴: 2026-11-09 ウェブ制作記事の配色追加に合わせて紹介画像の代替テキストを更新。
-// 変更履歴: 2026-11-04 承認済みのブランドストーリーと全ページ構成を初回実装。
-// 変更履歴: 2026-11-09 ウェブ制作のプレビューをクイズ記事へ揃え、実績や架空店舗と混同しない表記へ変更。
-// 変更履歴: 2026-11-09 日常で使えるデザイン記事への調整に合わせ、画像の代替文を更新。
-// 変更履歴: 2026-11-05 ヒーローに装飾3Dキャンバスと既存SVGフォールバックの受け口を追加。
-// 変更履歴: 2026-11-05 シネマティック・テック案の単一3Dコア、短いコピー、非対称構成へヒーローを再設計。
-// 変更履歴: 2026-11-08 白黒赤ヒーローと社内制作事例へ置換し、実画面を主役にする。
-// 変更履歴: 2026-11-08 YAYOI SAIGA事例を外し、HiXFiを参考にしたサービス起点の導線へ再整理。
-// 変更履歴: 2026-11-08 全ページ共通のSiteLayoutへhead・ヘッダー・フッターを集約。
-// 変更履歴: 2026-11-08 依頼者の会社名・担当者名・メール欄を追加し、相談欄を入力に合わせて伸びる2行の初期表示へ変更。
+// 変更履歴: 2026-11-15 セキュリティ専門のトップへ全面改稿。ヒーロー・問い合わせ・無料チェックの機能は維持。
+// 役割: 無料確認から有料検査・保守まで、対象と費用を理解して相談できる入口。
 import SiteLayout from '../layouts/SiteLayout.astro';
-// 変更履歴: 2026-11-13 ヒーローと文字サイズを維持したまま、本文の色面・余白・画像の扱いをホーム限定で統一。
-import '../styles/home-continuity.css';
-import ContactForm from '../components/ContactForm.astro';
-import VeilHero from '../components/VeilHero.astro';
+import VeilHero from './VeilHero.astro';
 import SafetyCheck from './SafetyCheck.astro';
-// 変更履歴: 2026-11-08 4サービスへの詳細・体験導線を追加し、ECを含む提供領域を統一。
-// 変更履歴: 2026-11-08 サービスをサンプル画面・短い説明付きの横並びカラムへ変更し、完成像を比較しやすくする。
-// 変更履歴: 2026-11-08 スクロール連動の赤い大見出しを追加し、相談欄を本文＋任意URLとコピー操作へ簡略化。
-// 変更履歴: 2026-11-08 再指示により問い合わせ前の動く文字帯を撤去し、一般的な問い合わせ見出しへ変更。
-// 変更履歴: 2026-11-08 サービスを3件ずつ見せる手動横送りへ変更。全4件を左右ボタン・スワイプで閲覧できる。
-// 変更履歴: 2026-11-08 独立した企業理念ページへのリンクをフッターへ追加。
-// 変更履歴: 2026-11-08 確認済み運営会社と会社概要への導線をフッターに追加。
-// 変更履歴: 2026-11-08 サービスの横スクロールを撤去し、対象者・できること・料金をトップで説明する一覧へ変更。安全チェックへの導線とFAQの「準備中」表現を整理。
-// 変更履歴: 2026-11-09 縦の一覧を、3/2/1件表示で左右に送る承認済みのサービス紹介へ復元。
-import ServiceOverview from './ServiceOverview.astro';
-import PricingSummary from '../components/PricingSummary.astro';
-interface Props { preview?: boolean; }
-const {preview = false} = Astro.props;
-const serviceBase = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-const faqs = [
-  ['相談内容がまとまっていなくても大丈夫ですか？', 'はい。何を頼めばよいか分からない段階から、困っていることと優先順位を一緒に整理します。'],
-  ['小さな修正だけでも相談できますか？', '現在のサイトや運用状況を確認したうえで、対応できる範囲をご案内します。大きなリニューアルを前提にはしません。'],
-  ['今のExcelや紙の管理から相談できますか？', 'はい。今使っている表や、手間がかかる作業を教えてください。続けて使うものと、システムに任せる仕事を相談し、制作費と運用費をご提示します。'],
-  ['セキュリティ診断では何を確認しますか？', '無料の「かんたん安全チェック」では、通信の暗号化やなりすましメール対策など外から見える項目を確認します。有料の基本セキュリティ確認（¥59,400）では、サイトの更新状態、管理者の設定、パスワードの扱い、データの控え、問い合わせの仕組みを調べ、対象と項目は作業前に合意します。'],
-  ['料金や対応地域は決まっていますか？', 'ウェブサイト制作、保守、基本セキュリティ確認の固定料金は掲載しています。対象外の作業は、必ず開始前に金額と内容をご案内します。対応方法は、ご相談内容に合わせてご案内します。'],
+import SecurityServices from './SecurityServices.astro';
+import ContactForm from './ContactForm.astro';
+import '../styles/home-continuity.css';
+interface Props {preview?:boolean;}
+const {preview=false}=Astro.props;
+const faqs=[
+ ['何を頼めばよいか分からなくても相談できますか？','はい。管理の状況や気になっていることから、必要な確認と費用を整理します。'],
+ ['無料チェックと有料検査は何が違いますか？','無料は公開情報や既知の漏えい記録の確認です。有料は事前に合意した設定・資料・コードなどを調査します。侵入テストは別のプランです。'],
+ ['問題が見つかった後の修正も含まれますか？','検査料金には修正・復旧・再検査を含みません。必要な作業と費用を別途ご案内します。PHP・WordPress更新は専用プランで承ります。'],
+ ['調査は許可した範囲だけで行いますか？','対象・操作・検査環境・停止条件を事前に書面で合意します。第三者のシステムや、許可されていない範囲は調査しません。'],
+ ['結果はどう受け取れますか？','有料の基本確認・詳細検査・総合検査は、方法と結果をまとめた書面を国内郵送します。調査データは発送後30日で削除します。無料チェックは画面上で確認できます。'],
 ];
 ---
-
-<SiteLayout title={preview ? "SITEVEIL｜モーション試作" : "ホームページ制作・業務システム開発｜SITEVEIL（愛知県大府市）"} description="愛知県大府市のSITEVEIL。小さな会社・お店のホームページ制作、SEO対策、業務システム開発、保守・セキュリティ確認を支援します。制作118,800円、基本保守月9,240円。オンラインでご相談いただけます。" homePage noindex={preview}>
-      <VeilHero />
-      <SafetyCheck />
-
-      <section class="services section section--mist" id="services" aria-labelledby="services-title">
-        <div class="shell">
-          <div class="section-heading section-heading--wide">
-            <h2 id="services-title">つくる、守る、育てるを、<br />ひとつの相談先で。</h2>
-
-
-          </div>
-
-          <ServiceOverview />
-        </div>
-      </section>
-
-      <section class="pricing section section--paper" id="pricing" aria-labelledby="pricing-title">
-        <div class="shell">
-          <div class="pricing__heading">
-            <h2 id="pricing-title">料金は、先に。</h2>
-            <p>すべて税込。必要な範囲から。</p>
-          </div>
-
-          <PricingSummary />
-          <p class="pricing__external">表示はすべて税込。保守契約は任意です。対象範囲、追加オプション、外部費用は料金ページにまとめています。</p>
-
-        </div>
-      </section>
-
-      <section class="security section" aria-labelledby="security-title" data-security-motion>
-        <div class="security__line" aria-hidden="true"></div>
-        <div class="shell security__layout">
-          <div>
-            <h2 id="security-title">便利さにも、<br />安心を。</h2>
-            <p>公開情報の確認から、詳しい調査まで。</p>
-            <a class="security__check-link" href={`${serviceBase}/security/`}>安全性の確認・調査 <span aria-hidden="true">↗</span></a>
-          </div>
-          <ul class="security__checks">
-            <li><span aria-hidden="true"></span>WordPressや追加機能が最新か</li>
-            <li><span aria-hidden="true"></span>管理者・パスワード・データの控え</li>
-            <li><span aria-hidden="true"></span>問い合わせフォームと通信</li>
-            <li><span aria-hidden="true"></span>社内情報の扱い</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="faq section section--paper" id="faq" aria-labelledby="faq-title">
-        <div class="shell faq__layout">
-          <div class="section-heading">
-            <h2 id="faq-title">よくある質問</h2>
-
-          </div>
-          <div class="faq-list">
-            {faqs.map(([question, answer]) => (
-              <details>
-                <summary>{question}<span aria-hidden="true"></span></summary>
-                <div class="faq-list__answer"><p>{answer}</p></div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section class="contact section" id="contact" aria-labelledby="contact-title">
-        <div class="shell contact__layout">
-          <div class="contact__intro">
-            <h2 id="contact-title">お問い合わせ</h2>
-
-
-          </div>
-
-          <ContactForm />
-        </div>
-      </section>
-    <script>
-      import '../scripts/site';
-    </script>
+<SiteLayout title="セキュリティ検査・保守・漏えいチェック｜SITEVEIL" description="小さな会社のセキュリティを、分かる言葉で。無料のサイト・メール漏えいチェック、基本確認59,400円、詳細検査198,000円〜、侵入テスト330,000円〜、保守月9,240円。税込。対象と費用を合意して調査します。" homePage noindex={preview}>
+<VeilHero/><SafetyCheck/>
+<section class="services section" id="services" aria-labelledby="services-title"><div class="shell"><div class="section-heading"><h2 id="services-title">確かめる。<br/>守り続ける。</h2></div><SecurityServices/><p>表示はすべて税込。対象と費用は作業前に合意します。</p></div></section>
+<section class="security section" aria-labelledby="security-title"><div class="shell security__layout"><div><h2 id="security-title">何を調べたかまで、<br/>きちんと残す。</h2><p>問題の有無だけでなく、調査した範囲と方法、分かったこと、まだ分からないことを書面にまとめます。</p></div><ul class="security__checks"><li><span aria-hidden="true"></span>対象と許可範囲を事前に合意</li><li><span aria-hidden="true"></span>根拠と対応の優先順位をご報告</li><li><span aria-hidden="true"></span>検査報告書を国内郵送</li><li><span aria-hidden="true"></span>発送後30日で調査データを削除</li></ul></div></section>
+<section class="faq section" id="faq" aria-labelledby="faq-title"><div class="shell faq__layout"><div class="section-heading"><h2 id="faq-title">よくある質問</h2></div><div class="faq-list">{faqs.map(([question,answer])=><details><summary>{question}<span aria-hidden="true"></span></summary><div class="faq-list__answer"><p>{answer}</p></div></details>)}</div></div></section>
+<section class="contact section" id="contact" aria-labelledby="contact-title"><div class="shell contact__layout"><div class="contact__intro"><h2 id="contact-title">お問い合わせ</h2></div><ContactForm/></div></section>
+<script>import '../scripts/site';</script>
 </SiteLayout>
-
 <!-- 試作の役割: アンカー移動も待たせず、素早い往復操作をそのまま反映する。 -->
 <style is:global>html:has([data-veil-stage]) { scroll-behavior: auto; }
 html:has([data-veil-stage]) .site-header { border:0; border-radius:0; box-shadow:none; background:transparent; top:0; width:100%; min-height:76px; padding:16px 4%; }html:has([data-brand-observed]) .site-header .brand { opacity:0; visibility:hidden; transition:none; }

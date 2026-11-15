@@ -94,3 +94,5 @@ body .reception-hero h1 { font-size:clamp(32px,4vw,48px); font-weight:700; }
 /* 個別ページの旧見出し指定より共通の強弱を優先し、遷移時の大きさの差をなくす。 */
 body.page-inner #main h1 { font-size:clamp(32px,4vw,48px); font-weight:700; line-height:1.5; letter-spacing:-.025em; }
 @media(max-width:800px) { body.page-inner #main h1 { font-size:32px; } }
+/* 変更履歴: 2026-11-15 更新プランも本文の白・墨色へ統一。警告状態の色は維持。 */
+body .urgent-grid article { background:#f5f5f7; border:0; border-radius:10px; }

@@ -27,3 +27,12 @@ it.each(['/services/phone-reception/', '/services/phone-reception/samples/', '/a
   expect(response.headers.get('X-Robots-Tag')).toContain('noindex');
   expect(assets.fetch).not.toHaveBeenCalled();
 });
+
+// 変更履歴: 2026-11-15 終了した制作系の旧URLは、現行サービスへ案内する。
+it.each(['/services/websites/','/services/seo/','/services/ai-apps/examples/'])('redirects retired services: %s',async path=>{
+  const assets={fetch:vi.fn()};
+  const response=await siteWorker.fetch(new Request('https://site-veil.com'+path),{ASSETS:assets});
+  expect(response.status).toBe(301);
+  expect(response.headers.get('Location')).toBe('https://site-veil.com/services/');
+  expect(assets.fetch).not.toHaveBeenCalled();
+});

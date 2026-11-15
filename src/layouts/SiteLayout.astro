@@ -1,4 +1,5 @@
 ---
+// 変更履歴: 2026-11-15 共有画像と説明をセキュリティ専門へ更新。
 // 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
 // 変更履歴: 2026-11-08 ページごとに複製されていたhead・ロゴ・ヘッダー・フッターを共通レイアウトへ集約。
 // 変更履歴: 2026-11-11 全ページに明るい共通トーン・文字・余白を適用。
@@ -40,8 +41,8 @@ const organizationSchema = {'@context':'https://schema.org','@graph':[
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="SITEVEIL" />
     <meta property="og:locale" content="ja_JP" />
-    <meta property="og:image" content={new URL(`${home}images/services/websites.webp`,organizationRoot).href} />
-    <meta property="og:image:alt" content="SITEVEILのウェブサイト制作・SEO対策・保守サービス" />
+    <meta property="og:image" content={new URL(`${home}images/services/site-maintenance.svg`,organizationRoot).href} />
+    <meta property="og:image:alt" content="SITEVEILのセキュリティ確認・検査・保守サービス" />
     <meta name="twitter:card" content="summary_large_image" />
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(organizationSchema).replace(/</g,'\u003c')} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
