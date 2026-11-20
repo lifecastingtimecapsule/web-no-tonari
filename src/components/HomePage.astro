@@ -7,6 +7,8 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import VeilHero from './VeilHero.astro';
 import SafetyCheck from './SafetyCheck.astro';
 import SecurityPositioning from './SecurityPositioning.astro';
+// 変更履歴 2026-11-20　架空の報告見本に加え、許可された匿名改善事例を掲載。
+import SecurityCase from './SecurityCase.astro';
 import SecurityBoundaries from './SecurityBoundaries.astro';
 import ContactForm from './ContactForm.astro';
 import '../styles/home-continuity.css';
@@ -21,6 +23,7 @@ const faqs = [
 ---
 <SiteLayout title="セキュリティ検査・保守・漏えいチェック｜SITEVEIL" description="小さな会社のセキュリティを、分かる言葉で。無料のサイト・メール漏えいチェック、基本確認59,400円、詳細検査198,000円〜、侵入テスト330,000円〜、保守月9,240円。税込。対象と費用を合意して調査します。" homePage noindex={preview}>
 <VeilHero/><SafetyCheck/><SecurityPositioning/>
+<SecurityCase/>
 <SecurityBoundaries/>
 <section class="faq section" id="faq" aria-labelledby="faq-title"><div class="shell faq__layout"><div class="section-heading"><h2 id="faq-title">よくある質問</h2><p class="reader-faq-links"><a href={home + 'service-specification/'}>サービス仕様</a>・<a href={home + 'terms/'}>利用規約</a></p></div><div class="faq-list">{faqs.map(([question,answer,id])=><details id={id}><summary>{question}<span aria-hidden="true"></span></summary><div class="faq-list__answer"><p>{answer}</p></div></details>)}</div></div></section>
 <section class="contact section" id="contact" aria-labelledby="contact-title"><div class="shell contact__layout"><div class="contact__intro"><h2 id="contact-title">お問い合わせ</h2></div><ContactForm/></div></section>
