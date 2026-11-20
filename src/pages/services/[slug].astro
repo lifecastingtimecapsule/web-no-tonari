@@ -1,49 +1,28 @@
 ---
-// 変更履歴: 2026-11-15 公開対象をセキュリティへ限定し、調査の合意と報告の流れへ更新。
-// 変更履歴: 2026-11-13 AI電話受付の導入相談ページへの入口を追加。
-// 変更履歴: 2026-11-13 最新指定により緊急初動を撤回し、PHP・WordPress更新への問い合わせに統一。
-// 変更履歴: 2026-11-11 基本チェックと詳しい検査・侵入テストの料金と郵送報告を区別して案内。
-// 変更履歴: 2026-11-11 公開SEO点検により、実内容に合う検索向け情報へ更新。
-// 変更履歴: 2026-11-11 問い合わせへの金額引き継ぎを撤去。サービス名だけを渡す。
-// 変更履歴: 2026-11-11 問い合わせを説明の末尾に整理し、最新の名称・導線指定を反映。
-// 変更履歴: 2026-11-11 料金から問い合わせへ直接進み、選んだ内容と金額を引き継ぐ。
-// 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
-// 変更履歴: 2026-11-11 経営者向けに料金・作業・対象外を常時表示。教材は補足ページへ分離。
-// 変更履歴: 2026-11-11 業務別の制作費・月額を常時表示し、個別見積もりだけの案内を解消。
-// 役割: 顧客が依頼内容と費用を判断し、そのまま相談できるサービス案内。
-import EmergencyMaintenancePlans from '../../components/EmergencyMaintenancePlans.astro';
+/* 変更履歴 2026-11-20　複数ページで繰り返していた料金の詳細を集約し、依頼後の流れと報告を説明。 */
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import '../../styles/services.css';
-import {servicePages} from '../../data/services';
-import {businessPricing} from '../../data/business-pricing';
-import {pricingPlans,securityInvestigationPlans,formatPrice} from '../../data/pricing';
-import BusinessPricing from '../../components/BusinessPricing.astro';
-import InlinePricing from '../../components/InlinePricing.astro';
-import SecurityInvestigationPlans from '../../components/SecurityInvestigationPlans.astro';
-export function getStaticPaths(){return servicePages.map(service=>({params:{slug:service.slug},props:{service}}));}
-const {service}=Astro.props;
-const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
-const servicePlanIds:Record<string,string[]>={websites:['website'],seo:['seo'],security:['maintenance','security'],'ai-apps':[]};
+import { servicePages } from '../../data/services';
+import { pricingPlans, formatPrice } from '../../data/pricing';
+import '../../styles/catalog.css';
+/** 公開中のサービスに対応する案内ページを生成する。 */
+export function getStaticPaths() {
+  return servicePages.map(service => ({ params: { slug: service.slug }, props: { service } }));
+}
+const { service } = Astro.props;
+const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
+const basic = pricingPlans.find(plan => plan.id === 'security')!;
 ---
-<SiteLayout title={service.searchTitle} description={service.description} breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:`${home}services/`},{name:service.name,path:`${home}services/${service.slug}/`}]}>
-<div class="shell"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={`${home}services/`}>サービス</a><span>/</span><span aria-current="page">{service.name}</span></nav>
-<section class="service-intro"><div><h1>{service.name}</h1><p>{service.slug==='seo'?service.lead:service.preview}</p>{service.slug==='ai-apps'?<div class="service-price-quote"><strong>顧客管理の例<br />制作{formatPrice(businessPricing[0].initial)}〜</strong><p>月々{formatPrice(businessPricing[0].monthly)}〜（当社運用・税込）。受注管理や書類作成など、仕事別の目安を下の一覧に掲載しています。</p><a href="#business-pricing">できること・制作費・月額の一覧</a></div>:<InlinePricing planIds={servicePlanIds[service.slug]||[]} showContact={false}/>}</div>
-<aside><h2>{service.slug==='ai-apps'?'こんな仕事に使えます':'ご依頼いただけること'}</h2>{service.tasks.map(([title,body])=><article class="seo-method"><h3>{title}</h3><p>{body}</p></article>)}</aside></section>
-{service.slug==='ai-apps'&&<section class="service-order"><h2>電話受付も、仕事に合わせて。</h2><p>接客中・施術中・現場作業中のご用件をAIが伺い、予約希望や伝言を整理。業種別の会話例と参考料金をご覧いただけます。現在は導入相談・試験受付中です。</p><a class="button button--human" href={home+'services/phone-reception/'}>AI電話受付の内容・参考料金を見る</a></section>}
-{service.slug==='ai-apps'&&<BusinessPricing showContact={false}/>}
-{service.slug==='security'&&<EmergencyMaintenancePlans showContact={false}/>}
-{service.slug==='security'&&<SecurityInvestigationPlans showContact={false}/>}
-<section class="service-order"><h2>相談から納品まで</h2><ol><li><strong>困っていることをお聞きします</strong><p>対象のサイトやシステム、気になっていることを教えてください。必要な資料は相談時にご案内します。</p></li><li><strong>内容・金額・納期を確認します</strong><p>対象・許可範囲・検査環境・停止条件・報告内容を着手前に合意します。</p></li><li><strong>調査し、結果を書面でお届けします</strong><p>追加のご依頼がある場合は、費用と日程を先にお伝えします。</p></li></ol></section>
-{service.slug==='security'&&<p>サイト・メールの無料チェックは、こちらからご利用いただけます。<a href={`${home}security/`}>無料チェック・詳しい検査の内容と料金</a></p>}
-
-<section class="service-inquiry" aria-label="このサービスへのお問い合わせ">
-{service.slug==='ai-apps'?<a class="button button--human" href={`${home}?service=${encodeURIComponent(service.name)}#contact`}>業務システム開発について問い合わせる</a>:pricingPlans.filter(plan=>(servicePlanIds[service.slug]||[]).includes(plan.id)).map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
-{service.slug==='security'&&<a class="button button--human" href={`${home}?service=${encodeURIComponent('PHP・WordPress更新')}#contact`}>PHP・WordPress更新について相談する</a>}
-{service.slug==='security'&&securityInvestigationPlans.map(plan=><a class="button button--human" href={`${home}?service=${encodeURIComponent(plan.name)}#contact`}>{plan.name}について問い合わせる</a>)}
-</section>
-</div>
+<SiteLayout title={service.searchTitle} description={service.description} breadcrumbs={[{name:'ホーム',path:home},{name:'サービス',path:home+'services/'},{name:service.name,path:home+'services/'+service.slug+'/'}]}>
+  <div class="shell catalog-page">
+    <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><a href={home + 'services/'}>サービス</a><span>/</span><span aria-current="page">検査の流れ</span></nav>
+    <header class="catalog-heading"><h1>ご相談から報告まで</h1><p>基本セキュリティ確認は1回 {formatPrice(basic.amount)}（税込・国内送料込み）。<br />何を調べるか、最初に一緒に決めます。</p></header>
+    <ol class="reader-steps">
+      <li><h2>気になることをお聞きします</h2><p>「以前の担当者しか設定を知らない」「予約サイトにお客様の情報を預かっている」など、普段の言葉でお知らせください。必要な資料はこちらからご案内します。</p></li>
+      <li><h2>範囲と費用を決めて調べます</h2><p>対象・方法・費用を書面で合意してから始めます。侵入テストを選ぶ場合は、本番から切り離した複製環境でのみ検証します。<a href={home + 'pricing/'}>検査別の料金と対象範囲</a></p></li>
+      <li><h2>対応の順番を書面でお届けします</h2><p>基本確認・詳細検査・総合検査の結果は国内へ郵送します。先に直す項目と、追加で確認したい点が分かります。調査データの保管は発送後30日間です。</p></li>
+    </ol>
+    <p class="reader-more">継続して点検する場合は、<a href={home + 'service-specification/#monitoring-title'}>定期確認の範囲</a>をご覧ください。更新作業・修正・復旧は別途お見積もりします。</p>
+    <section class="catalog-close"><h2>検査について相談する</h2><a class="button button--human" href={home + '?service=' + encodeURIComponent(service.name) + '#contact'}>お問い合わせフォームへ</a></section>
+    <aside class="reader-more">関連する読み物　<a href={home + 'services/security/php/'}>古いPHPで何が起きる？</a>　<a href={home + 'services/security/examples/'}>不審な連絡の見分け方</a></aside>
+  </div>
 </SiteLayout>
-<style>
-/* 役割: 必須の情報は開閉操作なしで読める。補足リンクを依頼内容と区別する。 */
-.service-inquiry{display:flex;flex-wrap:wrap;gap:16px;padding:24px 0;border-top:1px solid #e4e8e5}.service-inquiry .button{white-space:normal;text-align:center;max-width:100%}.seo-method{padding:16px 0;border-top:1px solid #e4e8e5}.seo-method h3{margin:0 0 8px}.seo-method p{margin:0}.service-order{padding-block:24px;border-top:1px solid #e4e8e5}.service-order ol{padding-left:24px;display:grid;gap:16px}.service-order p{margin:6px 0;font-size:16px;line-height:1.85}.service-reference{margin-top:24px;padding-top:24px;border-top:1px solid #e4e8e5}.service-reference h2{font-size:22px}
-</style>

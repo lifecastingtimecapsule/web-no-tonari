@@ -1,4 +1,6 @@
 ---
+// 変更履歴 2026-11-20　同じ項目名でサービス一覧と依頼の流れを区別。
+// 変更履歴 2026-11-20　問い合わせとサービス選びを優先し、契約書類を末尾にまとめた。
 // 変更履歴: 2026-11-12 問い合わせ欄をメール・お問い合わせフォームの2リンクで明示。
 // 変更履歴: 2026-11-09 サービス・料金をページ内スクロールから専用ページへの遷移へ変更。
 // 変更履歴: 2026-11-08 全ページで運営者・会社概要・企業理念を見つけられるよう共通化。
@@ -18,8 +20,8 @@ import { servicePages } from '../data/services';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
-  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => [service.name, `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
-  ['ご案内', [['サービス仕様', `${home}service-specification/`], ['利用規約', `${home}terms/`], ['プライバシーポリシー', `${home}privacy/`], ['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
+  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => ['ご相談から報告まで', `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
+  ['ご案内', [['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
   ['お問い合わせ', [['お問い合わせフォーム', `${home}#contact`]]],
 ];
 ---
@@ -41,6 +43,7 @@ const groups: [string, [string, string][]][] = [
   </div>
   <div class="shell site-footer__bottom">
     {isCompanyPage ? <span /> : <small>運営：株式会社ライフキャスティングジャパン（愛知県大府市）</small>}
+    <nav class="footer-terms" aria-label="契約・個人情報"><a href={home + 'service-specification/'}>サービス仕様</a><a href={home + 'terms/'}>利用規約</a><a href={home + 'privacy/'}>プライバシーポリシー</a></nav>
     <small>© 2026 SITEVEIL</small>
   </div>
 </footer>

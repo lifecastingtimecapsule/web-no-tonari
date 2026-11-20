@@ -1,4 +1,5 @@
 ---
+// 変更履歴 2026-11-20　記事の読後に料金の該当ページへ直接進めるよう統一。
 // 変更履歴: 2026-11-11 エスケープされた本文だけを表示する記事ページを追加。
 // 変更履歴: 2026-11-11 公開日を明記し、記録済みの参照元を資料名・掲載日のリンクで表示。
 // 役割: 見出しと短い段落で解説し、必要な人だけ末尾のサービス案内へ進める。
@@ -21,6 +22,6 @@ const schema={'@context':'https://schema.org','@type':'Article',headline:article
   const reference=columnReference(block.text,article.sources);
   return reference?<p class="column-reference"><a href={reference.url} target="_blank" rel="noopener noreferrer">{reference.label}</a></p>:<p>{block.text}</p>;
 })}</div>
-<footer class="column-end"><a href={`${home}services/${article.category==='security'?'security':'ai-apps'}/`}>{article.category==='security'?'検査の内容と料金を見る':'業務システム開発の内容と料金を見る'}</a><a href={`${home}columns/`}>コラム一覧へ</a></footer></article></div>
+<footer class="column-end"><a href={`${home}pricing/`}>検査・保守の料金を見る</a><a href={`${home}columns/`}>コラム一覧へ</a></footer></article></div>
 <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\u003c')}/>
 </SiteLayout>
