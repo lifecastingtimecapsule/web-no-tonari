@@ -61,7 +61,6 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 
   <section class="check-scope" aria-labelledby="check-scope-title">
     <h2 id="check-scope-title">調べるのは、この6つです</h2>
-    <p class="check-scope__lead">専門用語はできるだけ使わず、危ないかどうかを分かりやすくお伝えします。</p>
     <dl>{checks.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
   </section>
 
@@ -132,7 +131,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 .check-page .status-badge--unknown { color: var(--ink-muted); background: white; border-color: var(--mist); }
 .check-result__time { margin-top: 14px; color: var(--ink-muted); font-size: 12px; }
 .check-scope { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--mist); }
-.check-scope__lead { margin: 0 0 8px; color: var(--ink-muted); font-size: 14px; line-height: 1.9; }
+.check-scope h2 { margin-bottom: 20px; font-size: clamp(2.1rem, 4.6vw, 3.2rem); line-height: 1.3; letter-spacing: -.03em; }
 .check-scope dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; margin: 24px 0 0; }
 .check-scope dl > div { padding: 18px 0; border-top: 1px solid var(--mist); }
 .check-scope dt { margin-bottom: 6px; font-weight: 700; }
