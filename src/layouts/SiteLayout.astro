@@ -12,18 +12,25 @@ import '../styles/atmosphere.css';
 import '../styles/minimal.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-interface Props { title: string; description: string; homePage?: boolean; noindex?: boolean; breadcrumbs?: {name:string;path:string}[]; }
-const { title, description, homePage = false, noindex = false, breadcrumbs = [] } = Astro.props;
+// 変更履歴: 2026-11-23 公開FAQと公開料金を構造化データへ渡せるようにし、OGP画像をPNGへ切り替えた。
+interface Props { title: string; description: string; homePage?: boolean; noindex?: boolean; breadcrumbs?: {name:string;path:string}[]; faq?: {question:string;answer:string}[]; services?: {name:string;description:string;price:number}[]; }
+const { title, description, homePage = false, noindex = false, breadcrumbs = [], faq = [], services = [] } = Astro.props;
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const canonical = new URL(noindex && homePage ? home : Astro.url.pathname, Astro.site ?? 'https://site-veil.com').toString();
 const organizationRoot = new URL(home, Astro.site ?? 'https://site-veil.com').href;
-const organizationSchema = {'@context':'https://schema.org','@graph':[
+// 変更履歴: 2026-11-23 SNSがSVGを表示できないため、1200x630のPNGを共有画像に使う。
+const ogImage = new URL(`${home}images/og/siteveil-ogp.png`, organizationRoot).href;
+const schemaNodes: Record<string, unknown>[] = [
   {'@type':'Organization','@id':`${organizationRoot}#organization`,name:'SITEVEIL',legalName:'株式会社ライフキャスティングジャパン',url:organizationRoot,logo:new URL(`${home}brand/siteveil-horizontal-black.svg`,organizationRoot).href,address:{'@type':'PostalAddress',addressRegion:'愛知県',addressLocality:'大府市',addressCountry:'JP'}},
   {'@type':'WebSite','@id':`${organizationRoot}#website`,url:organizationRoot,name:'SITEVEIL',inLanguage:'ja',publisher:{'@id':`${organizationRoot}#organization`}},
   {'@type':'WebPage',url:canonical,name:title,description,inLanguage:'ja',isPartOf:{'@id':`${organizationRoot}#website`}},
   // 役割: 画面に表示するパンくずと同じ階層だけを検索エンジンへ伝える。
   ...(breadcrumbs.length>1?[{'@type':'BreadcrumbList',itemListElement:breadcrumbs.map((breadcrumb,index)=>({'@type':'ListItem',position:index+1,name:breadcrumb.name,item:new URL(breadcrumb.path,organizationRoot).href}))}]:[])
-]};
+];
+// 変更履歴: 2026-11-23 画面に表示しているFAQと料金だけをFAQPage・Serviceとして追加（画面に無い情報は出さない）。
+if(faq.length>0)schemaNodes.push({'@type':'FAQPage','@id':`${canonical}#faq`,mainEntity:faq.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))});
+if(services.length>0)schemaNodes.push(...services.map(service=>({'@type':'Service',name:service.name,description:service.description,serviceType:service.name,provider:{'@id':`${organizationRoot}#organization`},areaServed:{'@type':'Country',name:'JP'},offers:{'@type':'Offer',price:String(service.price),priceCurrency:'JPY',availability:'https://schema.org/InStock',url:canonical}})));
+const organizationSchema = {'@context':'https://schema.org','@graph':schemaNodes};
 ---
 <!doctype html>
 <html lang="ja">
@@ -42,9 +49,15 @@ const organizationSchema = {'@context':'https://schema.org','@graph':[
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="SITEVEIL" />
     <meta property="og:locale" content="ja_JP" />
-    <meta property="og:image" content={new URL(`${home}images/services/site-maintenance.svg`,organizationRoot).href} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="SITEVEILのセキュリティ確認・検査・保守サービス" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     {!noindex && <script type="application/ld+json" set:html={JSON.stringify(organizationSchema).replace(/</g,'\u003c')} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

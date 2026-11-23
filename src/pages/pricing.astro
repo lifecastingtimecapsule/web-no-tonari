@@ -10,7 +10,7 @@ import {pricingPlans,formatPrice} from '../data/pricing';
 import '../styles/catalog.css';
 const home=import.meta.env.BASE_URL.replace(/\/$/,'')+'/';
 ---
-<SiteLayout title="セキュリティ検査・保守の料金｜SITEVEIL" description="基本確認59,400円、詳細検査198,000円〜、侵入テスト330,000円〜、基本保守月9,240円、PHP・WordPress更新99,000円〜。税込。無料チェックと有料調査の範囲を分けてご案内します。">
+<SiteLayout title="セキュリティ検査・保守の料金｜SITEVEIL" description="基本確認59,400円、詳細検査198,000円〜、侵入テスト330,000円〜、基本保守月9,240円、PHP・WordPress更新99,000円〜。税込。無料チェックと有料調査の範囲を分けてご案内します。" services={pricingPlans.filter(plan=>['maintenance','security'].includes(plan.id)).map(plan=>({name:plan.name,description:plan.summary,price:plan.amount}))}>
 <div class="shell catalog-page pricing-page"><nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><span aria-current="page">料金</span></nav><header class="catalog-heading"><h1>調べる範囲と、<br/>費用を明確に。</h1><p>すべて税込。追加作業は、内容と費用にご了承いただいてから進めます。</p></header>
 <PricingSummary/>
 <section class="pricing-section" id="included"><h2>基本確認・保守・漏えいチェック</h2>
