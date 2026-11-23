@@ -15,7 +15,7 @@ import {servicePages} from '../data/services';
 /** 公開サービスと案内ページだけを正規URLで列挙する。更新していない日付は生成しない。 */
 export const GET: APIRoute = ({site}) => {
   const root = new URL(import.meta.env.BASE_URL, site ?? 'https://site-veil.com');
-  const paths = ['columns/', ...columns.map(article=>`columns/${article.slug}/`), '', 'services/', ...servicePages.map(service => `services/${service.slug}/`), 'services/security/php/', 'pricing/', 'service-specification/', 'terms/', 'privacy/', 'company/', 'philosophy/', 'email-check/', 'check/', 'security/'];
+  const paths = ['columns/', ...columns.map(article=>`columns/${article.slug}/`), '', 'services/', ...servicePages.map(service => `services/${service.slug}/`), 'services/security/php/', 'pricing/', 'service-specification/', 'terms/', 'privacy/', 'company/', 'philosophy/', 'security/'];
   const entries = paths.map(path => `<url><loc>${new URL(path,root).href}</loc></url>`).join('');
   return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries}</urlset>`, {headers:{'Content-Type':'application/xml; charset=utf-8'}});
 };

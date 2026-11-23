@@ -5,6 +5,7 @@ import { describe, expect, it, vi, afterEach } from 'vitest';
 import { analyzeMail, analyzePage, joinTxtData, normalizeTarget, organizationalDomain } from '../workers/safety-check/src/checks';
 import worker, { isPublicIpAddress } from '../workers/safety-check/src/index';
 
+// 変更履歴: 2026-11-23 診断項目の追加に合わせ、検索向け設定・公開ファイル・WordPress・応答時間の観測値も持つ整ったページへ更新。
 const securePage = {
   httpsReachable: true,
   finalUrl: 'https://example.co.jp/',
@@ -15,7 +16,12 @@ const securePage = {
     'x-content-type-options': 'nosniff',
     'referrer-policy': 'strict-origin-when-cross-origin',
   },
-  html: '<html><head><title>t</title></head><body><img src="https://example.co.jp/a.png"></body></html>',
+  html: '<html><head><title>例のサイト</title><meta name="description" content="説明"><link rel="canonical" href="https://example.co.jp/"><meta property="og:image" content="https://example.co.jp/og.png"></head><body><h1>見出し</h1><img src="https://example.co.jp/a.png"></body></html>',
+  robotsTxt: true,
+  sitemapXml: true,
+  securityTxt: true,
+  wordpress: { detected: false, userEnumeration: null },
+  responseTimeMs: 120,
 };
 
 describe('normalizeTarget', () => {
@@ -131,14 +137,24 @@ describe('worker', () => {
       if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
       const dnsResponse = publicDns(input);
       if (dnsResponse) return dnsResponse;
+      if (input.includes('/robots.txt') || input.includes('/.well-known/security.txt')) return new Response('User-agent: *', { headers: { 'Content-Type': 'text/plain' } });
+      if (input.includes('/sitemap.xml')) return new Response('<urlset/>', { headers: { 'Content-Type': 'application/xml' } });
       return new Response(securePage.html, { headers: { 'Content-Type': 'text/html', ...securePage.headers } });
     }));
     const response = await worker.fetch(checkRequest('www.example.com'), env, ctx);
     const body = await response.json() as { counts: Record<string, number> };
     expect(response.status).toBe(200);
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe(env.ALLOWED_ORIGINS);
-    expect(body.counts).toMatchObject({ action: 0, unknown: 0 });
-    expect(requested.filter((url) => !url.includes('dns-query') && !url.includes('turnstile/v0/siteverify'))).toEqual(['https://www.example.com/', 'http://www.example.com/']);
+    expect(body.counts).toMatchObject({ action: 0, advice: 0, unknown: 0 });
+    // 変更履歴: 2026-11-23 公開ファイルの確認が加わったため、対象サイトへの通信を明示的に検証する。
+    const siteCalls = requested.filter((url) => !url.includes('dns-query') && !url.includes('turnstile/v0/siteverify'));
+    expect(siteCalls[0]).toBe('https://www.example.com/');
+    expect(siteCalls).toContain('http://www.example.com/');
+    expect(siteCalls).toEqual(expect.arrayContaining([
+      'https://www.example.com/robots.txt',
+      'https://www.example.com/sitemap.xml',
+      'https://www.example.com/.well-known/security.txt',
+    ]));
     expect(limiter.limit).toHaveBeenCalledWith({ key: 'safety:unknown' });
   });
 

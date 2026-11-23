@@ -1,4 +1,6 @@
 ---
+// 変更履歴: 2026-11-23 無料診断の統合に伴い、/check/ の本文を部品化。
+// 役割: サイトURLから公開情報だけを確認する診断ツール（/security/ で使用）。
 // 変更履歴 2026-11-20　チェック後の補足リンクを実際に開くページの名前と合わせる。
 // 変更履歴: 2026-11-15 通常時の見た目を保つTurnstileの受け口を安全チェック実行欄へ追加。
 // 変更履歴: 2026-11-11 再レビューで業務システム開発へ案内を統一。専門語と寄り道を減らし、問い合わせへ直接つなぐ。
@@ -9,7 +11,6 @@
 // 変更履歴: 2026-11-11 基本セキュリティ確認の改定料金を無料チェック後の案内に反映。
 // 変更履歴: 2026-11-11 入力前に無料・登録不要を明示し、料金確認の移動を不要にする。
 // 役割: 確認範囲を先に示し、結果を3段階で表示して、有料の基本セキュリティ確認と相談へつなぐ。
-import SiteLayout from '../layouts/SiteLayout.astro';
 import '../styles/services.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 // 変更履歴: 2026-11-08 公開済みWorkerのURLを既定値にし、リポジトリ変数がなくても動くよう変更（変数があれば優先）。
@@ -22,13 +23,16 @@ const checks = [
   ['ソフトの情報の見え方', 'サイトを動かすソフトの種類や更新番号が、外から見える状態になっていないか。'],
   ['暗号化されない読み込み', 'https:// のページの中で、http:// の画像やプログラムを読み込んでいないか。'],
   ['会社を名乗る偽メールへの対策', '会社のドメインを名乗った偽メールを防ぐ設定（SPF・DMARC）があるか。'],
+  // 変更履歴: 2026-11-23 診断項目の拡張に合わせて説明を追加。
+  ['検索向けの基本設定', 'タイトル・説明文・正規URL・SNS共有画像・見出し1が、検索結果と共有に適した形か。'],
+  ['公開ファイルの設置', 'robots.txt・サイトマップ・security.txt が公開されているか。'],
+  ['WordPressの状態', 'WordPressが使われているか、ユーザー名が外から推測できる状態かを確認。'],
+  ['ページの応答時間', 'トップページの応答にかかる時間を計測。'],
 ];
 const notChecked = ['WordPressや追加機能が最新か', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
-<SiteLayout title="かんたん安全チェック｜SITEVEIL" description="サイトのURLを入れるだけ。通信の暗号化、ブラウザ向けの保護設定、会社を名乗る偽メールへの対策など、外から見える安全性を無料で確認できます。">
 <div class="shell check-page">
-  <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">かんたん安全チェック</span></nav>
-  <h1>サイトの安全性を、<br />かんたんチェック。</h1>
+  <h2 class="check-tool__title">サイトの安全性を、<br />かんたんチェック。</h2>
   <p class="check-lead">無料・登録不要。URLから、公開されている情報を確認します。</p>
 
   <form class="check-form" data-check-form data-api={checkApi} novalidate>
@@ -38,7 +42,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
       <button class="button button--human" type="submit" data-check-run disabled={!apiAvailable}>チェックする</button>
     </div>
     <div class="check-form__challenge" data-turnstile data-sitekey={turnstileSitekey}></div>
-    <p id="check-disclosure" class="check-form__note">確認するのはトップページ1件と、サイトのアドレスに関する公開設定（DNS）だけです。侵入や攻撃にあたる操作は行いません。</p>
+    <p id="check-disclosure" class="check-form__note">確認するのは、トップページ1件、公開ファイル（robots.txt・サイトマップ・security.txt）、サイトのアドレスに関する公開設定（DNS）です。WordPressの場合は設定を1〜2か所だけ確認します。侵入や攻撃にあたる操作は行いません。</p>
     <p id="check-status" class="check-form__status" role="status" aria-live="polite" data-check-status>{apiAvailable ? '' : 'チェック機能は公開準備中です。お急ぎの場合は、お問い合わせからご相談ください。'}</p>
   </form>
 
@@ -71,11 +75,10 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 </div>
 <script>import '../scripts/safety-check';</script>
 <div class="shell"><p><a href={`${home}services/`}>ほかの検査と料金を見る</a></p></div>
-</SiteLayout>
 <style is:global>
 /* JSで描画する結果行にも効かせるため、.check-page配下に限定したグローバルスタイルにする。 */
 .check-page { max-width: 1000px; }
-.check-page h1 { margin: 0 0 24px; font-size: clamp(2.3rem, 5vw, 4.4rem); font-weight: 900; line-height: 1.25; letter-spacing: -.035em; }
+.check-page .check-tool__title { margin: 0 0 24px; font-size: clamp(2.3rem, 5vw, 4.4rem); font-weight: 900; line-height: 1.25; letter-spacing: -.035em; }
 .check-lead { margin-bottom: 36px; color: var(--ink-muted); line-height: 2; }
 .check-form { padding: 28px; border-radius: 16px; background: var(--mist-light); }
 .check-form label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; }

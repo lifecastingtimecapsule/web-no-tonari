@@ -13,7 +13,7 @@ import privacySource from '../src/pages/privacy.astro?raw';
 import layoutSource from '../src/layouts/SiteLayout.astro?raw';
 import securitySource from '../src/pages/security.astro?raw';
 import contactSource from '../deploy/site/src/contact.ts?raw';
-import emailCheckSource from '../src/pages/email-check.astro?raw';
+import emailCheckSource from '../src/components/EmailCheckTool.astro?raw';
 
 describe('SITEVEILの公開ホーム', () => {
   it('keeps_the_approved_hero_and_safety_check_first', () => {

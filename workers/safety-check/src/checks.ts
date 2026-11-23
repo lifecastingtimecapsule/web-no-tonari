@@ -23,6 +23,17 @@ export interface PageSnapshot {
   httpRedirectsToHttps: boolean | null;
   headers: Record<string, string>;
   html: string;
+  // 変更履歴: 2026-11-23 無料診断の項目拡張に伴い、公開ファイル・WordPress・応答時間の観測値を受け取る。
+  /** robots.txt が公開されているか（null = 確認できず） */
+  robotsTxt?: boolean | null;
+  /** sitemap.xml が公開されているか（null = 確認できず） */
+  sitemapXml?: boolean | null;
+  /** /.well-known/security.txt が公開されているか（null = 確認できず） */
+  securityTxt?: boolean | null;
+  /** WordPress の検出と、ユーザー名が推測できる状態か（null = 未確認） */
+  wordpress?: { detected: boolean; userEnumeration: boolean | null } | null;
+  /** トップページの応答時間（ミリ秒・null = 確認できず） */
+  responseTimeMs?: number | null;
 }
 
 export interface MailSnapshot {
@@ -160,10 +171,63 @@ export function analyzePage(page: PageSnapshot): CheckItem[] {
     }
   }
 
+  // 変更履歴: 2026-11-23 検索向け設定・公開ファイル・WordPress・応答時間の項目を追加。
+  // 役割: 取得済みのHTMLと応答から分かる範囲だけを判定し、分からないものは「確認できず」にする。
+
+  const title = page.html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, '').trim() ?? '';
+  const description = page.html.match(/<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i)?.[1]
+    ?? page.html.match(/<meta[^>]+content=["']([^"']*)["'][^>]*name=["']description["']/i)?.[1] ?? '';
+  const hasOgImage = /<meta[^>]+property=["']og:image["']/i.test(page.html);
+  const hasCanonical = /<link[^>]+rel=["']canonical["']/i.test(page.html);
+  const h1Count = (page.html.match(/<h1\b/gi) ?? []).length;
+  const noindex = /<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(page.html);
+  const seoMissing: string[] = [];
+  if (!title) seoMissing.push('タイトル（title）');
+  else if (title.length > 40) seoMissing.push('タイトルが長すぎる（40字超）');
+  if (!description) seoMissing.push('説明文（description）');
+  if (!hasCanonical) seoMissing.push('正規URL（canonical）');
+  if (!hasOgImage) seoMissing.push('SNS共有用の画像（og:image）');
+  if (h1Count === 0) seoMissing.push('見出し1（h1）');
+  if (noindex) {
+    items.push({ id: 'seo', title: '検索向けの基本設定', status: 'action', summary: 'このページは検索結果に出ない設定（noindex）です。', detail: '公開ページを意図して検索から外している場合を除き、設定を見直してください。' });
+  } else {
+    items.push(seoMissing.length === 0
+      ? { id: 'seo', title: '検索向けの基本設定', status: 'ok', summary: 'タイトル・説明文・正規URL・共有画像・見出しが揃っています。', detail: '内容の質や順位を保証するものではありません。' }
+      : { id: 'seo', title: '検索向けの基本設定', status: seoMissing.length <= 2 ? 'advice' : 'action', summary: `検索結果で伝わりにくい項目が${seoMissing.length}件あります。`, detail: `未設定・要確認：${seoMissing.join('、')}。検索結果の見え方や共有時の表示に影響します。` });
+  }
+
+  const filesKnown = [page.robotsTxt, page.sitemapXml, page.securityTxt].some((value) => value !== null && value !== undefined);
+  const missingFiles: string[] = [];
+  if (page.robotsTxt === false) missingFiles.push('robots.txt');
+  if (page.sitemapXml === false) missingFiles.push('サイトマップ（sitemap.xml）');
+  if (page.securityTxt === false) missingFiles.push('security.txt（連絡先の明示）');
+  items.push(!filesKnown
+    ? { id: 'files', title: '公開ファイルの設置', status: 'unknown', summary: '公開ファイルの有無を確認できませんでした。', detail: '時間をおいて再度お試しください。' }
+    : missingFiles.length === 0
+      ? { id: 'files', title: '公開ファイルの設置', status: 'ok', summary: 'robots.txt・サイトマップ・security.txt を確認できました。', detail: '' }
+      : { id: 'files', title: '公開ファイルの設置', status: 'advice', summary: `${missingFiles.length}件が見つかりませんでした。`, detail: `見つからない項目：${missingFiles.join('、')}。サイトマップは検索エンジンへの案内、security.txt は脆弱性の連絡先の明示に使います。` });
+
+  if (page.wordpress === undefined || page.wordpress === null) {
+    items.push({ id: 'wordpress', title: 'WordPressの状態', status: 'unknown', summary: 'WordPressかどうかを確認できませんでした。', detail: '' });
+  } else if (!page.wordpress.detected) {
+    items.push({ id: 'wordpress', title: 'WordPressの状態', status: 'ok', summary: 'WordPressは検出されませんでした。', detail: '別のCMSや自作サイトの場合は、管理画面の更新状況を別途ご確認ください。' });
+  } else if (page.wordpress.userEnumeration === true) {
+    items.push({ id: 'wordpress', title: 'WordPressの状態', status: 'action', summary: 'WordPressのユーザー名が外から推測できる状態です。', detail: '作者ページへの転送から、ログインIDの候補が分かってしまいます。ユーザー名の表示設定や、ログイン試行の制限を検討してください。' });
+  } else {
+    items.push({ id: 'wordpress', title: 'WordPressの状態', status: 'advice', summary: 'WordPressが使われています。', detail: '更新状況・プラグイン・管理者アカウントは外から確認できません。管理画面で確認してください。' });
+  }
+
+  const ms = page.responseTimeMs;
+  items.push(typeof ms !== 'number'
+    ? { id: 'speed', title: 'ページの応答時間', status: 'unknown', summary: '応答時間を計測できませんでした。', detail: '' }
+    : ms < 1200
+      ? { id: 'speed', title: 'ページの応答時間', status: 'ok', summary: `トップページは約${ms}ミリ秒で応答しました。`, detail: '計測は1回のみで、回線状況により変わります。' }
+      : ms < 3000
+        ? { id: 'speed', title: 'ページの応答時間', status: 'advice', summary: `トップページの応答に約${ms}ミリ秒かかりました。`, detail: '訪問者が離れる原因になります。サーバーや画像の見直しを検討してください。' }
+        : { id: 'speed', title: 'ページの応答時間', status: 'action', summary: `トップページの応答に約${ms}ミリ秒かかりました。`, detail: '表示が遅く、訪問者も検索エンジンも離れやすくなります。サーバー応答と読み込み量を確認してください。' });
+
   return items;
 }
-
-/** DNSのTXTから、なりすましメール対策（SPF・DMARC）の項目を作る。 */
 export function analyzeMail(mail: MailSnapshot): CheckItem[] {
   const items: CheckItem[] = [];
   const spf = mail.spf?.find((record) => /^v=spf1\b/i.test(record));

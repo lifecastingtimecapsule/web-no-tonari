@@ -31,6 +31,13 @@ export default {
       return Response.redirect(new URL('/services/',url.origin).href,301);
     }
     if (url.pathname === '/api/breach-check') return handleBreach(request,env);
+    // 変更履歴: 2026-11-23 無料診断を /security/ に統合したため、旧URLを統合ページの該当位置へ転送する。
+    if (url.pathname === '/check' || url.pathname === '/check/') {
+      return Response.redirect(new URL('/security/#site',url.origin).href,301);
+    }
+    if (url.pathname === '/email-check' || url.pathname === '/email-check/') {
+      return Response.redirect(new URL('/security/#email',url.origin).href,301);
+    }
     if (url.pathname === '/api/contact') return handleContact(request, env);
     return env.ASSETS.fetch(request);
   },

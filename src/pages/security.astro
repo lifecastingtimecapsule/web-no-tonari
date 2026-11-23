@@ -1,17 +1,36 @@
 ---
-/* 変更履歴 2026-11-20　無料で試すページを独立した入口とし、有料プランの説明は料金表に集約。 */
+// 変更履歴: 2026-11-23 無料診断を1ページに統合。サイト診断とメール漏えい診断を同じ画面で使えるようにした。
+// 役割: 複数の無料診断の入口を1か所にまとめ、有料の検査・相談へつなぐ。
 import SiteLayout from '../layouts/SiteLayout.astro';
+import SiteCheckTool from '../components/SiteCheckTool.astro';
+import EmailCheckTool from '../components/EmailCheckTool.astro';
 import '../styles/catalog.css';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 ---
-<SiteLayout title="無料のサイト・メール安全チェック｜SITEVEIL" description="サイトの通信や保護設定、メールアドレスの既知の漏えい記録をオンラインで確認できます。無料・登録不要。">
-  <div class="shell catalog-page">
-    <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span>/</span><span aria-current="page">無料チェック</span></nav>
-    <header class="catalog-heading"><h1>無料でできる安全チェック</h1><p>調べたいものを選ぶと、入力画面が開きます。登録は不要です。</p></header>
-    <div class="reader-tools">
-      <article><h2>会社やお店のサイト</h2><p>サイトのURLから、通信の暗号化や、なりすましメール対策の設定を調べます。</p><a href={home + 'check/'}>サイトのURLを確認する</a></article>
-      <article><h2>メールアドレス</h2><p>既知の漏えい記録に含まれるかと、おおよその件数を表示します。ご本人か、確認の許可を得たアドレスが対象です。</p><a href={home + 'email-check/'}>メールアドレスを確認する</a></article>
-    </div>
-    <p class="reader-more">管理画面の設定やプログラムまで調べたい方は、<a href={home + 'services/'}>有料の検査と料金</a>をご覧ください。</p>
+<SiteLayout title="無料のサイト・メール安全チェック｜SITEVEIL" description="サイトURLとメールアドレスから、通信の暗号化・保護設定・公開ファイル・WordPress・検索向け設定・漏えい記録を無料で確認できます。登録不要。">
+  <div class="shell catalog-page free-tools">
+    <nav class="page-breadcrumb" aria-label="パンくず"><a href={home}>ホーム</a><span aria-hidden="true">/</span><span aria-current="page">無料チェック</span></nav>
+    <header class="catalog-heading">
+      <h1>無料でできる安全チェック</h1>
+      <p>サイトとメールの診断を、このページでまとめて確認できます。無料・登録不要。</p>
+    </header>
+    <nav class="free-tools__index" aria-label="診断ツール">
+      <a href="#site">サイトの安全チェック</a>
+      <a href="#email">メール漏えいチェック</a>
+    </nav>
   </div>
+  <section id="site" class="free-tools__tool">
+    <SiteCheckTool />
+  </section>
+  <section id="email" class="free-tools__tool">
+    <EmailCheckTool />
+  </section>
 </SiteLayout>
+<style is:global>
+  .free-tools__index { display: flex; flex-wrap: wrap; gap: 12px; }
+  .free-tools__index a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px; border: 1px solid var(--mist); border-radius: 999px; color: var(--ink); text-decoration: none; font-weight: 700; }
+  .free-tools__index a:hover { border-color: var(--signal); color: var(--signal); }
+  .free-tools__tool { scroll-margin-top: 120px; }
+  #email { margin-top: 72px; padding-top: 56px; border-top: 1px solid var(--mist); }
+  @media (max-width: 800px) { #email { margin-top: 48px; padding-top: 40px; } }
+</style>

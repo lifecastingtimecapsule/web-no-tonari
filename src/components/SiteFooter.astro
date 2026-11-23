@@ -20,7 +20,7 @@ import { servicePages } from '../data/services';
 const home = import.meta.env.BASE_URL.replace(/\/$/, '') + '/';
 const isCompanyPage = Astro.url.pathname.endsWith('/company/');
 const groups: [string, [string, string][]][] = [
-  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => ['ご相談から報告まで', `${home}services/${service.slug}/`]), ['無料メール漏えいチェック', `${home}email-check/`], ['かんたん安全チェック', `${home}check/`]]],
+  ['サービス', [['サービス一覧', `${home}services/`], ...servicePages.map((service): [string, string] => ['ご相談から報告まで', `${home}services/${service.slug}/`]), ['無料でできる安全チェック', `${home}security/`]]],
   ['ご案内', [['コラム', `${home}columns/`], ['会社概要', `${home}company/`], ['企業理念', `${home}philosophy/`], ['料金', `${home}pricing/`], ['よくある質問', `${home}#faq`]]],
   ['お問い合わせ', [['お問い合わせフォーム', `${home}#contact`]]],
 ];

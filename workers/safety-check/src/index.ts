@@ -1,8 +1,8 @@
 // 変更履歴: 2026-11-15 Turnstileの成功・action・本番hostnameを確認してから外部サイトへ接続するよう変更。
 // 変更履歴: 2026-11-15 名前解決後の非公開IPを遮断し、転送を同一ホスト2回まで、呼び出し制限をCloudflare共有カウンタに変更。
 // 変更履歴: 2026-11-08 「かんたん安全チェック」のCloudflare Worker入口を追加。
-// 役割: 公開サイトのトップページ1件とDNSのTXTだけを取得し、確認結果をJSONで返す。
-// 方針: 1回の確認でトップページへのGETは最大2系統（https・http）、転送は同一ホスト2回まで。結果は10分間キャッシュする。
+// 役割: 公開サイトのトップページ・公開ファイル（robots.txt・サイトマップ・security.txt）・DNSのTXTを取得し、確認結果をJSONで返す。
+// 方針: 1回の確認で外部へのGETはトップページ2系統（https・http）と公開ファイル3件、WordPressの場合は設定確認2件まで。転送は同一ホスト2回まで。結果は10分間キャッシュする。
 import { analyzeMail, analyzePage, countStatuses, isIpLiteral, joinTxtData, normalizeTarget, organizationalDomain } from './checks';
 import type { PageSnapshot } from './checks';
 import {verifyTurnstile,type TurnstileEnv} from '../../shared/turnstile';
@@ -133,6 +133,7 @@ async function readLimited(response: Response): Promise<string> {
 }
 
 async function snapshotPage(host: string): Promise<PageSnapshot & { diagnostics: Record<string, string | number | null> }> {
+  const startedAt = Date.now();
   const [httpsResult, httpResult] = await Promise.allSettled([
     fetchFollowing(`https://${host}/`, true),
     fetchWithTimeout(`http://${host}/`, { redirect: 'manual', headers: { 'User-Agent': USER_AGENT } }),
@@ -153,6 +154,51 @@ async function snapshotPage(host: string): Promise<PageSnapshot & { diagnostics:
   }
   const headers: Record<string, string> = {};
   page?.response.headers.forEach((value, key) => { headers[key.toLowerCase()] = value; });
+
+  // 変更履歴: 2026-11-23 公開ファイル・WordPress・応答時間の確認を追加（トップページを取得できた場合のみ）。
+  // 方針: 追加の通信は同一ホストへの限定的なGETのみ。HTMLを返す「なんでも200」のサイトを存在と誤認しないよう、Content-Typeも見る。
+  const base = `https://${host}`;
+  const probe = async (path: string): Promise<boolean | null> => {
+    try {
+      const response = await fetchWithTimeout(`${base}${path}`, { redirect: 'manual', headers: { 'User-Agent': USER_AGENT } });
+      const type = (response.headers.get('Content-Type') ?? '').toLowerCase();
+      await response.body?.cancel();
+      if (response.status === 404) return false;
+      if (response.status >= 200 && response.status < 300) return !type.includes('text/html');
+      if (response.status >= 300 && response.status < 400) return true;
+      return null;
+    } catch {
+      return null;
+    }
+  };
+  let robotsTxt: boolean | null = null;
+  let sitemapXml: boolean | null = null;
+  let securityTxt: boolean | null = null;
+  let wordpress: { detected: boolean; userEnumeration: boolean | null } | null = null;
+  if (page) {
+    [robotsTxt, sitemapXml, securityTxt] = await Promise.all([
+      probe('/robots.txt'),
+      probe('/sitemap.xml'),
+      probe('/.well-known/security.txt'),
+    ]);
+    const detected = /wp-content|wp-includes/i.test(page.body) || /<meta[^>]+name=["']generator["'][^>]+wordpress/i.test(page.body);
+    if (detected) {
+      let userEnumeration: boolean | null = null;
+      try {
+        const response = await fetchWithTimeout(`${base}/?author=1`, { redirect: 'manual', headers: { 'User-Agent': USER_AGENT } });
+        const location = response.headers.get('Location') ?? '';
+        await response.body?.cancel();
+        userEnumeration = /\/author\//.test(location) ? true : false;
+      } catch {
+        userEnumeration = null;
+      }
+      wordpress = { detected: true, userEnumeration };
+    } else {
+      wordpress = { detected: false, userEnumeration: null };
+    }
+  }
+  const responseTimeMs = page ? Date.now() - startedAt : null;
+
   return {
     httpsReachable: Boolean(page),
     status: page?.response.status ?? null,
@@ -160,6 +206,11 @@ async function snapshotPage(host: string): Promise<PageSnapshot & { diagnostics:
     httpRedirectsToHttps,
     headers,
     html: page?.body ?? '',
+    robotsTxt,
+    sitemapXml,
+    securityTxt,
+    wordpress,
+    responseTimeMs,
     diagnostics,
   };
 }
@@ -207,7 +258,7 @@ export default {
     if(turnstile!=='valid')return json({error:'challenge',message:'操作を確認できませんでした。画面を更新して、もう一度お試しください。'},403,cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-    const cacheKey = new Request(`https://safety-check.cache/v6/${normalized.url.hostname}`);
+    const cacheKey = new Request(`https://safety-check.cache/v7/${normalized.url.hostname}`);
     const cached = await cache?.match(cacheKey);
     if (cached) return json(await cached.json(), 200, { ...cors, 'X-Check-Cache': 'hit' });
 

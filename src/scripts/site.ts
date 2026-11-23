@@ -257,7 +257,7 @@ function setupSafetyCheck(): void {
     try {
       const targetUrl = new URL(/^https?:\/\//i.test(enteredUrl) ? enteredUrl : `https://${enteredUrl}`);
       if (!['http:', 'https:'].includes(targetUrl.protocol) || !targetUrl.hostname.includes('.')) throw new Error('invalid-url');
-      const checkUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/check/`, location.origin);
+      const checkUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, '')}/security/#site`, location.origin);
       checkUrl.searchParams.set('url', targetUrl.hostname);
       if (previewState) previewState.textContent = '確認へ進む';
       input.removeAttribute('aria-invalid');
