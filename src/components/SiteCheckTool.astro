@@ -18,12 +18,12 @@ const checkApi = import.meta.env.PUBLIC_SAFETY_CHECK_API || 'https://web-no-tona
 const apiAvailable = Boolean(checkApi);
 const turnstileSitekey = '0x4AAAAAAGBp3rc6eEe2zLBS';
 const checks = [
-  ['通信が守られているか', '鍵マーク（https）で開けるか、古い http:// から自動で切り替わるか。'],
-  ['ブラウザの防御設定', 'サイトを悪用した攻撃を防ぐ設定が入っているか。'],
-  ['ソフトのバージョン隠し', '使っているソフトの種類・版が外から見える状態になっていないか。'],
-  ['偽メールへの対策', '会社のドメインを名乗る偽メールを防ぐ設定（SPF・DMARC）があるか。'],
-  ['検索と共有の見え方', '検索結果に出るタイトル・説明、共有時の画像が揃っているか。'],
-  ['過去の漏えい', 'そのドメインが、漏えい元として公表されたことがないか。'],
+  ['鍵マークで開けるか', 'https:// で安全に開けるか、古い http:// から自動で切り替わるか。'],
+  ['ブラウザの守りが固いか', 'サイトを悪用した攻撃を防ぐ設定が入っているか。'],
+  ['使っているソフトが丸見えでないか', 'ソフトの種類や版が、外から見えない状態か。'],
+  ['会社をかたる偽メールを防げるか', 'なりすましメールを防ぐ設定（SPF・DMARC）があるか。'],
+  ['検索やSNSでちゃんと見えるか', '検索結果のタイトル・説明、共有したときの画像が揃っているか。'],
+  ['過去に漏えいしていないか', 'この会社が、漏えい元として公表されたことがないか。'],
 ];
 const notChecked = ['WordPressや追加機能が最新か', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
@@ -60,7 +60,8 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
   </section>
 
   <section class="check-scope" aria-labelledby="check-scope-title">
-    <h2 id="check-scope-title">無料で調べること</h2>
+    <h2 id="check-scope-title">調べるのは、この6つです</h2>
+    <p class="check-scope__lead">むずかしい設定の話は抜きにして、危ないかどうかだけを見ます。</p>
     <dl>{checks.map(([title, body]) => <div><dt>{title}</dt><dd>{body}</dd></div>)}</dl>
   </section>
 
@@ -131,6 +132,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 .check-page .status-badge--unknown { color: var(--ink-muted); background: white; border-color: var(--mist); }
 .check-result__time { margin-top: 14px; color: var(--ink-muted); font-size: 12px; }
 .check-scope { margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--mist); }
+.check-scope__lead { margin: 0 0 8px; color: var(--ink-muted); font-size: 14px; line-height: 1.9; }
 .check-scope dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; margin: 24px 0 0; }
 .check-scope dl > div { padding: 18px 0; border-top: 1px solid var(--mist); }
 .check-scope dt { margin-bottom: 6px; font-weight: 700; }
