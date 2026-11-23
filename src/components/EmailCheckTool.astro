@@ -17,8 +17,8 @@ const turnstileSitekey='0x4AAAAAAGBp3rc6eEe2zLBS';
     <label class="email-check__field" for="breach-email">メールアドレス</label>
     <div class="email-check__entry"><input id="breach-email" name="email" type="email" autocomplete="email" inputmode="email" spellcheck="false" placeholder="you@example.com" maxlength="254" required aria-describedby="breach-privacy breach-status" /><button type="submit">無料で調べる<span aria-hidden="true">↗</span></button></div>
     <div class="email-check__challenge" data-turnstile data-sitekey={turnstileSitekey}></div>
-    <label class="email-check__consent"><input type="checkbox" name="consent" required /><span>本人、または調査の許可を得たメールアドレスです。漏えい情報を提供する外部サービスに、このアドレスを送って調べることに同意します。</span></label>
-    <p id="breach-privacy" class="email-check__privacy">メールアドレスはHave I Been PwnedとXposedOrNotへ送信します。SITEVEILはアドレスと結果を保存しません。パスワードは入力しないでください。<a href={`${home}privacy/`}>情報の取扱いを確認</a></p>
+    <label class="email-check__consent"><input type="checkbox" name="consent" required /><span>本人、または許可を得たアドレスです。外部サービス（Have I Been Pwned・XposedOrNot）に送って調べることに同意します。</span></label>
+    <p id="breach-privacy" class="email-check__privacy">SITEVEILはアドレスと結果を保存しません。パスワードは入力しないでください。<a href={`${home}privacy/`}>情報の取扱いを確認</a></p>
     <div class="email-check__trap" aria-hidden="true"><label>入力しないでください<input name="website" tabindex="-1" autocomplete="off" /></label></div>
     <p id="breach-status" class="email-check__status" role="status" aria-live="polite" data-breach-status></p>
   </form>
