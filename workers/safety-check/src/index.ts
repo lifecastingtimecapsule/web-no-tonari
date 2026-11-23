@@ -3,7 +3,7 @@
 // 変更履歴: 2026-11-08 「かんたん安全チェック」のCloudflare Worker入口を追加。
 // 役割: 公開サイトのトップページ・公開ファイル（robots.txt・サイトマップ・security.txt）・DNSのTXTを取得し、確認結果をJSONで返す。
 // 方針: 1回の確認で外部へのGETはトップページ2系統（https・http）と公開ファイル3件、WordPressの場合は設定確認2件まで。転送は同一ホスト2回まで。結果は10分間キャッシュする。
-import { analyzeMail, analyzePage, countStatuses, isIpLiteral, joinTxtData, normalizeTarget, organizationalDomain } from './checks';
+import { analyzeDomainBreach, analyzeMail, analyzePage, countStatuses, isIpLiteral, joinTxtData, normalizeTarget, organizationalDomain } from './checks';
 import type { PageSnapshot } from './checks';
 import {verifyTurnstile,type TurnstileEnv} from '../../shared/turnstile';
 
@@ -228,12 +228,55 @@ async function lookupTxt(name: string): Promise<string[] | null> {
   }
 }
 
+/** HIBPの公開漏えい一覧（認証不要）から、漏えい元ドメインの索引を作る。24時間キャッシュする。 */
+interface BreachIndexEntry { name: string; domain: string; date: string; pwnCount: number }
+
+async function fetchBreachIndex(): Promise<BreachIndexEntry[] | null> {
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
+  const key = new Request('https://safety-check.cache/hibp-breaches-v1');
+  try {
+    const cached = await cache?.match(key);
+    if (cached) return (await cached.json()) as BreachIndexEntry[];
+  } catch { /* キャッシュ不調は無視して取得へ */ }
+  try {
+    const response = await fetch('https://haveibeenpwned.com/api/v3/breaches', {
+      headers: { 'User-Agent': USER_AGENT, Accept: 'application/json' },
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!response.ok) return null;
+    const raw = (await response.json()) as Record<string, unknown>[];
+    if (!Array.isArray(raw)) return null;
+    // 保存するのは公開情報の最小限だけ（説明文・メールアドレス等は保持しない）。
+    const index = raw.flatMap((entry): BreachIndexEntry[] => {
+      const domain = typeof entry.Domain === 'string' ? entry.Domain.trim().toLowerCase().replace(/\.$/, '') : '';
+      const name = typeof entry.Name === 'string' ? entry.Name.slice(0, 80) : '';
+      const date = typeof entry.BreachDate === 'string' ? entry.BreachDate.slice(0, 10) : '';
+      const pwnCount = typeof entry.PwnCount === 'number' ? entry.PwnCount : 0;
+      return domain && name ? [{ name, domain, date, pwnCount }] : [];
+    });
+    if (cache) await cache.put(key, new Response(JSON.stringify(index), { headers: { 'Cache-Control': 'max-age=86400' } }));
+    return index;
+  } catch {
+    return null;
+  }
+}
+
+/** 対象ドメイン（組織ドメイン・ホスト・その配下）に一致する漏えい記録を抜き出す。 */
+function matchBreaches(index: BreachIndexEntry[] | null, host: string, domain: string) {
+  if (!index) return null;
+  return index.filter((entry) => entry.domain === host || entry.domain === domain || entry.domain.endsWith(`.${domain}`));
+}
+
 async function runCheck(target: URL) {
   const host = target.hostname;
   await assertPublicHost(host);
   const domain = organizationalDomain(host);
-  const [page, spf, dmarc] = await Promise.all([snapshotPage(host), lookupTxt(domain), lookupTxt(`_dmarc.${domain}`)]);
-  const items = [...analyzePage(page), ...analyzeMail({ domain, spf, dmarc })];
+  const [page, spf, dmarc, breachIndex] = await Promise.all([snapshotPage(host), lookupTxt(domain), lookupTxt(`_dmarc.${domain}`), fetchBreachIndex()]);
+  const items = [
+    ...analyzePage(page),
+    ...analyzeMail({ domain, spf, dmarc }),
+    ...analyzeDomainBreach({ domain, records: matchBreaches(breachIndex, host, domain) }),
+  ];
   return { target: target.toString(), domain, checkedAt: new Date().toISOString(), reachable: page.httpsReachable, items, counts: countStatuses(items), diagnostics: page.diagnostics };
 }
 
@@ -258,7 +301,7 @@ export default {
     if(turnstile!=='valid')return json({error:'challenge',message:'操作を確認できませんでした。画面を更新して、もう一度お試しください。'},403,cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-    const cacheKey = new Request(`https://safety-check.cache/v7/${normalized.url.hostname}`);
+    const cacheKey = new Request(`https://safety-check.cache/v8/${normalized.url.hostname}`);
     const cached = await cache?.match(cacheKey);
     if (cached) return json(await cached.json(), 200, { ...cors, 'X-Check-Cache': 'hit' });
 

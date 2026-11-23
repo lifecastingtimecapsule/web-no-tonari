@@ -255,6 +255,41 @@ export function analyzeMail(mail: MailSnapshot): CheckItem[] {
   return items;
 }
 
+/** 公開されている漏えい記録のうち、対象ドメインが漏えい元として掲載されているもの。 */
+export interface BreachSnapshot {
+  domain: string;
+  /** 取得できなかった場合は null（＝確認できず） */
+  records: { name: string; date: string; pwnCount: number }[] | null;
+}
+
+/**
+ * 変更履歴: 2026-11-23 「ドメインの漏えい履歴」を追加。
+ * 役割: ドメインが漏えい元として公表されているかだけを判定する。
+ * 方針: 個々のメールアドレスの一覧は、ドメイン所有者の確認なしには扱わない（別メニュー）。
+ */
+export function analyzeDomainBreach(snapshot: BreachSnapshot): CheckItem[] {
+  const items: CheckItem[] = [];
+  if (snapshot.records === null) {
+    items.push({ id: 'breach-domain', title: 'ドメインの漏えい履歴', status: 'unknown', summary: '公開されている漏えい記録を確認できませんでした。', detail: '時間をおいて再度お試しください。' });
+    return items;
+  }
+  if (snapshot.records.length === 0) {
+    items.push({ id: 'breach-domain', title: 'ドメインの漏えい履歴', status: 'ok', summary: `${snapshot.domain} は、公表されている漏えい記録の「漏えい元」には見つかりませんでした。`, detail: 'このドメインのメールアドレスが漏えいしていないことを保証するものではありません。個別のアドレスは「メール漏えいチェック」で確認できます。' });
+    return items;
+  }
+  const sorted = [...snapshot.records].sort((a, b) => b.date.localeCompare(a.date));
+  const latest = sorted[0];
+  const names = sorted.slice(0, 3).map((record) => `${record.name}（${record.date}）`).join('、');
+  items.push({
+    id: 'breach-domain',
+    title: 'ドメインの漏えい履歴',
+    status: 'action',
+    summary: `このドメインが漏えい元として公表されている記録が${sorted.length}件あります。最後は${latest.date}です。`,
+    detail: `記録：${names}${sorted.length > 3 ? ' ほか' : ''}。漏えいした情報にパスワードが含まれる場合、同じパスワードを使い回しているアカウントの変更を検討してください。`,
+  });
+  return items;
+}
+
 /** TXTレコードの値を、引用符で分割された形式から結合済みの文字列へ戻す。 */
 export function joinTxtData(data: string): string {
   const parts = data.match(/"((?:[^"\\]|\\.)*)"/g);

@@ -28,6 +28,7 @@ const checks = [
   ['公開ファイルの設置', 'robots.txt・サイトマップ・security.txt が公開されているか。'],
   ['WordPressの状態', 'WordPressが使われているか、ユーザー名が外から推測できる状態かを確認。'],
   ['ページの応答時間', 'トップページの応答にかかる時間を計測。'],
+  ['ドメインの漏えい履歴', 'そのドメインが過去に漏えい元として公表されていないか。個々のメールアドレスの一覧は、所有者確認が必要なため別メニューです。'],
 ];
 const notChecked = ['WordPressや追加機能が最新か', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
@@ -42,7 +43,7 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
       <button class="button button--human" type="submit" data-check-run disabled={!apiAvailable}>チェックする</button>
     </div>
     <div class="check-form__challenge" data-turnstile data-sitekey={turnstileSitekey}></div>
-    <p id="check-disclosure" class="check-form__note">確認するのは、トップページ1件、公開ファイル（robots.txt・サイトマップ・security.txt）、サイトのアドレスに関する公開設定（DNS）です。WordPressの場合は設定を1〜2か所だけ確認します。侵入や攻撃にあたる操作は行いません。</p>
+    <p id="check-disclosure" class="check-form__note">確認するのは、トップページ1件、公開ファイル（robots.txt・サイトマップ・security.txt）、サイトのアドレスに関する公開設定（DNS）です。WordPressの場合は設定を1〜2か所だけ確認します。ドメインの漏えい履歴は、公開されている漏えい記録にドメインだけを照会します（メールアドレスは送信しません）。侵入や攻撃にあたる操作は行いません。</p>
     <p id="check-status" class="check-form__status" role="status" aria-live="polite" data-check-status>{apiAvailable ? '' : 'チェック機能は公開準備中です。お急ぎの場合は、お問い合わせからご相談ください。'}</p>
   </form>
 

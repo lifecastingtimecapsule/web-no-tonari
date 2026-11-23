@@ -2,7 +2,7 @@
 // 変更履歴: 2026-11-15 名前解決後の非公開IP、別ホスト転送、分散レート制限の回帰検証を追加。
 // 変更履歴: 2026-11-08 安全チェックの入力制限と判定（3段階・確認できず）を固定するテストを追加。
 import { describe, expect, it, vi, afterEach } from 'vitest';
-import { analyzeMail, analyzePage, joinTxtData, normalizeTarget, organizationalDomain } from '../workers/safety-check/src/checks';
+import { analyzeDomainBreach, analyzeMail, analyzePage, joinTxtData, normalizeTarget, organizationalDomain } from '../workers/safety-check/src/checks';
 import worker, { isPublicIpAddress } from '../workers/safety-check/src/index';
 
 // 変更履歴: 2026-11-23 診断項目の追加に合わせ、検索向け設定・公開ファイル・WordPress・応答時間の観測値も持つ整ったページへ更新。
@@ -93,7 +93,19 @@ describe('analyzeMail', () => {
   });
 });
 
+describe('analyzeDomainBreach', () => {
+  it('漏えい元として公表されていれば要対応、無ければ問題なし、取得不可は確認できず', () => {
+    expect(analyzeDomainBreach({ domain: 'example.jp', records: null })[0].status).toBe('unknown');
+    expect(analyzeDomainBreach({ domain: 'example.jp', records: [] })[0].status).toBe('ok');
+    const found = analyzeDomainBreach({ domain: 'example.jp', records: [{ name: 'Example', date: '2021-03-01', pwnCount: 1000 }] })[0];
+    expect(found.status).toBe('action');
+    expect(found.summary).toContain('1件');
+    expect(found.detail).toContain('Example');
+  });
+});
+
 describe('worker', () => {
+
   afterEach(() => vi.unstubAllGlobals());
   const ctx = { waitUntil: () => undefined };
   const limiter = { limit: vi.fn(async () => ({ success: true })) };
@@ -137,6 +149,7 @@ describe('worker', () => {
       if (input.startsWith('http://')) return new Response(null, { status: 301, headers: { Location: 'https://example.com/' } });
       const dnsResponse = publicDns(input);
       if (dnsResponse) return dnsResponse;
+      if (input.includes('haveibeenpwned.com/api/v3/breaches')) return Response.json([]);
       if (input.includes('/robots.txt') || input.includes('/.well-known/security.txt')) return new Response('User-agent: *', { headers: { 'Content-Type': 'text/plain' } });
       if (input.includes('/sitemap.xml')) return new Response('<urlset/>', { headers: { 'Content-Type': 'application/xml' } });
       return new Response(securePage.html, { headers: { 'Content-Type': 'text/html', ...securePage.headers } });
@@ -147,7 +160,7 @@ describe('worker', () => {
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe(env.ALLOWED_ORIGINS);
     expect(body.counts).toMatchObject({ action: 0, advice: 0, unknown: 0 });
     // 変更履歴: 2026-11-23 公開ファイルの確認が加わったため、対象サイトへの通信を明示的に検証する。
-    const siteCalls = requested.filter((url) => !url.includes('dns-query') && !url.includes('turnstile/v0/siteverify'));
+    const siteCalls = requested.filter((url) => !url.includes('dns-query') && !url.includes('turnstile/v0/siteverify') && !url.includes('haveibeenpwned.com'));
     expect(siteCalls[0]).toBe('https://www.example.com/');
     expect(siteCalls).toContain('http://www.example.com/');
     expect(siteCalls).toEqual(expect.arrayContaining([
