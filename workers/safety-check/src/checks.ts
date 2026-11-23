@@ -4,12 +4,21 @@
 
 export type CheckStatus = 'ok' | 'advice' | 'action' | 'unknown';
 
+export interface PlainCopy {
+  title: string;
+  summary: string;
+  danger?: string;
+  past?: string;
+}
+
 export interface CheckItem {
   id: string;
   title: string;
   status: CheckStatus;
   summary: string;
   detail: string;
+  /** 一般向けの言い換え（messages.ts で付与） */
+  plain?: PlainCopy;
 }
 
 export interface PageSnapshot {

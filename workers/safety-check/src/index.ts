@@ -4,6 +4,7 @@
 // 役割: 公開サイトのトップページ・公開ファイル（robots.txt・サイトマップ・security.txt）・DNSのTXTを取得し、確認結果をJSONで返す。
 // 方針: 1回の確認で外部へのGETはトップページ2系統（https・http）と公開ファイル3件、WordPressの場合は設定確認2件まで。転送は同一ホスト2回まで。結果は10分間キャッシュする。
 import { analyzeDomainBreach, analyzeMail, analyzePage, countStatuses, isIpLiteral, joinTxtData, normalizeTarget, organizationalDomain } from './checks';
+import { decorate, scoreRisk } from './messages';
 import type { PageSnapshot } from './checks';
 import {verifyTurnstile,type TurnstileEnv} from '../../shared/turnstile';
 
@@ -272,12 +273,13 @@ async function runCheck(target: URL) {
   await assertPublicHost(host);
   const domain = organizationalDomain(host);
   const [page, spf, dmarc, breachIndex] = await Promise.all([snapshotPage(host), lookupTxt(domain), lookupTxt(`_dmarc.${domain}`), fetchBreachIndex()]);
-  const items = [
+  const items = decorate([
     ...analyzePage(page),
     ...analyzeMail({ domain, spf, dmarc }),
     ...analyzeDomainBreach({ domain, records: matchBreaches(breachIndex, host, domain) }),
-  ];
-  return { target: target.toString(), domain, checkedAt: new Date().toISOString(), reachable: page.httpsReachable, items, counts: countStatuses(items), diagnostics: page.diagnostics };
+  ]);
+  const risk = scoreRisk(items);
+  return { target: target.toString(), domain, checkedAt: new Date().toISOString(), reachable: page.httpsReachable, items, counts: countStatuses(items), risk, diagnostics: page.diagnostics };
 }
 
 export default {
@@ -301,7 +303,7 @@ export default {
     if(turnstile!=='valid')return json({error:'challenge',message:'操作を確認できませんでした。画面を更新して、もう一度お試しください。'},403,cors);
 
     const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default;
-    const cacheKey = new Request(`https://safety-check.cache/v8/${normalized.url.hostname}`);
+    const cacheKey = new Request(`https://safety-check.cache/v9/${normalized.url.hostname}`);
     const cached = await cache?.match(cacheKey);
     if (cached) return json(await cached.json(), 200, { ...cors, 'X-Check-Cache': 'hit' });
 

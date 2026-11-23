@@ -3,6 +3,7 @@
 // 変更履歴: 2026-11-08 安全チェックの入力制限と判定（3段階・確認できず）を固定するテストを追加。
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import { analyzeDomainBreach, analyzeMail, analyzePage, joinTxtData, normalizeTarget, organizationalDomain } from '../workers/safety-check/src/checks';
+import { decorate, scoreRisk } from '../workers/safety-check/src/messages';
 import worker, { isPublicIpAddress } from '../workers/safety-check/src/index';
 
 // 変更履歴: 2026-11-23 診断項目の追加に合わせ、検索向け設定・公開ファイル・WordPress・応答時間の観測値も持つ整ったページへ更新。
@@ -104,7 +105,27 @@ describe('analyzeDomainBreach', () => {
   });
 });
 
+describe('scoreRisk / decorate', () => {
+  const item = (status: 'ok' | 'advice' | 'action' | 'unknown') => ({ id: 'x', title: 't', status, summary: 's', detail: '' });
+  it('問題の重みで危険度を出し、確認できた項目数を返す', () => {
+    expect(scoreRisk([]).level).toBe('unknown');
+    expect(scoreRisk([item('ok'), item('ok')]).score).toBe(0);
+    expect(scoreRisk([item('advice')]).level).toBe('watch');
+    expect(scoreRisk([item('action')]).score).toBe(30);
+    expect(scoreRisk([item('action'), item('action')]).level).toBe('danger');
+    const mixed = scoreRisk([item('action'), item('unknown')]);
+    expect(mixed.known).toBe(1);
+    expect(mixed.total).toBe(2);
+  });
+  it('やさしい表現と過去事例を付与する', () => {
+    const [first] = decorate([{ id: 'https', title: 'HTTPS', status: 'action', summary: 'x', detail: '' }]);
+    expect(first.plain?.title).toContain('暗号化');
+    expect(first.plain?.past).toBeTruthy();
+  });
+});
+
 describe('worker', () => {
+
 
   afterEach(() => vi.unstubAllGlobals());
   const ctx = { waitUntil: () => undefined };

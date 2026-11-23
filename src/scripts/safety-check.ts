@@ -5,11 +5,16 @@
 import {createTurnstileController} from './turnstile';
 
 type Status = 'ok' | 'advice' | 'action' | 'unknown';
-interface Item { id: string; title: string; status: Status; summary: string; detail: string }
-interface Result { target: string; checkedAt: string; items: Item[]; counts: Record<Status, number> }
+type RiskLevel = 'good' | 'watch' | 'caution' | 'danger' | 'unknown';
+interface Plain { title: string; summary: string; danger?: string; past?: string }
+interface Item { id: string; title: string; status: Status; summary: string; detail: string; plain?: Plain }
+interface Risk { score: number; level: RiskLevel; label: string; headline: string; note: string; known: number; total: number }
+interface Result { target: string; checkedAt: string; items: Item[]; counts: Record<Status, number>; risk?: Risk }
 
-const STATUS_LABEL: Record<Status, string> = { ok: '問題なし', advice: '確認をおすすめ', action: '要対応', unknown: '確認できず' };
-const STATUS_ICON: Record<Status, string> = { ok: '✓', advice: '!', action: '×', unknown: '–' };
+// 変更履歴: 2026-11-23 一般向けに「危険」「注意」の言葉へ変更。
+const STATUS_LABEL: Record<Status, string> = { ok: '問題なし', advice: '注意', action: '危険', unknown: '確認できず' };
+const STATUS_ICON: Record<Status, string> = { ok: '✓', advice: '!', action: '!', unknown: '–' };
+const FALLBACK_RISK: Risk = { score: 0, level: 'unknown', label: '判定できませんでした', headline: '自動では判定できませんでした', note: '公開情報から判定できませんでした。', known: 0, total: 0 };
 
 const form = document.querySelector<HTMLFormElement>('[data-check-form]')!;
 const input = document.querySelector<HTMLInputElement>('#check-url')!;
@@ -32,8 +37,31 @@ function badge(state: Status): HTMLElement {
   return element;
 }
 
+function text(selector: string, value: string): void {
+  const element = document.querySelector<HTMLElement>(selector);
+  if (element) element.textContent = value;
+}
+
 function render(result: Result): void {
-  document.querySelector('[data-check-target]')!.textContent = `確認したサイト：${result.target}`;
+  text('[data-check-target]', `確認したサイト：${result.target}`);
+
+  // 危険度バナー（0〜100の目安。確率ではない）
+  const risk = result.risk ?? { ...FALLBACK_RISK, total: result.items.length };
+  const verdict = document.querySelector<HTMLElement>('[data-check-verdict]')!;
+  verdict.dataset.level = risk.level;
+  verdict.hidden = false;
+  text('[data-verdict-label]', `危険度：${risk.label}`);
+  text('[data-verdict-score]', String(risk.score));
+  const meter = document.querySelector<HTMLElement>('[data-verdict-meter]')!;
+  meter.setAttribute('aria-valuenow', String(risk.score));
+  meter.setAttribute('aria-valuetext', `危険度スコア ${risk.score} / 100（${risk.label}）`);
+  const fill = meter.querySelector<HTMLElement>('.check-meter__fill');
+  if (fill) fill.style.inlineSize = `${risk.score}%`;
+  text('[data-verdict-headline]', risk.headline);
+  const unknownNote = risk.total > risk.known ? ` 確認できたのは${risk.total}項目中${risk.known}項目です。` : '';
+  text('[data-verdict-note]', `${risk.note}${unknownNote}`);
+
+  // 内訳チップ
   const summary = document.querySelector('[data-check-summary]')!;
   summary.replaceChildren();
   for (const state of ['action', 'advice', 'ok', 'unknown'] as Status[]) {
@@ -44,33 +72,54 @@ function render(result: Result): void {
     item.append(chip);
     summary.append(item);
   }
+
+  // 危険な順に並べ、やさしい言葉＋過去事例＋技術詳細（折りたたみ）で表示
   const list = document.querySelector('[data-check-items]')!;
   list.replaceChildren();
-  // 要対応→確認をおすすめ→問題なしの順に並べ、先に見るべき項目を上へ置く。
   const order: Status[] = ['action', 'advice', 'unknown', 'ok'];
   for (const entry of [...result.items].sort((a, b) => order.indexOf(a.status) - order.indexOf(b.status))) {
     const row = document.createElement('li');
     row.className = 'check-item';
+    row.append(badge(entry.status));
     const body = document.createElement('div');
     const title = document.createElement('h3');
-    title.textContent = entry.title;
-    const text = document.createElement('p');
-    text.textContent = entry.summary;
-    body.append(title, text);
+    title.textContent = entry.plain?.title ?? entry.title;
+    const lead = document.createElement('p');
+    lead.className = 'check-plain';
+    lead.textContent = entry.plain?.summary ?? entry.summary;
+    body.append(title, lead);
+    if (entry.plain?.danger) {
+      const danger = document.createElement('p');
+      danger.className = 'check-danger';
+      danger.textContent = entry.plain.danger;
+      body.append(danger);
+    }
+    if (entry.plain?.past) {
+      const past = document.createElement('p');
+      past.className = 'check-past';
+      past.textContent = `過去に起きたこと：${entry.plain.past}`;
+      body.append(past);
+    }
     if (entry.detail) {
+      const details = document.createElement('details');
+      const summaryEl = document.createElement('summary');
+      summaryEl.textContent = '技術的な詳細';
       const detail = document.createElement('p');
       detail.textContent = entry.detail;
-      body.append(detail);
+      details.append(summaryEl, detail);
+      body.append(details);
     }
-    row.append(badge(entry.status), body);
+    row.append(body);
     list.append(row);
   }
+
   const checkedAt = new Date(result.checkedAt);
-  document.querySelector('[data-check-time]')!.textContent = `${checkedAt.toLocaleString('ja-JP')} 時点の結果です。サイトの状態を保証するものではありません。`;
+  text('[data-check-time]', `${checkedAt.toLocaleString('ja-JP')} 時点の結果です。サイトの状態を保証するものではありません。`);
 
   const needsWork = result.items.filter((item) => item.status === 'action' || item.status === 'advice');
+  const names = needsWork.map((item) => `${item.plain?.title ?? item.title}（${STATUS_LABEL[item.status]}）`).join('、');
   const note = needsWork.length
-    ? `安全チェックで気になった項目：${needsWork.map((item) => `${item.title}（${STATUS_LABEL[item.status]}）`).join('、')}`
+    ? `安全チェックで気になった項目：${names}`
     : '安全チェックでは大きな問題は見つかりませんでした。中身の確認も相談したいです。';
   const target = new URL(home, location.origin);
   target.searchParams.set('service', '安全チェックの結果');

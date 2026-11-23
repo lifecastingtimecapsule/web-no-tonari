@@ -18,17 +18,12 @@ const checkApi = import.meta.env.PUBLIC_SAFETY_CHECK_API || 'https://web-no-tona
 const apiAvailable = Boolean(checkApi);
 const turnstileSitekey = '0x4AAAAAAGBp3rc6eEe2zLBS';
 const checks = [
-  ['通信の暗号化', 'https:// で開けるか、http:// から自動で切り替わるか、暗号化を固定する設定（HSTS）があるか。'],
-  ['ブラウザ向けの保護設定', '他サイトへの埋め込みや、読み込み元の制限など、主な4つの設定が有効か。'],
-  ['ソフトの情報の見え方', 'サイトを動かすソフトの種類や更新番号が、外から見える状態になっていないか。'],
-  ['暗号化されない読み込み', 'https:// のページの中で、http:// の画像やプログラムを読み込んでいないか。'],
-  ['会社を名乗る偽メールへの対策', '会社のドメインを名乗った偽メールを防ぐ設定（SPF・DMARC）があるか。'],
-  // 変更履歴: 2026-11-23 診断項目の拡張に合わせて説明を追加。
-  ['検索向けの基本設定', 'タイトル・説明文・正規URL・SNS共有画像・見出し1が、検索結果と共有に適した形か。'],
-  ['公開ファイルの設置', 'robots.txt・サイトマップ・security.txt が公開されているか。'],
-  ['WordPressの状態', 'WordPressが使われているか、ユーザー名が外から推測できる状態かを確認。'],
-  ['ページの応答時間', 'トップページの応答にかかる時間を計測。'],
-  ['ドメインの漏えい履歴', 'そのドメインが過去に漏えい元として公表されていないか。個々のメールアドレスの一覧は、所有者確認が必要なため別メニューです。'],
+  ['通信が守られているか', '鍵マーク（https）で開けるか、古い http:// から自動で切り替わるか。'],
+  ['ブラウザの防御設定', 'サイトを悪用した攻撃を防ぐ設定が入っているか。'],
+  ['ソフトのバージョン隠し', '使っているソフトの種類・版が外から見える状態になっていないか。'],
+  ['偽メールへの対策', '会社のドメインを名乗る偽メールを防ぐ設定（SPF・DMARC）があるか。'],
+  ['検索と共有の見え方', '検索結果に出るタイトル・説明、共有時の画像が揃っているか。'],
+  ['過去の漏えい', 'そのドメインが、漏えい元として公表されたことがないか。'],
 ];
 const notChecked = ['WordPressや追加機能が最新か', '管理者アカウントとパスワードの扱い', 'バックアップと復元の手順', '問い合わせフォームの中身と情報の扱い'];
 ---
@@ -48,8 +43,17 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
   </form>
 
   <section class="check-result" data-check-result hidden aria-labelledby="check-result-title" tabindex="-1">
-    <h2 id="check-result-title">チェック結果</h2>
+    <h2 id="check-result-title">診断結果</h2>
     <p class="check-result__target" data-check-target></p>
+
+    <div class="check-verdict" data-check-verdict data-level="unknown">
+      <p class="check-verdict__label" data-verdict-label>判定中</p>
+      <p class="check-verdict__score" aria-hidden="true"><span data-verdict-score>0</span><small>/100</small></p>
+      <div class="check-meter" role="meter" aria-label="危険度スコア" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-verdict-meter><span class="check-meter__fill"></span></div>
+      <p class="check-verdict__headline" data-verdict-headline></p>
+      <p class="check-verdict__note" data-verdict-note></p>
+    </div>
+
     <ul class="check-summary" data-check-summary aria-label="結果の内訳"></ul>
     <ol class="check-items" data-check-items></ol>
     <p class="check-result__time" data-check-time></p>
@@ -95,6 +99,25 @@ const notChecked = ['WordPressや追加機能が最新か', '管理者アカウ�
 .check-result:focus { outline: none; }
 .check-result h2, .check-scope h2, .check-next h2 { margin: 0 0 12px; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.4; letter-spacing: -.02em; }
 .check-result__target { margin: 0 0 20px; font-weight: 700; overflow-wrap: anywhere; }
+.check-verdict { margin: 0 0 28px; padding: 22px 24px; border: 1px solid var(--mist); border-radius: 14px; background: var(--mist-light); color: var(--ink); }
+.check-verdict[hidden] { display: none; }
+.check-verdict[data-level="danger"] { border-color: #e9b4bc; background: #fff1f3; color: #b3122a; }
+.check-verdict[data-level="caution"] { border-color: #efd3a6; background: #fff8ea; color: #8a5a00; }
+.check-verdict[data-level="watch"] { border-color: #c9d4ea; background: #f2f6ff; color: #2a4b8d; }
+.check-verdict[data-level="good"] { border-color: #b9e0cf; background: #effaf4; color: #155f45; }
+.check-verdict__label { margin: 0 0 4px; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+.check-verdict__score { margin: 0 0 12px; font-size: clamp(2.8rem, 7vw, 4rem); font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.check-verdict__score small { margin-left: 4px; font-size: 14px; font-weight: 700; opacity: .7; }
+.check-meter { height: 10px; border-radius: 999px; background: #e3e3e8; overflow: clip; }
+.check-meter__fill { display: block; block-size: 100%; inline-size: 0%; border-radius: inherit; background: currentColor; transition: inline-size .45s ease; }
+.check-verdict__headline { margin: 14px 0 0; font-size: 18px; font-weight: 800; line-height: 1.6; }
+.check-verdict__note { margin: 8px 0 0; font-size: 12px; line-height: 1.8; opacity: .8; }
+.check-page .check-plain { font-size: 14px; line-height: 1.85; }
+.check-page .check-danger { margin-top: 8px; padding: 10px 12px; border-radius: 8px; background: #fff1f3; color: #8e1024; font-size: 13px; line-height: 1.8; }
+.check-page .check-past { margin-top: 8px; font-size: 13px; line-height: 1.8; color: var(--ink-muted); }
+.check-page .check-item details { margin-top: 10px; }
+.check-page .check-item summary { cursor: pointer; font-size: 12px; color: var(--ink-muted); }
+@media (prefers-reduced-motion: reduce) { .check-meter__fill { transition: none; } }
 .check-page .check-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; padding: 0; list-style: none; }
 .check-page .check-items { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--mist); }
 .check-page .check-item { display: grid; grid-template-columns: 148px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--mist); }
