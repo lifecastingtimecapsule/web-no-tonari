@@ -1,3 +1,4 @@
+// 変更履歴 2026-11-20　相談別の価格表示と、架空の報告見本・作業範囲の導線を回帰検査。
 // 変更履歴: 2026-11-15 公開ホームの読み順とサービス境界への導線を回帰検査へ追加。
 import { describe, expect, it } from 'vitest';
 import homeSource from '../src/components/HomePage.astro?raw';
@@ -23,14 +24,16 @@ describe('SITEVEILの公開ホーム', () => {
   });
 
   it('explains_risk_discovery_with_stable_sections', () => {
-    const publicCopy = `${positioningSource}\n${boundariesSource}`;
-    const visibleCopy = publicCopy.replace(/<[^>]+>/g, '');
-
-    expect(visibleCopy).toContain('確認できるリスクを、早期に見つける。');
-    expect(positioningSource).toContain('<span>早期に見つける。</span>');
-    for (const sectionId of ['positioning', 'service-modes', 'update-boundary', 'clone-testing', 'reporting']) {
+    const publicCopy = [homeSource, positioningSource, boundariesSource].join('\n');
+    expect(positioningSource).toContain('formatPrice(plan.amount)');
+    expect(positioningSource).toContain('pricing/#');
+    expect(boundariesSource).toContain('架空の予約サイト');
+    expect(boundariesSource).toContain('未確認の範囲');
+    for (const sectionId of ['positioning', 'service-modes', 'reporting']) {
       expect(publicCopy).toContain(`id="${sectionId}"`);
     }
+    expect(homeSource).toContain('複製環境だけ');
+    expect(homeSource).toContain('更新する場合');
   });
 
   it('links_visible_boundaries_to_their_full_documents', () => {

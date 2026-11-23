@@ -1,0 +1,57 @@
+/* 変更履歴 2026-11-20　読み始めの位置、価格列と報告見本の紙面をそろえ、スマホでは同じ順番で縦に読む。 */
+.reader-wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+.reader-section { scroll-margin-top:84px; padding-block: clamp(44px, 6vw, 80px); }
+.reader-heading { display:flex; justify-content:space-between; align-items:end; gap:1rem; margin-bottom:28px; }
+.reader-heading h2,.reader-story h2 { font-size:clamp(30px,4vw,48px); line-height:1.32; letter-spacing:-.035em; margin:0; }
+.reader-heading p,.reader-free { font-size:15px; line-height:1.8; }
+.reader-heading p { margin:0; }
+.reader-heading span { white-space:nowrap; }
+.reader-choice { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) minmax(0,1fr); gap:clamp(20px,3.5vw,52px); padding:26px 0; border-top:1px solid #c8c7c5; align-items:start; }
+.reader-choice h3 { margin:0; font-size:clamp(20px,2vw,26px); line-height:1.45; text-wrap:pretty; }
+.reader-choice p,.reader-story p,.reader-paper dd { font-size:16px; line-height:1.85; margin:0; }
+.reader-choice ul { list-style:none; padding:0; margin:0; }
+.reader-choice li + li { margin-top:10px; border-top:1px solid #dedbd8; padding-top:10px; }
+.reader-choice a { display:grid; gap:3px; width:fit-content; color:inherit; text-decoration:none; }
+.reader-choice a span,.reader-story a,.reader-free a { text-decoration:underline; text-underline-offset:4px; }
+.reader-choice a span { font-size:15px; }
+.reader-choice strong { font-size:20px; font-variant-numeric:tabular-nums; line-height:1.45; }
+.reader-wrap .reader-free { max-width:none; border-top:1px solid #c8c7c5; padding-top:18px; margin:0; }
+.reader-report { background:#f5f1ea; color:#251e1a; }
+.reader-spread { display:grid; grid-template-columns:.9fr 1.1fr; align-items:center; gap:clamp(28px,6vw,84px); }
+.reader-story p { margin-top:18px; max-width:36em; }
+.reader-story a { display:inline-block; margin-top:18px; padding-block:8px; }
+.reader-paper { margin:0; background:#fff; padding:clamp(20px,3.4vw,44px); box-shadow:0 6px 24px #3a2a1510; border-top:3px solid #bf512b; }
+.reader-paper figcaption { display:flex; justify-content:space-between; flex-wrap:wrap; align-items:center; gap:8px; color:#684634; }
+.reader-paper h3 { font-size:clamp(21px,2.2vw,28px); line-height:1.5; margin:22px 0; }
+.reader-paper dl { margin:0; } .reader-paper dl > div { border-top:1px solid #dedbd8; padding:12px 0; }
+.reader-paper dt { font-size:14px; font-weight:700; color:#753d25; }
+@media(max-width:760px){
+  .reader-choice,.reader-spread { grid-template-columns:1fr; }
+  .reader-choice { gap:10px; padding:22px 0; }
+  .reader-choice ul { margin-top:2px; }
+  .reader-choice a { display:flex; width:auto; min-height:44px; align-items:center; justify-content:space-between; gap:12px; }
+  .reader-choice strong { white-space:nowrap; }
+  .reader-heading { display:block; margin-bottom:18px; } .reader-heading p { margin-top:10px; }
+  .reader-wrap { width:calc(100% - 36px); } .reader-paper dd { line-height:1.7; }
+}
+
+/* 下層の入口、説明文と価格を読み進める幅と罫線を共有する。 */
+.reader-tools { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(24px,5vw,72px); }
+.reader-tools article { padding-block:20px; border-top:2px solid #aa593c; }
+.reader-tools article + article { border-color:#727197; }
+.reader-tools h2,.reader-steps h2 { font-size:clamp(21px,2.4vw,28px); margin:0; line-height:1.5; }
+.reader-tools p,.reader-steps p,.reader-more { line-height:1.85; font-size:16px; }
+.reader-tools a,.reader-more a,.reader-steps a { text-underline-offset:4px; }
+.reader-tools a { display:inline-flex; align-items:center; min-height:44px; font-weight:700; }
+.reader-steps { list-style:decimal-leading-zero; margin:0; padding-inline-start:2.2rem; }
+.reader-steps li { border-top:1px solid #d2cfca; padding:20px 0 20px 12px; }
+.reader-steps li::marker { font-variant-numeric:tabular-nums; color:#8b4b31; }
+.reader-steps p { max-width:46em; margin:8px 0 0; }
+.reader-more { border-top:1px solid #d2cfca; padding-top:16px; margin-block:24px; }
+body.page-inner .catalog-page .catalog-heading { padding-block:clamp(16px,3vw,36px); }
+.reader-section [id], .faq-list details[id] { scroll-margin-top:90px; }
+body.page-inner main [id] { scroll-margin-top:96px; }
+@media(max-width:700px){ .reader-tools { grid-template-columns:1fr; gap:8px; } }
+.reader-faq-links { font-size:15px; line-height:1.8; margin-top:1em; }
+.site-footer .footer-terms { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; font-size:14px; }
+.site-footer .footer-terms a { padding-block:7px; }

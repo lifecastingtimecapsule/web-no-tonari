@@ -1,4 +1,5 @@
 ---
+// 変更履歴 2026-11-20　相談内容、費用、報告の順に並べ、重複するサービス一覧を省いた。
 // 変更履歴: 2026-11-15 セキュリティ専門のトップへ全面改稿。ヒーロー・問い合わせ・無料チェックの機能は維持。
 // 変更履歴: 2026-11-15 固定したヒーローと安全チェックの後へ、単発・定期・更新・複製環境の境界を追加。
 // 役割: 無料確認から有料検査・保守まで、対象と費用を理解して相談できる入口。
@@ -6,26 +7,25 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import VeilHero from './VeilHero.astro';
 import SafetyCheck from './SafetyCheck.astro';
 import SecurityPositioning from './SecurityPositioning.astro';
+// 変更履歴 2026-11-20　架空の報告見本に加え、許可された匿名改善事例を掲載。
+import SecurityCase from './SecurityCase.astro';
 import SecurityBoundaries from './SecurityBoundaries.astro';
-import SecurityServices from './SecurityServices.astro';
 import ContactForm from './ContactForm.astro';
 import '../styles/home-continuity.css';
-import '../styles/security-editorial.css';
 interface Props {preview?:boolean;}
 const {preview=false}=Astro.props;
-const faqs=[
- ['何を頼めばよいか分からなくても相談できますか？','はい。管理の状況や気になっていることから、必要な確認と費用を整理します。'],
- ['無料チェックと有料検査は何が違いますか？','無料は公開情報や既知の漏えい記録の確認です。有料は事前に合意した設定・資料・コードなどを調査します。侵入テストは別のプランです。'],
- ['問題が見つかった後の修正も含まれますか？','検査料金には修正・復旧・再検査を含みません。必要な作業と費用を別途ご案内します。PHP・WordPress更新は専用プランで承ります。'],
- ['調査は許可した範囲だけで行いますか？','対象・操作・検査環境・停止条件を事前に書面で合意します。第三者のシステムや、許可されていない範囲は調査しません。'],
- ['結果はどう受け取れますか？','有料の基本確認・詳細検査・総合検査は、方法と結果をまとめた書面を国内郵送します。調査データは発送後30日で削除します。無料チェックは画面上で確認できます。'],
+const home = import.meta.env.BASE_URL.replace(/\/$/,'') + '/';
+const faqs = [
+  ['検査の日にサイトを止める必要はありますか？','普段の運営に合わせて調査の時間と方法を決めます。侵入テストは、書面で同意いただいた複製環境だけで行います。', 'clone-testing'],
+  ['定期点検を頼むと、更新もしてもらえますか？','定期点検では変更点や更新の必要性をお知らせします。実際にソフトを更新する場合は、作業内容と費用を別途ご案内します。', 'update-boundary'],
+  ['紙の報告書をもう一度受け取れますか？','発送から30日以内にご相談ください。再発行しても保管期限は延びません。期限後の再調査・再発行は別途有料です。', 'report-reissue'],
 ];
 ---
 <SiteLayout title="セキュリティ検査・保守・漏えいチェック｜SITEVEIL" description="小さな会社のセキュリティを、分かる言葉で。無料のサイト・メール漏えいチェック、基本確認59,400円、詳細検査198,000円〜、侵入テスト330,000円〜、保守月9,240円。税込。対象と費用を合意して調査します。" homePage noindex={preview} faq={faqs.map(([question,answer])=>({question,answer}))}>
 <VeilHero/><SafetyCheck/><SecurityPositioning/>
-<section class="services section" id="services" aria-labelledby="services-title"><div class="shell"><div class="section-heading"><h2 id="services-title">検査と保守を、<br/>必要な範囲から。</h2></div><SecurityServices/><p>表示はすべて税込。対象と費用は作業前に合意します。</p></div></section>
+<SecurityCase/>
 <SecurityBoundaries/>
-<section class="faq section" id="faq" aria-labelledby="faq-title"><div class="shell faq__layout"><div class="section-heading"><h2 id="faq-title">よくある質問</h2></div><div class="faq-list">{faqs.map(([question,answer])=><details><summary>{question}<span aria-hidden="true"></span></summary><div class="faq-list__answer"><p>{answer}</p></div></details>)}</div></div></section>
+<section class="faq section" id="faq" aria-labelledby="faq-title"><div class="shell faq__layout"><div class="section-heading"><h2 id="faq-title">よくある質問</h2><p class="reader-faq-links"><a href={home + 'service-specification/'}>サービス仕様</a>・<a href={home + 'terms/'}>利用規約</a></p></div><div class="faq-list">{faqs.map(([question,answer,id])=><details id={id}><summary>{question}<span aria-hidden="true"></span></summary><div class="faq-list__answer"><p>{answer}</p></div></details>)}</div></div></section>
 <section class="contact section" id="contact" aria-labelledby="contact-title"><div class="shell contact__layout"><div class="contact__intro"><h2 id="contact-title">お問い合わせ</h2></div><ContactForm/></div></section>
 <script>import '../scripts/site';</script>
 </SiteLayout>

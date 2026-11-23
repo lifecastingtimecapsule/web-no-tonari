@@ -1,0 +1,29 @@
+---
+/* 変更履歴 2026-11-20　提供資料の匿名掲載許可に基づき、確認と改善の対応を示す事例を追加。 */
+/* 役割　実案件で行った確認・改善を、識別情報や再現手順を含めず紹介する。 */
+const improvements = [
+ ['購入者の本人確認', '購入手続きで、送られてきた利用者情報をそのまま信用していないかを確認。', 'ログイン情報の検証を追加し、購入者をサーバー側で確認する処理へ変更。'],
+ ['予約の重複と日時', '同時に操作した際の二重予約や、指定された日時の扱いを確認。', '予約の取得処理と空き枠の照合を見直し、重複や対象外の日時を受け付けないよう改善。'],
+ ['画面への不正な入力', 'URLに含まれる値が、画面やプログラムへそのまま入っていないかを確認。', '受け付ける値を制限。修正後に、不正な入力が画面で実行されないことを確認。'],
+ ['決済通知の受け取り', '通知の真正性・有効期限と、処理失敗時に再送される仕組みを確認。', '期限の検証と受信サイズの上限を追加し、失敗時に再送を受けられるよう改善。'],
+];
+---
+<section class="reader-section" aria-labelledby="case-title">
+  <div class="reader-wrap">
+    <header class="reader-heading"><h2 id="case-title">予約・購入の仕組みを、<br />裏側から見直した事例。</h2><p>予約・決済システムの改善事例</p></header>
+    <p class="case-intro">画面上では動いていても、本人確認や予約の処理に見落としが残ることがあります。プログラムと設定を調べ、次の点を改善しました。</p>
+    <div class="case-table">
+      <div class="case-table__heading" aria-hidden="true"><span>確認したところ</span><span>調べたこと</span><span>改善したこと</span></div>
+      {improvements.map(([title, checked, changed]) => <article><h3>{title}</h3><p><span class="case-label">調べたこと</span>{checked}</p><p><span class="case-label">改善したこと</span>{changed}</p></article>)}
+    </div>
+    <p class="case-note">提供された検査・修正記録をもとに匿名化しています。ソースコード・設定の確認と、記録にある修正後の動作確認をまとめた事例です。本番環境への能動的な侵入テストは実施していません。残る運用上の課題は、調査結果と併せて整理しています。</p>
+  </div>
+</section>
+<style>
+.case-intro{max-width:46em;line-height:1.85;margin:0 0 24px;font-size:16px}
+.case-table__heading,.case-table article{display:grid;grid-template-columns:.7fr 1fr 1fr;gap:32px;padding:20px 0;border-top:1px solid #ccc8c3}
+.case-table__heading{font-size:14px;color:#62594f;padding:12px 0}
+.case-table h3{font-size:20px;line-height:1.5;margin:0}.case-table p{font-size:16px;line-height:1.85;margin:0}.case-label{display:none}
+.case-note{font-size:14px;line-height:1.8;color:#62594f;max-width:65em;margin-top:22px}
+@media(max-width:760px){.case-table__heading{display:none}.case-table article{grid-template-columns:1fr;gap:12px}.case-label{display:block;font-size:14px;font-weight:700;margin-bottom:3px;color:#78533e}}
+</style>
