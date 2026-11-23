@@ -52,11 +52,6 @@ export const PLAIN: Record<string, PlainCopy> = {
     summary: 'https:// のページの中で、暗号化されない画像やプログラムを読み込んでいないか。',
     danger: '鍵マークに警告が出たり、表示が崩れたり、改ざんに気づきにくくなります。',
   },
-  seo: {
-    title: '検索結果とSNSでの見え方',
-    summary: '検索したときに出るタイトル・説明と、LINEやXで共有したときの画像があるか。',
-    danger: '検索結果にURLだけが並んだり、共有しても画像が出ないことがあります。同じ順位でもクリックされにくくなります。',
-  },
   files: {
     title: '公開設定ファイル',
     summary: 'robots.txt・サイトマップ・security.txt が公開されているか。',

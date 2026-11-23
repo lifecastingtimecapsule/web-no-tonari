@@ -180,30 +180,9 @@ export function analyzePage(page: PageSnapshot): CheckItem[] {
     }
   }
 
-  // 変更履歴: 2026-11-23 検索向け設定・公開ファイル・WordPress・応答時間の項目を追加。
+  // 変更履歴: 2026-11-23 公開ファイル・WordPress・応答時間の項目を追加。
+  // 変更履歴: 2026-11-23 検索向け設定（タイトル・説明・共有画像など）はセキュリティ診断の対象外とし、削除。
   // 役割: 取得済みのHTMLと応答から分かる範囲だけを判定し、分からないものは「確認できず」にする。
-
-  const title = page.html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, '').trim() ?? '';
-  const description = page.html.match(/<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i)?.[1]
-    ?? page.html.match(/<meta[^>]+content=["']([^"']*)["'][^>]*name=["']description["']/i)?.[1] ?? '';
-  const hasOgImage = /<meta[^>]+property=["']og:image["']/i.test(page.html);
-  const hasCanonical = /<link[^>]+rel=["']canonical["']/i.test(page.html);
-  const h1Count = (page.html.match(/<h1\b/gi) ?? []).length;
-  const noindex = /<meta[^>]+name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(page.html);
-  const seoMissing: string[] = [];
-  if (!title) seoMissing.push('タイトル（title）');
-  else if (title.length > 40) seoMissing.push('タイトルが長すぎる（40字超）');
-  if (!description) seoMissing.push('説明文（description）');
-  if (!hasCanonical) seoMissing.push('正規URL（canonical）');
-  if (!hasOgImage) seoMissing.push('SNS共有用の画像（og:image）');
-  if (h1Count === 0) seoMissing.push('見出し1（h1）');
-  if (noindex) {
-    items.push({ id: 'seo', title: '検索向けの基本設定', status: 'action', summary: 'このページは検索結果に出ない設定（noindex）です。', detail: '公開ページを意図して検索から外している場合を除き、設定を見直してください。' });
-  } else {
-    items.push(seoMissing.length === 0
-      ? { id: 'seo', title: '検索向けの基本設定', status: 'ok', summary: 'タイトル・説明文・正規URL・共有画像・見出しが揃っています。', detail: '内容の質や順位を保証するものではありません。' }
-      : { id: 'seo', title: '検索向けの基本設定', status: seoMissing.length <= 2 ? 'advice' : 'action', summary: `検索結果で伝わりにくい項目が${seoMissing.length}件あります。`, detail: `未設定・要確認：${seoMissing.join('、')}。検索結果の見え方や共有時の表示に影響します。` });
-  }
 
   const filesKnown = [page.robotsTxt, page.sitemapXml, page.securityTxt].some((value) => value !== null && value !== undefined);
   const missingFiles: string[] = [];
